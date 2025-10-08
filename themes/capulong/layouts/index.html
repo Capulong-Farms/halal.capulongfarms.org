@@ -1,0 +1,78 @@
+{{ define "main" }}
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Welcome to Capulong Farms</h1>
+            <p>Fresh produce and farm supplies delivered from our farm to your table</p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact & Payment Section -->
+<section id="order" class="contact-section">
+    <div class="container">
+        <h2>Order & Payment</h2>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h3>How to Order</h3>
+                <p>Click the WhatsApp button to place your order directly with us. We'll confirm availability and arrange delivery.</p>
+                <div class="contact-details">
+                    <p><i class="fas fa-map-marker-alt"></i> Philippines</p>
+                    <p><i class="fab fa-whatsapp"></i> WhatsApp Business</p>
+                </div>
+            </div>
+            <div class="payment-info">
+                <h3>Payment via GCash</h3>
+                <p>Scan the QR code below to pay via GCash:</p>
+                <div class="gcash-qr">
+                    <img src="{{ .Site.Params.gcash_qr_image }}" alt="GCash QR Code">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section id="products" class="products-section">
+    <div class="container">
+        <h2>Our Products & Prices</h2>
+        
+        {{ range .Site.Data.products.categories }}
+        <div class="product-category">
+            <h3>{{ .name }}</h3>
+            <div class="products-grid">
+                {{ range .products }}
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="{{ .image }}" alt="{{ .name }}" loading="lazy">
+                    </div>
+                    <h4>{{ .name }}</h4>
+                    <p class="price">{{ .price }}</p>
+                </div>
+                {{ end }}
+            </div>
+        </div>
+        {{ end }}
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="about-section">
+    <div class="container">
+        <h2>About Capulong Farms</h2>
+        <div class="about-content">
+            <div class="about-image">
+                <img src="/images/farm-photo.jpg" alt="Capulong Farms">
+            </div>
+            <div class="about-text">
+                <p>Capulong Farms is a family-owned farm in the Philippines dedicated to providing fresh, quality produce and farm supplies directly to consumers.</p>
+                <p>We believe in sustainable farming practices and delivering the freshest products from our farm to your table.</p>
+                <p>Our commitment is to quality, freshness, and supporting local agriculture.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{ end }}

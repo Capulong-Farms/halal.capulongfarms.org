@@ -1,0 +1,29 @@
+baseURL = 'https://capulongfarms.com/'
+languageCode = 'en-ph'
+title = 'Capulong Farms'
+theme = 'capulong'
+
+[params]
+  description = "Fresh produce and farm supplies from Capulong Farms, Philippines"
+  whatsapp_number = "639171234567"  # Replace with your actual WhatsApp Business number
+  gcash_qr_image = "/images/gcash-qr.png"
+
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "Buy & Pay!"
+    url = "/#order"
+    weight = 2
+    [menu.main.params]
+      class = "cta-button"
+  [[menu.main]]
+    name = "Products"
+    url = "/#products"
+    weight = 3
+  [[menu.main]]
+    name = "About"
+    url = "/#about"
+    weight = 4

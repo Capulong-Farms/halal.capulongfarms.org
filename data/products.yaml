@@ -1,0 +1,63 @@
+categories:
+  - name: "Fresh Vegetables"
+    id: "vegetables"
+    products:
+      - name: "Tomatoes"
+        price: "₱80/kg"
+        image: "/images/products/tomatoes.jpg"
+        # Alternative: use external URL
+        # image: "https://example.com/path/to/image.jpg"
+        
+      - name: "Lettuce"
+        price: "₱60/head"
+        image: "/images/products/lettuce.jpg"
+        
+      - name: "Carrots"
+        price: "₱70/kg"
+        image: "/images/products/carrots.jpg"
+        
+      - name: "Bell Peppers"
+        price: "₱120/kg"
+        image: "/images/products/bell-peppers.jpg"
+        
+      - name: "Eggplant"
+        price: "₱50/kg"
+        image: "/images/products/eggplant.jpg"
+        
+      - name: "Cabbage"
+        price: "₱40/head"
+        image: "/images/products/cabbage.jpg"
+
+  - name: "Farm Supplies"
+    id: "supplies"
+    products:
+      - name: "Organic Fertilizer"
+        price: "₱350/sack"
+        image: "/images/products/fertilizer.jpg"
+        
+      - name: "Seeds Package"
+        price: "₱150/pack"
+        image: "/images/products/seeds.jpg"
+        
+      - name: "Gardening Tools"
+        price: "₱500/set"
+        image: "/images/products/tools.jpg"
+        
+      - name: "Compost"
+        price: "₱200/sack"
+        image: "/images/products/compost.jpg"
+
+  - name: "Fresh Fruits"
+    id: "fruits"
+    products:
+      - name: "Papaya"
+        price: "₱60/kg"
+        image: "/images/products/papaya.jpg"
+        
+      - name: "Banana"
+        price: "₱40/bunch"
+        image: "/images/products/banana.jpg"
+        
+      - name: "Mango"
+        price: "₱100/kg"
+        image: "/images/products/mango.jpg"
