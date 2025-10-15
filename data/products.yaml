@@ -1,6 +1,6 @@
 categories:
   - name: "Farm Products"
-    id: "produce"
+    id: "vegetables"
     products:
       - name: "Sweet Corn, Grade A"
         price: "₱12/pc"
@@ -151,7 +151,6 @@ categories:
         image: "/images/products/PF-Silage-refill.jpg"
         # Alternative: use external URL
         # image: "https://example.com/path/to/image.jpg"
-
 
   - name: "Farm Supplies"
     id: "supplies"
