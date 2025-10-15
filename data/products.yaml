@@ -163,6 +163,18 @@ categories:
         price: "₱140/kg"
         image: "/images/products/FA-Catfish-Catfish.jpg"
 
+      - name: "Catfish, Hito, Live"
+        price: "₱120/kg"
+        image: "/images/products/FA-Catfish-Live.jpg"
+
+      - name: "Catfish, Hito, Fresh"
+        price: "₱110/kg"
+        image: "/images/products/FA-Catfish-Fresh.jpg"
+
+      - name: "Catfish, Hito, Frozen"
+        price: "₱140/kg"
+        image: "/images/products/FA-Catfish-Catfish.jpg"
+
   - name: "Fish & Aquatics"
     id: "aquatics"
     products:
