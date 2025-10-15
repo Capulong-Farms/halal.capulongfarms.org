@@ -1,6 +1,6 @@
 categories:
   - name: "Farm Products"
-    id: "vegetable"
+    id: "produce"
     products:
       - name: "Sweet Corn, Grade A"
         price: "₱12/pc"
@@ -104,10 +104,10 @@ categories:
         price: "₱500/drum"
         image: "/images/products/PF-Silage-refill.jpg"
 
-  - name: "Farm Supplies"
-    id: "supplies"
+  - name: "Livestocks & Poultry"
+    id: "livestocks"
     products:
-      - name: "Organic Fertilizer"
+      - name: "Tilapia, Live"
         price: "₱350/sack"
         image: "/images/products/fertilizer.jpg"
 
@@ -123,8 +123,8 @@ categories:
         price: "₱200/sack"
         image: "/images/products/compost.jpg"
 
-  - name: "Fresh Fruits"
-    id: "fruits"
+  - name: "Fish & Aquatics"
+    id: "aquatics"
     products:
       - name: "Papaya"
         price: "₱60/kg"
