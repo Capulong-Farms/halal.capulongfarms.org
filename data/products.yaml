@@ -104,8 +104,8 @@ categories:
         price: "₱500/drum"
         image: "/images/products/PF-Silage-refill.jpg"
 
-  - name: "Livestocks & Poultry"
-    id: "livestocks"
+  - name: "Fish & Aquatics"
+    id: "aquatics"
     products:
       - name: "Tilapia, Live"
         price: "₱100/kg"
@@ -175,17 +175,32 @@ categories:
         price: "₱140/kg"
         image: "/images/products/FA-Snail-Frozen.jpg"
 
-  - name: "Fish & Aquatics"
-    id: "aquatics"
+  - name: "Processed Foods"
+    id: "processed"
     products:
-      - name: "Papaya"
-        price: "₱60/kg"
-        image: "/images/products/papaya.jpg"
+      - name: "Cat Food, Bottled"
+        price: "₱100/bottle"
+        image: "/images/products/PF-CatFood-Bottled.jpg"
 
-      - name: "Banana"
-        price: "₱40/bunch"
-        image: "/images/products/banana.jpg"
+      - name: "Cat Food, Canned"
+        price: "₱100/can"
+        image: "/images/products/PF-CatFood-Canned.jpg"
 
-      - name: "Mango"
-        price: "₱100/kg"
-        image: "/images/products/mango.jpg"
+      - name: "Cat Food, Bag"
+        price: "₱50/bag"
+        image: "/images/products/PF-CatFood-Bag.jpg"
+
+  - name: "Livestocks & Poultry"
+    id: "livestocks"
+    products:
+      - name: "Ducks, Ducklings (<1 week)"
+        price: "₱25/chick"
+        image: "/images/products/LP-Duck-Duckling.jpg"
+
+      - name: "Ducks, Layers"
+        price: "₱75/chick"
+        image: "/images/products/LP-Duck-Layer.jpg"
+
+      - name: "Ducks, Cull"
+        price: "₱100/chick"
+        image: "/images/products/LP-Duck-Cull.jpg"
