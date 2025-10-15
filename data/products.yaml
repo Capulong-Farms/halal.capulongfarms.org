@@ -72,11 +72,11 @@ categories:
         price: "₱35/kg"
         image: "/images/products/FP-Papaya-RipeL.jpg"
 
-      - name: "Palay, 50kg, wet"
+      - name: "Palay, wet, 50kg"
         price: "₱17/kg"
         image: "/images/products/FP-Palay-50-wet.jpg"
 
-      - name: "Palay, 50kg, dry"
+      - name: "Palay, dry, 50kg"
         price: "₱21/kg"
         image: "/images/products/FP-Palay-50-dry.jpg"
 
