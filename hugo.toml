@@ -19,12 +19,8 @@ theme = 'capulong'
     weight = 2
    # [menu.main.params]
    #   class = "cta-button"
-   # the above Call to Action, CTA-button is commented out, to make way for other style
+   # Note: the above Call to Action, CTA-button is commented out, to make way for other style
   [[menu.main]]
     name = "Products"
     url = "/#products"
     weight = 3
-  [[menu.main]]
-    name = "About"
-    url = "/#about"
-    weight = 4
