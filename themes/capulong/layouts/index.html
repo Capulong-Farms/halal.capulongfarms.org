@@ -66,12 +66,24 @@
         <div id="tab-{{ $index }}" class="tab-content {{ if eq $index 0 }}active{{ end }}">
             <div class="products-grid">
                 {{ range $category.products }}
+                <!--
                 <div class="product-card">
                     <div class="product-image">
                         <img src="{{ .image }}" alt="{{ .name }}" loading="lazy">
                     </div>
                     <h4>{{ .name }}</h4>
                     <p class="price">{{ .price }}</p>
+                </div>
+                -->
+              <div class="product-card {{ if eq .available false }}not-available{{ end }}">
+                  <div class="product-image">
+                      <img src="{{ .image }}" alt="{{ .name }}" loading="lazy">
+                      {{ if eq .available false }}
+                      <div class="watermark">NOT AVAILABLE</div>
+                      {{ end }}
+                  </div>
+                  <h4>{{ .name }}</h4>
+                  <p class="price">{{ .price }}</p>
                 </div>
                 {{ end }}
             </div>
