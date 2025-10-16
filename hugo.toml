@@ -1,6 +1,6 @@
 baseURL = 'https://capulongfarms.com/'
 languageCode = 'en-ph'
-title = 'Capulong Farms'
+title = 'Farm-to-Table Pampanga | Fresh Produce & Livestock – Capulong Farms'
 theme = 'capulong'
 
 [params]
