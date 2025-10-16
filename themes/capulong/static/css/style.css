@@ -92,6 +92,43 @@ body {
     color: var(--white);
 }
 
+/* ===== Animated Tab-Style Nav Underline ===== */
+.main-nav ul {
+    position: relative;
+}
+
+.main-nav ul li {
+    position: relative;
+}
+
+.main-nav ul li a {
+    color: var(--text-dark);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.main-nav ul li a.active {
+    color: var(--primary-color);
+}
+
+.main-nav ul li a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;   /* distance below the link text */
+    width: 0%;
+    height: 3px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.main-nav ul li a.active::after,
+.main-nav ul li a:hover::after {
+    width: 100%;
+}
+
 /* Hero Section */
 .hero {
     background: linear-gradient(135deg, var(--primary-color), #1e5a3f);
