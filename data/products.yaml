@@ -100,10 +100,12 @@ categories:
       - name: "Silage, drum"
         price: "₱900/drum"
         image: "/images/PF-Silage.jpg"
+        available: false   # <-- mark as not available
 
       - name: "Silage, drum (refill)"
         price: "₱500/drum"
         image: "/images/PF-Silage-refill.jpg"
+        available: false   # <-- mark as not available
 
   - name: "Fish & Aquatics"
     id: "aquatics"
