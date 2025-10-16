@@ -13,5 +13,8 @@
 - Themes & JS in:
 **/themes/capulong/static/**
 
+- Whatsapp Button/Floating Buttons in:
+**/themes/capulong/layouts/partials/**
+
 - Product Images in:
 **/static/images/products/**
