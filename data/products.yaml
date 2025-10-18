@@ -129,6 +129,11 @@ categories:
         image: "/images/PF-Silage-refill.jpg"
         available: false   # <-- mark as not available
 
+      - name: "Charcoal Briquettes, Uling"
+        price: "₱100/kg"
+        image: "/images/PF-Charcoal.jpg"
+        available: false   # <-- mark as not available
+
   - name: "Fish & Aquatics"
     id: "aquatics"
     products:
