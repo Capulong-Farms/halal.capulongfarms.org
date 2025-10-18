@@ -475,7 +475,7 @@ categories:
         image: "/images/LP-Bufallo-Milk.jpg"
         available: true   # <-- mark as not available
 
-  - name: "Training Courses - Online"
+  - name: "Online Training"
     id: "coursesonline"
     products:
       - name: " Duck Growing"
@@ -513,10 +513,10 @@ categories:
         image: "/images/TCO-Steamer.jpg"
         available: true   # <-- mark as not available
 
-  - name: "Training Courses - On-Site"
+  - name: "On-site Training"
     id: "coursesonsite"
     products:
-      - name: " Duck Growing"
+      - name: "Duck Growing"
         price: "₱1,500/day"
         image: "/images/TC-Duck.jpg"
         available: true   # <-- mark as not available
@@ -554,7 +554,7 @@ categories:
   - name: "Training Literatures"
     id: "coursesliteratures"
     products:
-      - name: " Duck Growing"
+      - name: "Duck Growing"
         price: "₱500/book"
         image: "/images/TL-Duck.jpg"
         available: true   # <-- mark as not available
@@ -588,3 +588,31 @@ categories:
         price: "₱500/day"
         image: "/images/TL-Steamer.jpg"
         available: true   # <-- mark as not available
+
+  - name: "Block Works"
+    id: "blockworks"
+    products:
+      - name: "Hollow Blocks, 4-inch"
+        price: "₱10/block"
+        image: "/images/BW-HollowBlock4.jpg"
+        available: false    # <-- mark as not available
+
+      - name: "Hollow Blocks, 6-inch"
+        price: "₱10/block"
+        image: "/images/BW-HollowBlock4.jpg"
+        available: false    # <-- mark as not available
+
+      - name: "Hollow Blocks, 8-inch"
+        price: "₱10/block"
+        image: "/images/BW-HollowBlock4.jpg"
+        available: false    # <-- mark as not available
+
+      - name: "Hollow Blocks, 1-foot"
+        price: "₱10/block"
+        image: "/images/BW-HollowBlock4.jpg"
+        available: false    # <-- mark as not available
+
+      - name: "Hollow Post, 8-feet "
+        price: "₱10/block"
+        image: "/images/BW-HollowBlock4.jpg"
+        available: false    # <-- mark as not available
