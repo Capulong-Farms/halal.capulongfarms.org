@@ -186,19 +186,30 @@ body {
     object-fit: cover;
 }
 
-.product-card .product-image .watermark {
+/* === NEW: Improved Not Available Watermark === */
+.product-card .product-image .not-available-watermark {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) rotate(-25deg);
-    font-size: 1.5rem;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.85); /* white background */
+    color: red; /* red text */
     font-weight: bold;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
     pointer-events: none;
-    white-space: nowrap;
     z-index: 10;
 }
+
+/* Optional diagonal version — comment out above transform and uncomment below if you prefer angled watermark */
+/*
+.product-card .product-image .not-available-watermark {
+    transform: translate(-50%, -50%) rotate(-25deg);
+}
+*/
 
 .product-card h4 {
     padding: 1rem 1rem 0.5rem;
