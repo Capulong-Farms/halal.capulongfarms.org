@@ -66,16 +66,21 @@
         {{ range $category.products }}
         <div class="product-card {{ if not .available }}not-available{{ end }}">
           <div class="product-image">
+            {{ $image := .image }}
+            {{ if not $image }}
+              {{ $image = "/images/placeholder.png" }} <!-- Generic placeholder -->
+            {{ end }}
+
             {{ if .available }}
               <a href="https://wa.me/{{ $.Site.Params.whatsapp_number }}?text={{ urlquery (printf "Hello, I want to order %s at %s" .name .price) }}" 
                  target="_blank" 
                  rel="noopener noreferrer"
                  style="display:block; position: relative;">
-                <img src="{{ .image }}" alt="{{ .name }}" loading="lazy" style="display:block;">
+                <img src="{{ $image }}" alt="{{ .name }}" loading="lazy" style="display:block;">
                 <div class="available-icon">✔</div>
               </a>
             {{ else }}
-              <img src="{{ .image }}" alt="{{ .name }}" loading="lazy" style="display:block;">
+              <img src="{{ $image }}" alt="{{ .name }}" loading="lazy" style="display:block;">
               <div class="watermark">NOT AVAILABLE</div>
               <div class="not-available-icon">✖</div>
             {{ end }}
