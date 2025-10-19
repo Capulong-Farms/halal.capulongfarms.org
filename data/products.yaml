@@ -275,7 +275,7 @@ categories:
 
       - name: "Burong Kapampangan"
         price: "₱200/pack"
-        image: "/images/PF-Homemade-Embotido.jpg"
+        image: "/images/PF-Homemade-Buro.jpg"
         available: true
 
       - name: "Keropok Lekor (frozen)"
@@ -285,7 +285,7 @@ categories:
 
       - name: "Keropok Kering"
         price: "₱100/pack"
-        image: "/images/PF-Homemade-Kropok.jpg"
+        image: "/images/PF-Homemade-Kering.jpg"
         available: true
 
       - name: "Mushroom Chips"
@@ -388,7 +388,7 @@ categories:
 
       - name: "Chicken, Fresh Eggs, Small"
         price: "₱---/tray"
-        image: "/images/LP- Chick-EggFreshS.jpg"
+        image: "/images/LP-Chick-EggFreshS.jpg"
         available: true
 
       - name: "Chicken, Fresh Eggs, Medium"
@@ -600,30 +600,30 @@ categories:
 
       - name: "Hollow Blocks, 6-inch"
         price: "₱10/block"
-        image: "/images/BW-HollowBlock4.jpg"
+        image: "/images/BW-HollowBlock6.jpg"
         available: false
 
       - name: "Hollow Blocks, 8-inch"
         price: "₱10/block"
-        image: "/images/BW-HollowBlock4.jpg"
+        image: "/images/BW-HollowBlock8.jpg"
         available: false
 
       - name: "Hollow Blocks, 1-foot"
         price: "₱10/block"
-        image: "/images/BW-HollowBlock4.jpg"
+        image: "/images/BW-HollowBlock1ft.jpg"
         available: false
 
       - name: "Hollow Post, 8-feet "
         price: "₱10/block"
-        image: "/images/BW-HollowBlock4.jpg"
+        image: "/images/BW-HollowPost8.jpg"
         available: false
 
   - name: "Website Creation"
     id: "website"
     products:
-      - name: "Website Creation"
+      - name: "Website Domain Naming"
         price: "₱___/website"
-        image: "/images/Website-Creation.jpg"
+        image: "/images/Website-Domain.jpg"
         available: false
 
       - name: "Website Hosting"
