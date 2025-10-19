@@ -24,3 +24,16 @@ theme = 'capulong'
     name = "Products"
     url = "/#products"
     weight = 3
+
+# Cache busting for CSS and images
+[outputs]
+  home = ["HTML", "JSON"]
+
+# Disable caching during development
+[caches]
+  [caches.getcsv]
+    maxAge = "10s"
+  [caches.getjson]
+    maxAge = "10s"
+  [caches.images]
+    maxAge = "10s"
