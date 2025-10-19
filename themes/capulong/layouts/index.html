@@ -71,11 +71,11 @@
                  target="_blank" 
                  rel="noopener noreferrer"
                  style="display:block; position: relative;">
-                <img src="{{ default "/images/placeholder.png" .image }}" alt="{{ .name }}" loading="lazy" style="display:block;">
+                <img src="{{ .image | relURL }}" alt="{{ .name }}" loading="lazy" onerror="this.src='/images/placeholder.png'">
                 <div class="available-icon">✔</div>
               </a>
             {{ else }}
-              <img src="{{ default "/images/placeholder.png" .image }}" alt="{{ .name }}" loading="lazy" style="display:block;">
+              <img src="{{ .image | relURL }}" alt="{{ .name }}" loading="lazy" onerror="this.src='/images/placeholder.png'">
               <div class="watermark">NOT AVAILABLE</div>
               <div class="not-available-icon">✖</div>
             {{ end }}
