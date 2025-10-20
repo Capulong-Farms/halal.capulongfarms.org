@@ -351,8 +351,8 @@ img:not([src]) {
 ============================= */
 .floating-contacts {
   position: fixed;
-  bottom: 22px;
-  right: 22px;
+  bottom: 20px;
+  right: 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -364,20 +364,23 @@ img:not([src]) {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 6px 14px rgba(0,0,0,0.18);
   text-decoration: none;
   transition: transform 160ms ease, box-shadow 160ms ease;
-  transform: translateZ(0);
+  background-size: 50% auto;
+  background-repeat: no-repeat;
+  background-position: center;
   overflow: hidden;
 }
 
 .floating-contacts .contact-float svg {
-  display: block;
   width: 28px;
   height: 28px;
+  display: block;
+  fill: #fff;
 }
 
 .contact-float:hover {
@@ -385,8 +388,13 @@ img:not([src]) {
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
-.whatsapp-float { background: #25D366; color: #fff; }
-.messenger-float { background: #0084FF; color: #fff; }
+.whatsapp-float {
+  background-color: #25D366;
+}
+
+.messenger-float {
+  background-color: #0084FF;
+}
 
 /* =============================
    Footer
@@ -418,7 +426,17 @@ img:not([src]) {
   .contact-grid { grid-template-columns: 1fr; }
   .gcash-qr { padding: 0; background: transparent; box-shadow: 4px 4px 12px rgba(0,0,0,0.6); margin-top: 1rem; border-radius: 10px; overflow: hidden; }
   .gcash-qr img { max-width: 100%; width: 100%; height: auto; }
-  .floating-contacts { right: 14px; bottom: 16px; gap: 8px; }
-  .floating-contacts .contact-float { width: 56px; height: 56px; }
-  .floating-contacts .contact-float svg { width: 24px; height: 24px; }
+  .floating-contacts {
+    right: 14px;
+    bottom: 16px;
+    gap: 8px;
+  }
+  .floating-contacts .contact-float {
+    width: 56px;
+    height: 56px;
+  }
+  .floating-contacts .contact-float svg {
+    width: 24px;
+    height: 24px;
+  }
 }
