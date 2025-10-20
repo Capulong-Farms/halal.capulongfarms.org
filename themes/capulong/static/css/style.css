@@ -335,61 +335,56 @@ img:not([src]) {
 }
 
 /* =============================
-   Floating Contacts (SVG / Font Awesome)
+   Floating Contacts (SVG & FA icons)
 ============================= */
 .floating-contacts {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: 22px;
+  right: 22px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  z-index: 1000;
+  gap: 12px;
+  align-items: center;
+  z-index: 99999;
 }
 
-.contact-float {
-  width: 80px;
-  height: 80px;
+.floating-contacts .contact-float {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 40px; /* for <i> icons */
-  box-shadow: 0 6px 12px rgba(0,0,0,0.6);
-  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.18);
   text-decoration: none;
-  color: white;
-  border: none;
-}
-
-.contact-float i {
-  display: block;
-  font-size: 40px; /* desktop default */
+  transition: transform 160ms ease, box-shadow 160ms ease;
+  transform: translateZ(0);
+  overflow: hidden;
+  color: #fff;
+  font-size: 28px;
 }
 
 .contact-float:hover {
-  transform: scale(1.1);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
-.whatsapp-float { background-color: #25d366; }
-.messenger-float { background-color: #0084ff; }
+/* Platform colors */
+.whatsapp-float { background: #25D366; }
+.messenger-float { background: #0084FF; }
 
+/* Mobile adjustments */
 @media (max-width: 768px) {
   .floating-contacts {
-    bottom: 20px;
-    right: 20px;
-    gap: 10px;
+    right: 14px;
+    bottom: 16px;
+    gap: 8px;
   }
 
-  .contact-float {
-    width: 70px;
-    height: 70px;
-    font-size: 35px;
-  }
-
-  .contact-float i {
-    font-size: 28px; /* ensures Messenger icon shows on mobile */
+  .floating-contacts .contact-float {
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
   }
 }
 
