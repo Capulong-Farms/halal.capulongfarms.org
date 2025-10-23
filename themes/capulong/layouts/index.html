@@ -70,7 +70,7 @@
               <a href="https://wa.me/{{ $.Site.Params.whatsapp_number }}?text={{ urlquery (printf "Hello, I want to order %s at %s" .name .price) }}" 
                  target="_blank" 
                  rel="noopener noreferrer"
-                 style="display:block; position: relative;">
+                 style="display:block; position:relative;">
                 <img src="{{ .image | relURL }}" alt="{{ .name }}" loading="lazy" onerror="this.src='/images/placeholder.png'">
                 <div class="available-icon">✔</div>
               </a>
@@ -88,23 +88,23 @@
     </div>
     {{ end }}
   </div>
-</section>
 
-<!-- Tab Functionality Script -->
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const tabs = document.querySelectorAll(".tab-button");
-    const contents = document.querySelectorAll(".tab-content");
+  <!-- Tab Functionality Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const tabs = document.querySelectorAll(".tab-button");
+      const contents = document.querySelectorAll(".tab-content");
 
-    tabs.forEach(tab => {
-      tab.addEventListener("click", () => {
-        tabs.forEach(t => t.classList.remove("active"));
-        contents.forEach(c => c.classList.remove("active"));
-        tab.classList.add("active");
-        document.getElementById(tab.dataset.tab).classList.add("active");
+      tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+          tabs.forEach(t => t.classList.remove("active"));
+          contents.forEach(c => c.classList.remove("active"));
+          tab.classList.add("active");
+          document.getElementById(tab.dataset.tab).classList.add("active");
+        });
       });
     });
-  });
-</script>
+  </script>
+</section>
 
 {{ end }}
