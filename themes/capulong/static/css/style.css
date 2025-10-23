@@ -9,7 +9,6 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px;
 }
 
 :root {
@@ -338,6 +337,8 @@ main {
   font-size: 2.5rem;
   color: var(--primary-color);
   margin-bottom: 3rem;
+  margin-top: -70px;
+  padding-top: 70px;
 }
 
 .contact-grid {
