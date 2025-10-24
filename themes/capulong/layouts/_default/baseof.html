@@ -20,37 +20,39 @@
     
     <!-- Active Navigation Link Detection Script -->
     <script>
-      // Clear all active classes immediately on page load (before anything else renders)
       document.addEventListener("DOMContentLoaded", function() {
-        const links = document.querySelectorAll(".main-nav a");
-        links.forEach(link => {
-          link.classList.remove("active");
-        });
-        
-        // Now apply the correct active class
         updateActiveLink();
       });
       
       function updateActiveLink() {
         const links = document.querySelectorAll(".main-nav a");
         const currentHash = window.location.hash;
-        const currentPath = window.location.pathname;
         
+        // Remove active class from ALL links
         links.forEach(link => {
-          const href = link.getAttribute("href");
-          
-          // Home link: only active when on / with no hash
-          if (href === "/" && (currentPath === "/" || currentPath === "") && currentHash === "") {
-            link.classList.add("active");
-          }
-          // Anchor links: active when hash matches
-          else if (currentHash !== "" && href.includes(currentHash)) {
-            link.classList.add("active");
-          }
+          link.classList.remove("active");
         });
+        
+        // If there's a hash (#order, #products), highlight that link only
+        if (currentHash) {
+          links.forEach(link => {
+            const href = link.getAttribute("href");
+            if (href === currentHash || href.endsWith(currentHash)) {
+              link.classList.add("active");
+            }
+          });
+        } else {
+          // If no hash, highlight Home only
+          links.forEach(link => {
+            const href = link.getAttribute("href");
+            if (href === "/") {
+              link.classList.add("active");
+            }
+          });
+        }
       }
       
-      // Update active link when hash changes (user clicks anchor link)
+      // Update active link when hash changes
       window.addEventListener("hashchange", function() {
         updateActiveLink();
       });
