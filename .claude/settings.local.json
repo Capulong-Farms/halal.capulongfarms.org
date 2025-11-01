@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(hugo:*)"
+      "Bash(hugo:*)",
+      "Bash(tree:*)",
+      "Bash(public)",
+      "Bash(resources --filesfirst:*)"
     ],
     "deny": [],
     "ask": []
