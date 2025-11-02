@@ -155,22 +155,89 @@
       });
       
       message += `\nTotal: ₱${total.toFixed(2)}\n\nPlease confirm availability and delivery.`;
-      
-      // Send to both WhatsApp and Messenger
-      const whatsappUrl = 'https://wa.me/{{ .Site.Params.whatsapp_number }}?text=' + encodeURIComponent(message);
-      const messengerUrl = 'https://m.me/61582708015159?text=' + encodeURIComponent(message);
-      
-      // Open WhatsApp
+      const encoded = encodeURIComponent(message);
+
+      // First send to WhatsApp
+      const whatsappUrl = `https://wa.me/{{ .Site.Params.whatsapp_number }}?text=${encoded}`;
       window.open(whatsappUrl, '_blank');
+
+      // Create and show custom dialog
+      const dialog = document.createElement('div');
+      dialog.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        z-index: 1000;
+        text-align: center;
+      `;
       
-      // Open Messenger after a short delay
-      setTimeout(() => {
-        window.open(messengerUrl, '_blank');
-      }, 500);
-      
-      // Clear cart after purchase
-      localStorage.removeItem(CART_KEY);
-      updateCartCount();
+      dialog.innerHTML = `
+        <p>Your order has been sent to WhatsApp!</p>
+        <p>Click the Messenger button below to also send via Messenger:</p>
+        <div style="margin-top: 15px;">
+          <a href="#" class="floating-messenger" style="
+            display: inline-block;
+            padding: 10px 20px;
+            background: #0084FF;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+          ">
+            <i class="fab fa-facebook-messenger"></i> Send to Messenger
+          </a>
+        </div>
+      `;
+
+      // Create overlay
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+      `;
+
+      // Add click handler to messenger button in dialog
+      dialog.querySelector('.floating-messenger').addEventListener('click', (e) => {
+        e.preventDefault();
+
+        // Get the message for messenger
+        const messengerId = '61582708015159';
+        const m = 'https://m.me/' + messengerId + '?text=' + encoded;
+        
+        // Open Messenger directly
+        window.open(m, '_blank');
+
+        // Remove dialog and overlay after short delay
+        setTimeout(() => {
+          document.body.removeChild(dialog);
+          document.body.removeChild(overlay);
+          
+          // Clear cart and show confirmation after messenger opens
+          localStorage.removeItem(CART_KEY);
+          updateCartCount();
+          alert('Cart has been cleared!');
+        }, 500);
+      });
+
+      // Add click handler to overlay for closing
+      overlay.addEventListener('click', () => {
+        document.body.removeChild(dialog);
+        document.body.removeChild(overlay);
+      });
+
+      // Add to page
+      document.body.appendChild(overlay);
+      document.body.appendChild(dialog);
     }
     
     function viewCart() {
@@ -217,6 +284,68 @@
           document.getElementById(tab.dataset.tab).classList.add("active");
         });
       });
+
+      // --- contact button behavior: build message from cart or fallback message ---
+      function getContactMessage() {
+        const cart = getCart();
+        if (!cart || cart.length === 0) {
+          return 'Hi, I browsed your products and I am interested to purchase. Kindly return my message for more details?';
+        }
+
+        let message = 'I would like to order the following items:\n\n';
+        let total = 0;
+        cart.forEach(item => {
+          const price = parseFloat(String(item.price).replace(/[^0-9.-]+/g, '')) || 0;
+          message += `• ${item.name} (${item.price}) x ${item.quantity}\n`;
+          total += price * item.quantity;
+        });
+        message += `\nTotal: ₱${total.toFixed(2)}\n\nPlease confirm availability and delivery.`;
+        return message;
+      }
+
+      // Attach click handlers to floating/contact anchors (whatsapp & messenger)
+      (function attachFloatingContactHandlers() {
+        const whatsappNumber = '{{ .Site.Params.whatsapp_number }}';
+        const messengerId = '61582708015159';
+
+        const selectors = [
+          'a[href*="wa.me"]',
+          'a[href*="api.whatsapp.com"]',
+          'a[href*="m.me"]',
+          'a[href*="facebook.com/messages"]',
+          'a.floating-whatsapp',
+          'a.floating-messenger',
+          'a.whatsapp',
+          'a.messenger'
+        ].join(',');
+
+        const anchors = document.querySelectorAll(selectors);
+        anchors.forEach(a => {
+          a.addEventListener('click', function(e) {
+            // build message
+            const rawMsg = getContactMessage();
+            const encoded = encodeURIComponent(rawMsg);
+
+            const href = (a.getAttribute('href') || '').toLowerCase();
+
+            if (href.includes('wa.me') || href.includes('api.whatsapp') || a.classList.contains('floating-whatsapp') || a.classList.contains('whatsapp')) {
+              e.preventDefault();
+              const wa = 'https://wa.me/' + whatsappNumber + '?text=' + encoded;
+              window.open(wa, '_blank');
+              return;
+            }
+
+            if (href.includes('m.me') || href.includes('facebook.com/messages') || a.classList.contains('floating-messenger') || a.classList.contains('messenger')) {
+              e.preventDefault();
+              const m = 'https://m.me/' + messengerId + '?text=' + encoded;
+              window.open(m, '_blank');
+              return;
+            }
+
+            // otherwise let the link behave normally
+          });
+        });
+      })();
     });
   </script>
 
