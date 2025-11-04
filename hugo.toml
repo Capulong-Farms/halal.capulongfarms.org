@@ -1,4 +1,4 @@
-baseURL = 'https://capulongfarms.org/'
+baseURL = 'https://capulongfarms.netlify.app/'
 languageCode = 'en-ph'
 title = 'Farm-to-Table Pampanga | Fresh Produce & Livestock – Capulong Farms'
 theme = 'capulong'
@@ -34,11 +34,11 @@ disableKinds = ["taxonomy", "term"]
 [outputs]
   home = ["HTML"]
 
-# Disable caching during development
+# Production cache settings
 [caches]
   [caches.getcsv]
-    maxAge = "10s"
+    maxAge = "1h"
   [caches.getjson]
-    maxAge = "10s"
+    maxAge = "1h"
   [caches.images]
-    maxAge = "10s"
+    maxAge = "24h"
