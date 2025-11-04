@@ -246,6 +246,9 @@
         return;
       }
       
+      // Close cart modal immediately
+      closeCartModal();
+      
       // Build message
       let message = 'I would like to order the following items:\n\n';
       let total = 0;
@@ -335,11 +338,27 @@
       overlay.addEventListener('click', () => {
         document.body.removeChild(dialog);
         document.body.removeChild(overlay);
+        
+        // Clear cart when dialog is closed
+        localStorage.removeItem(CART_KEY);
+        updateCartCount();
+        alert('Cart has been cleared!');
       });
 
       // Add to page
       document.body.appendChild(overlay);
       document.body.appendChild(dialog);
+      
+      // Auto-clear cart after 10 seconds if user doesn't interact
+      setTimeout(() => {
+        if (document.body.contains(dialog)) {
+          document.body.removeChild(dialog);
+          document.body.removeChild(overlay);
+          localStorage.removeItem(CART_KEY);
+          updateCartCount();
+          alert('Cart has been cleared!');
+        }
+      }, 10000);
     }
     
     function openCartModal() {
