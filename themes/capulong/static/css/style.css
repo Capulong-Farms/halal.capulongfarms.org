@@ -81,17 +81,37 @@ img:not([src]) {
   gap: 1rem;
 }
 
-.logo h1 {
+.logo {
+  flex-shrink: 0;
+}
+
+.logo-styled {
   color: var(--primary-color);
-  font-size: 1.8rem;
+  font-size: 1.3rem;
+  font-weight: 700;
   white-space: nowrap;
+  margin: 0;
+  padding: 0.4rem 1rem;
+  background: white;
+  border: 2px solid var(--primary-color);
+  border-radius: 6px;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 170px;
+  height: auto;
+  min-height: 36px;
+  box-sizing: border-box;
 }
 
 .main-nav ul {
   display: flex;
   list-style: none;
-  gap: 2rem;
-  flex-wrap: nowrap;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .main-nav a {
@@ -102,6 +122,11 @@ img:not([src]) {
   border-radius: 5px;
   transition: color 0.3s, background-color 0.3s;
   white-space: nowrap;
+  font-stretch: condensed;
+  letter-spacing: -0.3px;
+  font-family: 'Segoe UI', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif;
+  transform: scaleX(0.9);
+  transform-origin: center;
 }
 
 .main-nav a:hover {
@@ -974,6 +999,93 @@ main {
 }
 
 /* =============================
+   Map Container Styling
+============================= */
+.map-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.map-wrapper {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 600px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.map-wrapper iframe {
+  width: 100%;
+  height: 250px;
+  border-radius: 8px;
+  filter: contrast(1.1) saturate(1.1);
+}
+
+/* Mobile Map Styling */
+@media (max-width: 768px) {
+  .map-wrapper {
+    padding: 0.75rem;
+    max-width: 100%;
+  }
+  
+  .map-wrapper iframe {
+    height: 200px;
+  }
+}
+
+/* =============================
+   WhatsApp Contact Link Styling
+============================= */
+.whatsapp-contact-link {
+  color: #25d366;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  border: 2px solid transparent;
+}
+
+.whatsapp-contact-link:hover {
+  color: #128c7e;
+  background-color: rgba(37, 211, 102, 0.1);
+  border-color: rgba(37, 211, 102, 0.3);
+  transform: translateY(-1px);
+}
+
+.whatsapp-contact-link:active {
+  transform: translateY(0);
+  background-color: rgba(37, 211, 102, 0.2);
+}
+
+.whatsapp-contact-link i {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.whatsapp-contact-link:hover i {
+  transform: scale(1.1);
+}
+
+/* Mobile WhatsApp Link */
+@media (max-width: 768px) {
+  .whatsapp-contact-link {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.95rem;
+  }
+  
+  .whatsapp-contact-link i {
+    font-size: 1.1rem;
+  }
+}
+
+/* =============================
    Header Cart Button Styling
 ============================= */
 .cart-actions {
@@ -1372,9 +1484,9 @@ main {
   
   /* Mobile Cart Button Improvements */
   .cart-icon-btn {
-    min-width: 44px;
-    min-height: 44px;
-    padding: 0.5rem;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0.4rem;
   }
   
   .cart-icon-btn i {
@@ -1387,5 +1499,208 @@ main {
     font-size: 0.7rem;
     top: -6px;
     right: -6px;
+  }
+  
+  /* Mobile Header Optimizations */
+  .header-content {
+    gap: 0.3rem;
+    padding: 0.6rem 0;
+  }
+  
+  .logo-styled {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+    width: 110px;
+    min-height: 30px;
+    letter-spacing: 0.1px;
+  }
+  
+  .main-nav ul {
+    gap: 0.2rem;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+  
+  .main-nav a {
+    padding: 0.25rem 0.3rem;
+    font-size: 0.7rem;
+    border-radius: 3px;
+    font-weight: 600;
+    white-space: nowrap;
+    font-stretch: condensed;
+    letter-spacing: -0.2px;
+    font-family: 'Segoe UI', 'Arial Narrow', 'Liberation Sans Narrow', sans-serif;
+    transform: scaleX(0.85);
+    transform-origin: center;
+  }
+  
+  .main-nav a.cta-button {
+    padding: 0.25rem 0.25rem;
+    font-size: 0.65rem;
+  }
+  
+  /* Make navigation even more compact */
+  .main-nav {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+/* =============================
+   Contact Links Styling (WhatsApp, Messenger, Facebook)
+============================= */
+.whatsapp-contact-link,
+.messenger-contact-link,
+.facebook-contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  max-width: 220px;
+}
+
+.whatsapp-contact-link {
+  color: #25d366;
+  background: rgba(37, 211, 102, 0.1);
+}
+
+/* Messenger Contact Link */
+.messenger-contact-link {
+  color: #0084FF;
+  background: rgba(0, 132, 255, 0.1);
+}
+
+/* Facebook Contact Link */
+.facebook-contact-link {
+  color: #1877F2;
+  background: rgba(24, 119, 242, 0.1);
+}
+
+/* Hover States */
+.whatsapp-contact-link:hover {
+  color: #20b358;
+  background: rgba(37, 211, 102, 0.2);
+  border-color: rgba(37, 211, 102, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  text-decoration: none;
+}
+
+.messenger-contact-link:hover {
+  color: #0066CC;
+  background: rgba(0, 132, 255, 0.2);
+  border-color: rgba(0, 132, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 132, 255, 0.3);
+  text-decoration: none;
+}
+
+.facebook-contact-link:hover {
+  color: #1565C0;
+  background: rgba(24, 119, 242, 0.2);
+  border-color: rgba(24, 119, 242, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
+  text-decoration: none;
+}
+
+/* Active States */
+.whatsapp-contact-link:active,
+.messenger-contact-link:active,
+.facebook-contact-link:active {
+  transform: translateY(0);
+}
+
+.whatsapp-contact-link:active {
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.2);
+}
+
+.messenger-contact-link:active {
+  box-shadow: 0 2px 8px rgba(0, 132, 255, 0.2);
+}
+
+.facebook-contact-link:active {
+  box-shadow: 0 2px 8px rgba(24, 119, 242, 0.2);
+}
+
+/* Icon Styling */
+.whatsapp-contact-link i,
+.messenger-contact-link i,
+.facebook-contact-link i {
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.whatsapp-contact-link i {
+  color: #25d366;
+}
+
+.messenger-contact-link i {
+  color: #0084FF;
+}
+
+.facebook-contact-link i {
+  color: #1877F2;
+}
+
+/* Icon Hover Effects */
+.whatsapp-contact-link:hover i {
+  color: #20b358;
+  transform: scale(1.1);
+}
+
+.messenger-contact-link:hover i {
+  color: #0066CC;
+  transform: scale(1.1);
+}
+
+.facebook-contact-link:hover i {
+  color: #1565C0;
+  transform: scale(1.1);
+}
+
+/* Mobile responsive styling for all contact links */
+@media (max-width: 768px) {
+  .whatsapp-contact-link,
+  .messenger-contact-link,
+  .facebook-contact-link {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    min-height: 44px; /* Touch-friendly minimum size */
+    min-width: 160px;
+    justify-content: center;
+    max-width: 100%;
+  }
+  
+  .whatsapp-contact-link i,
+  .messenger-contact-link i,
+  .facebook-contact-link i {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .whatsapp-contact-link,
+  .messenger-contact-link,
+  .facebook-contact-link {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 240px;
+    margin: 0 auto 0.3rem auto;
+    display: flex;
+  }
+  
+  .contact-details p {
+    margin-bottom: 0.3rem;
   }
 }
