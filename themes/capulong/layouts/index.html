@@ -443,9 +443,30 @@
       }
     });
     
+    // Add mobile-friendly event listeners
+    function addMobileEventListeners() {
+      const cartButton = document.getElementById('cart-button');
+      if (cartButton) {
+        // Remove any existing onclick
+        cartButton.removeAttribute('onclick');
+        
+        // Add both touch and click events for better mobile compatibility
+        cartButton.addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          openCartModal();
+        }, { passive: false });
+        
+        cartButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          openCartModal();
+        });
+      }
+    }
+    
     // Tab functionality
     document.addEventListener("DOMContentLoaded", function() {
       updateCartCount();
+      addMobileEventListeners();
       
       const tabs = document.querySelectorAll(".tab-button");
       const contents = document.querySelectorAll(".tab-content");
