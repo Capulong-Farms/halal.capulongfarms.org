@@ -1,9 +1,9 @@
 # Capulong Farms Website - Stable State Documentation
-## Complete E-commerce Platform with Enhanced Contact System
+## Complete E-commerce Platform with Enhanced Contact System & Cache-Optimized Header
 
 ### Current Stable Version
-- **Commit Hash**: `ae22b07`
-- **Commit Message**: "Optimize website performance and reduce loading redundancy"
+- **Commit Hash**: `6d60d1d`
+- **Commit Message**: "Fix Capulong Farms nav link to prevent page reload"
 - **Date**: November 5, 2025
 - **Author**: polcapulong-capulongfarms <polcapulong@yahoo.com>
 - **Branch**: main
@@ -16,7 +16,20 @@
 
 ### Key Features Implemented in This Version
 
-#### 1. Enhanced Contact System (New in Current Version)
+#### 1. Redesigned 2-Column Header Layout (Latest Enhancement)
+- **Space-Optimized Design**: Eliminated 3-column layout for better mobile visibility
+- **Left-Aligned Navigation**: All navigation items aligned to the left for cleaner appearance
+- **Dual-Purpose Logo**: "Capulong Farms" serves as both brand logo and home navigation
+- **Improved Mobile Performance**: Better space utilization on smaller screens
+- **Clean Styling**: Removed navigation underlines for professional appearance
+
+#### 2. Browser Cache Optimization System
+- **CSS Cache Busting**: Implemented `?v=20251105` parameter to force CSS updates
+- **Navigation Cache Fix**: Changed "Capulong Farms" link from full page reload (`/`) to smooth scroll (`/#`)
+- **Desktop Browser Compatibility**: Resolved persistent cache issues across all browsers
+- **Consistent User Experience**: Eliminated version inconsistencies between page loads
+
+#### 3. Enhanced Contact System (Previous Version)
 - **Triple Contact Options**: WhatsApp Business, Messenger, and Facebook Page
 - **Smart Cart-Aware Functionality**: 
   - WhatsApp & Messenger: Open cart modal when items exist, send interest message when empty
@@ -25,7 +38,7 @@
 - **Mobile Optimized**: Touch-friendly 44px minimum sizing for accessibility
 - **Improved User Instructions**: Clear step-by-step cart workflow guidance
 
-#### 2. Amazon-Style Cart System
+#### 4. Amazon-Style Cart System
 - **Single Cart Icon**: Replaced multiple header cart buttons with a unified cart icon
 - **Item Count Badge**: Red circular badge showing total cart items count
 - **Cart Modal Interface**: Comprehensive modal popup for cart management
@@ -33,25 +46,14 @@
 - **Real-time Total Calculation**: Live updates of cart total as items change
 - **Empty Cart State**: Professional empty cart display with guidance
 
-#### 3. Enhanced User Experience
-- **Multi-Channel Contact Integration**:
-  - WhatsApp Business: Smart cart-aware messaging with professional green styling
-  - Messenger: Same smart functionality with Facebook blue styling
-  - Facebook Page: Direct navigation to official business page
-  - All contacts: Hover animations, lift effects, and consistent user experience
-- **Improved User Guidance**: Updated ordering instructions with clear cart workflow
-- **Professional UI Animations**: Smooth slide-in animations for modal and contact hover effects
-- **Mobile Responsive Design**: Optimized for all screen sizes with touch-friendly controls
-- **Click Outside to Close**: Modal closes when clicking the overlay
-
-#### 4. Quantity Management System
+#### 5. Quantity Management System
 - **Quantity Limits**: 1-9999 items per product
 - **Input Validation**: Numeric-only inputs with real-time validation
 - **Counter Controls**: Plus/minus buttons for easy quantity adjustment
 - **Auto-correction**: Invalid inputs automatically corrected to valid ranges
 - **Reset After Add**: Quantity resets to 1 after adding to cart
 
-#### 5. Product Management
+#### 6. Product Management
 - **Availability Control**: `available: true/false` shows/hides "NOT AVAILABLE" watermark
 - **Discontinue Filter**: `discontinue: true` completely hides products from website
 - **Category-based Organization**: Tabbed interface for different product categories
@@ -59,91 +61,150 @@
 
 ### Recent Enhancement Commits (Latest First)
 
-#### Latest Performance Optimization (Latest):
-1. **ae22b07** - "Optimize website performance and reduce loading redundancy" (Current Stable)
+#### Latest Header Redesign & Cache Optimization (Latest):
+1. **6d60d1d** - "Fix Capulong Farms nav link to prevent page reload" (Current Stable)
+   - Changed navigation link from `url="/"` to `url="/#"` 
+   - Prevents full page reload and cache issues
+   - Maintains smooth scrolling behavior like other nav links
+
+2. **d54939d** - "Add CSS cache busting to fix desktop browser cache issues"
+   - Added `?v=20251105` parameter to CSS file link
+   - Forces browsers to load latest CSS version
+   - Eliminates persistent cache issues on desktop browsers
+
+3. **c39163e** - "Remove navigation underlines for cleaner header design"
+   - Removed `text-decoration: underline` from active navigation links
+   - Improves appearance of "Capulong Farms" as both logo and navigation
+   - Cleaner, more professional look
+
+4. **260e8ab** - "Update stable state documentation with final header styling fix"
+   - Complete 2-column header layout implementation
+   - Left-aligned navigation with proper spacing
+   - Mobile-responsive design improvements
+
+#### Previous Performance & Header Commits:
+5. **9379160** - "Enforce header logo styling with !important declarations"
+6. **156aca9** - "Update stable state documentation with latest enhancements"
+7. **295ca8e** - "Fix header logo styling to match cart icon design"
+8. **2256017** - "Configure site for production deployment on Netlify"
+
+#### Contact System & Performance Enhancement Commits:
+9. **ae22b07** - "Optimize website performance and reduce loading redundancy"
    - Removed duplicate image storage (~50% payload reduction)
    - Extracted 467 lines of JavaScript to modular files (cart.js, app.js)
    - Added deferred loading for non-blocking execution
    - Fixed image path references and cleaned build artifacts
    - Improved Core Web Vitals performance
 
-#### Previous Enhancement Commits:
-2. **9379160** - "Enforce header logo styling with !important declarations"
-3. **295ca8e** - "Fix header logo styling to match cart icon design" 
-4. **2256017** - "Configure site for production deployment on Netlify"
-5. **5174528** - "Add Progressive Web App (PWA) functionality"
-
-#### Contact System Enhancement Commits:
-5. **8add58f** - "Update ordering instructions in Buy & Pay section"
-6. **4aca2ff** - "Update Facebook contact link text and URL"
-7. **8c32026** - "Add Messenger and Facebook contact options to Buy & Pay section"
-
-#### Previous Major Features:
-8. **03970ae** - "add smart WhatsApp hyperlinks to Buy & Pay section"
-9. **2dd61b5** - "implement Amazon-style cart system with modal interface" (Base)
+10. **8add58f** - "Update ordering instructions in Buy & Pay section"
+11. **4aca2ff** - "Update Facebook contact link text and URL"
+12. **8c32026** - "Add Messenger and Facebook contact options to Buy & Pay section"
 
 ### Files Modified in Current Version
 
-#### Performance Optimization Files (Commit ae22b07):
-1. **themes/capulong/layouts/index.html** (Major restructure)
-   - Removed 467 lines of inline JavaScript
-   - Replaced with external script references (cart.js, app.js)
-   - Improved HTML parsing performance with deferred loading
+#### Header Redesign & Cache Optimization (Latest Commits):
 
-2. **themes/capulong/layouts/_default/baseof.html** (+4 lines)
-   - Added WhatsApp number meta tag for JavaScript configuration
-   - Included external JavaScript files with defer attribute
-   - Improved script loading architecture
+1. **hugo.toml** (Navigation fix)
+   - Changed "Capulong Farms" navigation from `url = "/"` to `url = "/#"`
+   - Prevents full page reload and maintains smooth scrolling behavior
+   - Eliminates cache issues when clicking home navigation
 
-3. **data/products.yaml** (1 line fix)
-   - Fixed image path reference: FA-TilapiaFrozen.jpg → FA-Tilapia-Frozen.jpg
-   - Ensures proper image loading
+2. **themes/capulong/layouts/_default/baseof.html** (Cache busting)
+   - Added CSS cache busting: `href="{{ "css/style.css" | relURL }}?v=20251105"`
+   - Forces browsers to load latest CSS version on every deployment
+   - Eliminates persistent browser cache issues
 
-4. **themes/capulong/static/js/cart.js** (New file - 350+ lines)
-   - Complete cart management system
-   - Shopping cart operations (add, remove, update quantities)
-   - Modal management and order processing
-   - WhatsApp/Messenger integration
+3. **themes/capulong/static/css/style.css** (Styling cleanup)
+   - Removed `text-decoration: underline` from `.main-nav ul li a.active`
+   - Removed `text-decoration: underline !important` from mobile responsive CSS
+   - Changed both to `text-decoration: none` for cleaner appearance
 
-5. **themes/capulong/static/js/app.js** (New file - 90+ lines)
-   - Main application initialization
-   - Tab functionality and contact handlers
-   - Floating contact button behavior
-   - Global configuration management
+4. **themes/capulong/layouts/partials/header.html** (Layout structure)
+   - Removed 3-column logo section completely
+   - Implemented 2-column CSS Grid layout: navigation + cart
+   - Left-aligned navigation with proper spacing
+   - Mobile-responsive improvements
 
-#### Performance Infrastructure Changes:
-- **Eliminated**: Duplicate image storage in public/images/
-- **Cleaned**: Temporary CSS build artifacts (.tmp files)
-- **Optimized**: JavaScript execution with non-blocking defer loading
-- **Modularized**: Monolithic inline scripts into maintainable modules
+#### Header Layout Architecture:
+- **CSS Grid Implementation**: `grid-template-columns: 1fr auto`
+- **Navigation Positioning**: `justify-self: start` (left-aligned)
+- **Cart Positioning**: `justify-self: end` (right-aligned)
+- **Mobile Optimization**: Responsive design with condensed fonts and scaling
 
-#### Supporting Files (Previous Commits):
-4. **data/products.yaml**
-   - Product catalog with availability and discontinue flags
-   - Price, image, and category information
+#### Performance Infrastructure (Previous Commits):
+5. **themes/capulong/static/js/cart.js** (Modular cart system - 350+ lines)
+6. **themes/capulong/static/js/app.js** (Application logic - 90+ lines)
+7. **data/products.yaml** (Product catalog with corrected image paths)
 
-5. **hugo.toml**
-   - Site configuration with WhatsApp number
-   - Menu structure and cache settings
+### Header Redesign Technical Implementation
+
+#### Layout Transformation:
+- **From**: 3-column flexbox layout (logo | navigation | cart)
+- **To**: 2-column CSS Grid layout (navigation | cart)
+- **Key Change**: Complete removal of logo section to eliminate reserved space
+
+#### CSS Grid Specifications:
+```css
+.header-content {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 1rem 0;
+  gap: 1rem;
+}
+
+.main-nav {
+  justify-self: start;  /* Left-aligned navigation */
+}
+
+.cart-actions {
+  justify-self: end;    /* Right-aligned cart */
+}
+```
+
+#### Navigation Menu Configuration:
+```toml
+# hugo.toml menu structure
+[[menu.main]]
+  name = "Capulong Farms"
+  url = "/#"                    # Smooth scroll, no page reload
+  weight = 1
+  [menu.main.params]
+    class = "cta-button"        # Orange background styling
+
+[[menu.main]]
+  name = "Products"
+  url = "/#products"            # Smooth scroll to products section
+  weight = 2
+
+[[menu.main]]
+  name = "Buy&Pay!"
+  url = "/#order"               # Smooth scroll to order section
+  weight = 3
+```
+
+#### Cache Optimization Strategy:
+1. **CSS Cache Busting**: Version parameter forces fresh CSS downloads
+2. **Navigation Behavior**: Hash-based URLs prevent unnecessary page reloads
+3. **Hugo Server Settings**: Cache-busting options during development
+4. **Browser Compatibility**: Works across Chrome, Firefox, Edge, Safari
 
 ### Cart System Functionality & User Experience Flow
 
 #### Product Browsing Flow:
-1. **Landing**: User lands on homepage with hero section and farm information
-2. **Product Discovery**: User browses products via category tabs
-3. **Quantity Selection**: User adjusts quantity using +/- buttons or direct input
-4. **Add to Cart**: User clicks "Add to Cart" button
-5. **Visual Feedback**: Cart icon badge updates with new item count
+1. **Landing**: User lands on homepage with redesigned 2-column header
+2. **Navigation**: Clean left-aligned navigation without underlines
+3. **Product Discovery**: User browses products via category tabs
+4. **Quantity Selection**: User adjusts quantity using +/- buttons or direct input
+5. **Add to Cart**: User clicks "Add to Cart" button
+6. **Visual Feedback**: Cart icon badge updates with new item count
 
-#### Cart Management Flow:
-1. **Cart Access**: User clicks cart icon in header
-2. **Cart Modal Opens**: Professional modal displays all cart items
-3. **Item Management**: User can:
-   - Adjust individual item quantities
-   - Remove specific items
-   - View real-time total calculation
-   - Clear entire cart
-4. **Order Process**: User clicks "Proceed to Buy" to send order via WhatsApp/Messenger
+#### Header Navigation Flow:
+1. **Home Navigation**: "Capulong Farms" smoothly scrolls to top without page reload
+2. **Products Navigation**: Smooth scroll to products section
+3. **Buy&Pay Navigation**: Smooth scroll to order section
+4. **Consistent Behavior**: All navigation uses hash-based smooth scrolling
+5. **Cache Resilience**: CSS cache busting ensures consistent styling
 
 #### Contact Integration Flow:
 1. **Empty Cart State**: Contact buttons send generic interest message
@@ -152,91 +213,86 @@
 4. **Multi-channel Option**: Secondary Messenger option provided
 5. **Cart Clearing**: Cart automatically cleared after successful order
 
-### Technical Implementation Details
+### Browser Cache Issue Resolution
 
-#### JavaScript Cart Management:
-- **Local Storage**: Cart data persisted in browser localStorage
-- **Cart Key**: 'capulong_cart' for data persistence
-- **Data Structure**: Array of objects with name, price, quantity
-- **Real-time Updates**: Cart count badge updates on every cart modification
+#### Problem Identification:
+- **Desktop Browsers**: Aggressively cached old 3-column header layout
+- **Mobile Devices**: Showed correct 2-column layout (different cache behavior)
+- **Navigation Issues**: Full page reloads caused cache retrieval instead of fresh content
 
-#### CSS Architecture:
-- **CSS Custom Properties**: Consistent color scheme via CSS variables
-- **Responsive Design**: Mobile-first approach with breakpoints
-- **Animation Framework**: CSS animations for smooth UX transitions
-- **Component-based Styling**: Modular CSS for cart components
+#### Solutions Implemented:
+1. **CSS Cache Busting**: Added version parameter to force CSS updates
+2. **Navigation Fix**: Changed from page reload to smooth scroll behavior
+3. **Development Server**: Used cache-busting options during development
+4. **Testing Strategy**: Incognito windows for cache-free verification
 
-#### Hugo Integration:
-- **Data-driven Products**: Products sourced from YAML data file
-- **Template Logic**: Hugo templating for dynamic content generation
-- **Static Asset Management**: Optimized image loading and caching
+#### Browser Compatibility Testing:
+- **Chrome/Edge**: Hard refresh (Ctrl+Shift+R) and Developer Tools cache clearing
+- **Firefox**: Private window testing and cache clearing
+- **Mobile Browsers**: Consistent behavior across iOS Safari and Android Chrome
+- **Cache-Busting URLs**: Manual version parameters for immediate testing
 
 ### Revert Instructions
 
-#### Complete Revert to Previous State (Before Contact System Enhancement):
+#### Complete Revert to Previous Header State:
 ```bash
 # Navigate to repository
 cd C:\Afiq\Homepage\CapulongFarms\Chocolatey\capulongfarms.org
 
-# Revert to state before contact system enhancement (keep cart system)
-git reset --hard 2dd61b5
+# Revert to state before header redesign (keep contact & cart systems)
+git reset --hard ae22b07
 
 # Force push if needed (WARNING: This will overwrite remote history)
 git push origin main --force
 ```
 
-#### Complete Revert to Before Cart System:
+#### Revert Only Cache Optimization (Keep Header Design):
 ```bash
-# Navigate to repository
-cd C:\Afiq\Homepage\CapulongFarms\Chocolatey\capulongfarms.org
-
-# Revert to state before any cart/contact enhancements
-git reset --hard 16e8ea2
-
-# Force push if needed (WARNING: This will overwrite remote history)
-git push origin main --force
-```
-
-#### Selective Revert (Keep Cart, Remove Contact Enhancement):
-```bash
-# Revert only contact system changes
-git checkout 2dd61b5 -- themes/capulong/layouts/index.html
-git checkout 2dd61b5 -- themes/capulong/static/css/style.css
+# Revert cache busting changes
+git checkout ae22b07 -- themes/capulong/layouts/_default/baseof.html
+git checkout ae22b07 -- hugo.toml
 
 # Commit the selective revert
-git commit -m "revert contact system enhancement, keep cart system"
+git commit -m "revert cache optimization, keep header redesign"
 ```
 
 #### Restore Current State (If Reverted by Mistake):
 ```bash
-# Return to current stable state with performance optimizations
-git reset --hard ae22b07
+# Return to current stable state with header redesign
+git reset --hard 6d60d1d
 
 # Or restore specific commit
-git checkout ae22b07
+git checkout 6d60d1d
 ```
 
 ### Rollback Testing Checklist
 
 After any revert operation, verify:
-- [ ] Homepage loads correctly
+- [ ] Homepage loads with correct header layout (2-column vs 3-column)
+- [ ] Navigation alignment (left-aligned in current version)
+- [ ] "Capulong Farms" navigation behavior (smooth scroll vs page reload)
+- [ ] Navigation styling (underlines removed in current version)
 - [ ] Product tabs function properly
-- [ ] Cart functionality works (if applicable)
+- [ ] Cart functionality works
 - [ ] Mobile responsiveness maintained
 - [ ] Contact system functionality:
   - [ ] WhatsApp Business link behavior (cart-aware vs. interest message)
   - [ ] Messenger link behavior (cart-aware vs. interest message)
   - [ ] Facebook page link (direct navigation)
   - [ ] Contact link styling and hover effects
-- [ ] Product images display correctly
-- [ ] Ordering instructions clarity and accuracy
+- [ ] Browser cache behavior:
+  - [ ] CSS loads correctly after cache clearing
+  - [ ] Navigation links work consistently
+  - [ ] No version inconsistencies between page loads
+- [ ] Cross-browser compatibility (Chrome, Firefox, Edge, Safari)
 
 ### Dependencies & Requirements
 
 #### Hugo Configuration:
 - **Hugo Version**: Compatible with modern Hugo versions
-- **Theme**: Custom 'capulong' theme
+- **Theme**: Custom 'capulong' theme with 2-column header layout
 - **Data Sources**: products.yaml for product catalog
+- **Cache Busting**: CSS version parameter system
 
 #### External Dependencies:
 - **Font Awesome**: For icons (CDN)
@@ -247,79 +303,89 @@ After any revert operation, verify:
 #### Browser Requirements:
 - **JavaScript**: ES6+ features used
 - **localStorage**: Required for cart persistence
-- **CSS Grid**: Used for responsive product layout
+- **CSS Grid**: Used for responsive header and product layout
 - **CSS Custom Properties**: For consistent theming
+- **Modern CSS Support**: Grid, flexbox, custom properties
 
 ### Performance Considerations
 
-#### Optimizations Implemented (Latest Version):
-- **Modular JavaScript Architecture**: Separated 467 lines into cart.js and app.js
-- **Deferred Script Loading**: Non-blocking JavaScript execution with defer attribute
-- **Eliminated Image Duplication**: Removed duplicate storage reducing payload by ~50%
-- **Clean Build Process**: Removed temporary CSS artifacts and build leftovers
-- **Fixed Asset References**: Corrected broken image paths for proper loading
-- **Image Lazy Loading**: Reduces initial page load time
-- **CSS Minification**: Optimized stylesheet delivery
-- **Cache Busting**: 10-second cache for development
-- **Responsive Images**: Automatic scaling for different devices
+#### Header Redesign Optimizations:
+- **Reduced Layout Complexity**: 2-column vs 3-column layout reduces rendering work
+- **Eliminated Logo Asset**: Removed logo image loading and processing
+- **CSS Grid Efficiency**: More efficient than complex flexbox layouts
+- **Mobile Performance**: Better space utilization and faster rendering
 
-#### Performance Metrics Improved:
-- **First Contentful Paint (FCP)**: Faster due to reduced inline JavaScript
-- **Largest Contentful Paint (LCP)**: Improved with optimized image loading
-- **Cumulative Layout Shift (CLS)**: Better with deferred script execution
-- **Time to Interactive (TTI)**: Reduced through modular JavaScript loading
+#### Cache Optimization Benefits:
+- **Consistent Styling**: CSS cache busting eliminates version inconsistencies
+- **Reduced Support Issues**: Users always see the latest design
+- **Faster Development**: Cache-busting during development speeds iteration
+- **Cross-Browser Reliability**: Works consistently across all browsers
 
-#### Monitoring Points:
-- **Cart Performance**: localStorage operations and modular script loading
-- **Modal Animations**: CSS animation performance
-- **Mobile Loading**: Touch interaction responsiveness
-- **Image Loading**: Fallback placeholder system and optimized asset delivery
-- **Script Execution**: Deferred loading performance and module initialization
+#### Navigation Performance:
+- **Smooth Scrolling**: Hash-based navigation avoids page reloads
+- **Memory Efficiency**: Single-page app behavior reduces memory usage
+- **Network Efficiency**: Fewer HTTP requests with smooth scrolling navigation
+
+#### Performance Metrics Impact:
+- **First Contentful Paint (FCP)**: Improved with simplified header layout
+- **Largest Contentful Paint (LCP)**: Better with reduced logo asset loading
+- **Cumulative Layout Shift (CLS)**: More stable with CSS Grid layout
+- **Time to Interactive (TTI)**: Faster with optimized header rendering
 
 ### Security Considerations
 
-#### Data Protection:
-- **Client-side Storage**: Cart data stored locally only
-- **No Sensitive Data**: No payment info stored in cart
-- **Contact Integration**: Secure WhatsApp/Messenger API usage
+#### Cache Security:
+- **Version Control**: CSS cache busting prevents stale security fixes
+- **Content Integrity**: Ensures users get latest security updates
+- **XSS Prevention**: Hugo template escaping maintained
 
-#### Input Validation:
-- **Quantity Limits**: Enforced 1-9999 range
-- **Numeric Validation**: Input sanitization for quantities
-- **XSS Prevention**: Hugo template escaping
+#### Navigation Security:
+- **Internal Navigation**: All navigation links use hash-based internal routing
+- **No External Redirects**: Navigation stays within site boundaries
+- **Input Validation**: Maintained for all cart and contact functionality
 
 ### Maintenance Notes
 
 #### Regular Maintenance Tasks:
-1. **Product Updates**: Modify data/products.yaml for catalog changes
-2. **Image Management**: Ensure all product images exist in static/images/
-3. **Contact Info**: Update WhatsApp number in hugo.toml if needed
-4. **Cache Clearing**: Adjust cache settings for production deployment
+1. **CSS Version Updates**: Increment version parameter when making CSS changes
+2. **Header Layout Testing**: Verify header appearance across browsers
+3. **Navigation Testing**: Ensure smooth scrolling works on all devices
+4. **Cache Clearing**: Test cache behavior during development
+5. **Product Updates**: Modify data/products.yaml for catalog changes
+6. **Image Management**: Ensure all product images exist in static/images/
+7. **Contact Info**: Update WhatsApp number in hugo.toml if needed
 
 #### Monitoring Requirements:
+- **Header Layout Consistency**: Verify 2-column layout across browsers
+- **Navigation Behavior**: Test smooth scrolling vs page reload behavior
+- **Cache Performance**: Monitor CSS loading and version consistency
 - **Cart Functionality**: Test cart operations regularly
-- **Mobile Experience**: Verify mobile cart modal behavior
+- **Mobile Experience**: Verify mobile header and cart modal behavior
 - **Contact Integration**: Ensure WhatsApp/Messenger links work
-- **Image Loading**: Check for broken image links
 
 ### Future Enhancement Considerations
 
-#### Potential Improvements:
-- **Backend Integration**: Move from localStorage to server-side cart
-- **Payment Gateway**: Direct payment processing integration
-- **User Accounts**: Customer login and order history
-- **Inventory Management**: Real-time stock level tracking
-- **Order Tracking**: Status updates for placed orders
+#### Header & Navigation Improvements:
+- **Logo Integration**: Add SVG logo icon while maintaining space efficiency
+- **Sticky Navigation**: Implement sticky header on scroll
+- **Breadcrumb Navigation**: Add breadcrumb system for deeper pages
+- **Search Functionality**: Add product search to header
+
+#### Cache Optimization Enhancements:
+- **Automated Versioning**: Auto-increment CSS version on build
+- **Service Worker**: Implement PWA caching strategy
+- **Asset Fingerprinting**: Hash-based asset versioning
+- **CDN Integration**: Optimize asset delivery
 
 #### Technical Debt:
-- **JavaScript Modularization**: Split cart functions into separate files
-- **CSS Organization**: Further component-based stylesheet structure
-- **Template Optimization**: Reduce HTML duplication
-- **Performance Monitoring**: Add analytics for cart usage
+- **CSS Grid Fallbacks**: Add flexbox fallbacks for older browsers
+- **JavaScript Modularization**: Further split cart functions
+- **Template Optimization**: Reduce HTML duplication in header
+- **Performance Monitoring**: Add analytics for header and navigation usage
 
 ---
 
 **Documentation Generated**: November 5, 2025  
 **For Repository**: Capulong Farms Website (capulongfarms.org)  
-**Stable Commit**: ae22b07 (Performance Optimized)  
-**Documentation Purpose**: Backup/Revert Reference for Complete E-commerce Platform with PWA, Enhanced Contact System, and Performance Optimizations
+**Stable Commit**: 6d60d1d (Header Redesigned with Cache Optimization)  
+**Documentation Purpose**: Backup/Revert Reference for Complete E-commerce Platform with 2-Column Header, Browser Cache Optimization, Enhanced Contact System, and Performance Optimizations
