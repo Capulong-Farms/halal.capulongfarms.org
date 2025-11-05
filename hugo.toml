@@ -16,17 +16,17 @@ disableKinds = ["taxonomy", "term"]
 [menu]
   [[menu.main]]
     name = "Capulong Farms"
-    url = "/#"
+    url = "#"
     weight = 1
     [menu.main.params]
       class = "cta-button"
   [[menu.main]]
     name = "Products"
-    url = "/#products"
+    url = "#products"
     weight = 2
   [[menu.main]]
     name = "Buy&Pay!"
-    url = "/#order"
+    url = "#order"
     weight = 3
 
 # Cache busting for CSS and images

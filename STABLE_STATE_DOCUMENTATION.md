@@ -2,8 +2,8 @@
 ## Complete E-commerce Platform with Enhanced Contact System & Cache-Optimized Header
 
 ### Current Stable Version
-- **Commit Hash**: `6d60d1d`
-- **Commit Message**: "Fix Capulong Farms nav link to prevent page reload"
+- **Commit Hash**: `0606c8d`
+- **Commit Message**: "updated products.yaml"
 - **Date**: November 5, 2025
 - **Author**: polcapulong-capulongfarms <polcapulong@yahoo.com>
 - **Branch**: main
@@ -53,73 +53,106 @@
 - **Auto-correction**: Invalid inputs automatically corrected to valid ranges
 - **Reset After Add**: Quantity resets to 1 after adding to cart
 
-#### 6. Product Management
+#### 6. Comprehensive Product Catalog System
 - **Availability Control**: `available: true/false` shows/hides "NOT AVAILABLE" watermark
 - **Discontinue Filter**: `discontinue: true` completely hides products from website
-- **Category-based Organization**: Tabbed interface for different product categories
+- **Category-based Organization**: 10 distinct product categories with tabbed interface
 - **Image Handling**: Automatic fallback to placeholder for missing images
+- **Comprehensive Product Range**: 
+  - **190+ Products**: Complete farm-to-table product catalog
+  - **10 Product Categories**: Farm Products, Fish & Aquatics, Processed Foods, Livestock & Poultry, Online Training, On-site Training, Training Literatures, Block Works, Website Creation
+  - **Detailed Pricing**: Philippine Peso pricing with various units (kg, pc, tray, bottle, etc.)
+  - **Professional Image Management**: Organized naming convention (FA-, FP-, LP-, PF-, etc.)
 
 ### Recent Enhancement Commits (Latest First)
 
-#### Latest Header Redesign & Cache Optimization (Latest):
-1. **6d60d1d** - "Fix Capulong Farms nav link to prevent page reload" (Current Stable)
+#### Latest Product Catalog Update (Latest):
+1. **0606c8d** - "updated products.yaml" (Current Stable)
+   - Comprehensive product catalog update with 190+ products
+   - 10 distinct product categories fully populated
+   - Complete pricing structure in Philippine Peso
+   - Professional image naming convention implementation
+   - Full farm-to-table business catalog integration
+
+#### Previous Header Redesign & Cache Optimization:
+2. **6d60d1d** - "Fix Capulong Farms nav link to prevent page reload"
    - Changed navigation link from `url="/"` to `url="/#"` 
    - Prevents full page reload and cache issues
    - Maintains smooth scrolling behavior like other nav links
 
-2. **d54939d** - "Add CSS cache busting to fix desktop browser cache issues"
+3. **d54939d** - "Add CSS cache busting to fix desktop browser cache issues"
    - Added `?v=20251105` parameter to CSS file link
    - Forces browsers to load latest CSS version
    - Eliminates persistent cache issues on desktop browsers
 
-3. **c39163e** - "Remove navigation underlines for cleaner header design"
+4. **c39163e** - "Remove navigation underlines for cleaner header design"
    - Removed `text-decoration: underline` from active navigation links
    - Improves appearance of "Capulong Farms" as both logo and navigation
    - Cleaner, more professional look
 
-4. **260e8ab** - "Update stable state documentation with final header styling fix"
+5. **260e8ab** - "Update stable state documentation with final header styling fix"
    - Complete 2-column header layout implementation
    - Left-aligned navigation with proper spacing
    - Mobile-responsive design improvements
 
 #### Previous Performance & Header Commits:
-5. **9379160** - "Enforce header logo styling with !important declarations"
-6. **156aca9** - "Update stable state documentation with latest enhancements"
-7. **295ca8e** - "Fix header logo styling to match cart icon design"
-8. **2256017** - "Configure site for production deployment on Netlify"
+6. **9379160** - "Enforce header logo styling with !important declarations"
+7. **156aca9** - "Update stable state documentation with latest enhancements"
+8. **295ca8e** - "Fix header logo styling to match cart icon design"
+9. **2256017** - "Configure site for production deployment on Netlify"
 
 #### Contact System & Performance Enhancement Commits:
-9. **ae22b07** - "Optimize website performance and reduce loading redundancy"
+10. **ae22b07** - "Optimize website performance and reduce loading redundancy"
    - Removed duplicate image storage (~50% payload reduction)
    - Extracted 467 lines of JavaScript to modular files (cart.js, app.js)
    - Added deferred loading for non-blocking execution
    - Fixed image path references and cleaned build artifacts
    - Improved Core Web Vitals performance
 
-10. **8add58f** - "Update ordering instructions in Buy & Pay section"
-11. **4aca2ff** - "Update Facebook contact link text and URL"
-12. **8c32026** - "Add Messenger and Facebook contact options to Buy & Pay section"
+11. **8add58f** - "Update ordering instructions in Buy & Pay section"
+12. **4aca2ff** - "Update Facebook contact link text and URL"
+13. **8c32026** - "Add Messenger and Facebook contact options to Buy & Pay section"
 
 ### Files Modified in Current Version
 
-#### Header Redesign & Cache Optimization (Latest Commits):
+#### Latest Product Catalog Update (Current Version):
 
-1. **hugo.toml** (Navigation fix)
+1. **data/products.yaml** (Comprehensive product catalog overhaul)
+   - **Complete Business Catalog**: 190+ products across 10 categories
+   - **Professional Structure**: Organized by business lines with consistent pricing
+   - **Image Organization**: Systematic naming convention (FA-, FP-, LP-, PF-, TC-, TL-, BW-)
+   - **Seasonal Management**: Available/discontinue flags for inventory control
+   - **Price Transparency**: Clear Philippine Peso pricing with appropriate units
+
+#### Product Categories & Structure:
+- **Farm Products (35+ items)**: Vegetables, grains, compost, charcoal
+- **Fish & Aquatics (15+ items)**: Tilapia, Bangus, Catfish variations (live/fresh/frozen/processed)
+- **Processed Foods (17+ items)**: Canned goods, dried products, homemade specialties
+- **Livestock & Poultry (37+ items)**: Ducks, chickens, goats, eggs, meat, milk
+- **Online Training (7 courses)**: Farm-to-table skill development courses
+- **On-site Training (7 courses)**: Hands-on agricultural training programs  
+- **Training Literatures (7 books)**: Educational materials and guides
+- **Block Works (5 items)**: Construction materials (currently unavailable)
+- **Website Creation (4 services)**: Digital services (currently unavailable)
+
+#### Previous Header Redesign & Cache Optimization:
+
+2. **hugo.toml** (Navigation fix)
    - Changed "Capulong Farms" navigation from `url = "/"` to `url = "/#"`
    - Prevents full page reload and maintains smooth scrolling behavior
    - Eliminates cache issues when clicking home navigation
 
-2. **themes/capulong/layouts/_default/baseof.html** (Cache busting)
+3. **themes/capulong/layouts/_default/baseof.html** (Cache busting)
    - Added CSS cache busting: `href="{{ "css/style.css" | relURL }}?v=20251105"`
    - Forces browsers to load latest CSS version on every deployment
    - Eliminates persistent browser cache issues
 
-3. **themes/capulong/static/css/style.css** (Styling cleanup)
+4. **themes/capulong/static/css/style.css** (Styling cleanup)
    - Removed `text-decoration: underline` from `.main-nav ul li a.active`
    - Removed `text-decoration: underline !important` from mobile responsive CSS
    - Changed both to `text-decoration: none` for cleaner appearance
 
-4. **themes/capulong/layouts/partials/header.html** (Layout structure)
+5. **themes/capulong/layouts/partials/header.html** (Layout structure)
    - Removed 3-column logo section completely
    - Implemented 2-column CSS Grid layout: navigation + cart
    - Left-aligned navigation with proper spacing
@@ -132,9 +165,8 @@
 - **Mobile Optimization**: Responsive design with condensed fonts and scaling
 
 #### Performance Infrastructure (Previous Commits):
-5. **themes/capulong/static/js/cart.js** (Modular cart system - 350+ lines)
-6. **themes/capulong/static/js/app.js** (Application logic - 90+ lines)
-7. **data/products.yaml** (Product catalog with corrected image paths)
+6. **themes/capulong/static/js/cart.js** (Modular cart system - 350+ lines)
+7. **themes/capulong/static/js/app.js** (Application logic - 90+ lines)
 
 ### Header Redesign Technical Implementation
 
@@ -234,35 +266,34 @@
 
 ### Revert Instructions
 
-#### Complete Revert to Previous Header State:
+#### Complete Revert to Previous Version (Before Product Update):
 ```bash
 # Navigate to repository
 cd C:\Afiq\Homepage\CapulongFarms\Chocolatey\capulongfarms.org
 
-# Revert to state before header redesign (keep contact & cart systems)
-git reset --hard ae22b07
+# Revert to state before product catalog update
+git reset --hard 6d60d1d
 
 # Force push if needed (WARNING: This will overwrite remote history)
 git push origin main --force
 ```
 
-#### Revert Only Cache Optimization (Keep Header Design):
+#### Revert Only Product Catalog (Keep Header & Cache Design):
 ```bash
-# Revert cache busting changes
-git checkout ae22b07 -- themes/capulong/layouts/_default/baseof.html
-git checkout ae22b07 -- hugo.toml
+# Revert product catalog changes
+git checkout 6d60d1d -- data/products.yaml
 
 # Commit the selective revert
-git commit -m "revert cache optimization, keep header redesign"
+git commit -m "revert product catalog update, keep header and cache optimizations"
 ```
 
 #### Restore Current State (If Reverted by Mistake):
 ```bash
-# Return to current stable state with header redesign
-git reset --hard 6d60d1d
+# Return to current stable state with updated product catalog
+git reset --hard 0606c8d
 
 # Or restore specific commit
-git checkout 6d60d1d
+git checkout 0606c8d
 ```
 
 ### Rollback Testing Checklist
@@ -387,5 +418,5 @@ After any revert operation, verify:
 
 **Documentation Generated**: November 5, 2025  
 **For Repository**: Capulong Farms Website (capulongfarms.org)  
-**Stable Commit**: 6d60d1d (Header Redesigned with Cache Optimization)  
-**Documentation Purpose**: Backup/Revert Reference for Complete E-commerce Platform with 2-Column Header, Browser Cache Optimization, Enhanced Contact System, and Performance Optimizations
+**Stable Commit**: 0606c8d (Comprehensive Product Catalog Update)  
+**Documentation Purpose**: Backup/Revert Reference for Complete E-commerce Platform with Full Product Catalog (190+ Products), 2-Column Header, Browser Cache Optimization, Enhanced Contact System, and Performance Optimizations
