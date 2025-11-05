@@ -1,9 +1,9 @@
 # Capulong Farms Website - Stable State Documentation
-## Complete E-commerce Platform with Enhanced Contact System & Cache-Optimized Header
+## Clean E-commerce Platform - Cloudflare Ready (No PWA/Netlify)
 
 ### Current Stable Version
-- **Commit Hash**: `0606c8d`
-- **Commit Message**: "updated products.yaml"
+- **Commit Hash**: `ef4d846`
+- **Commit Message**: "Remove PWA and Netlify dependencies for Cloudflare deployment"
 - **Date**: November 5, 2025
 - **Author**: polcapulong-capulongfarms <polcapulong@yahoo.com>
 - **Branch**: main
@@ -66,8 +66,18 @@
 
 ### Recent Enhancement Commits (Latest First)
 
-#### Latest Product Catalog Update (Latest):
-1. **0606c8d** - "updated products.yaml" (Current Stable)
+#### Latest PWA & Netlify Cleanup (Current Stable):
+1. **ef4d846** - "Remove PWA and Netlify dependencies for Cloudflare deployment" (Current Stable)
+   - **Complete PWA Removal**: Eliminated manifest.json, sw.js, and all PWA assets
+   - **Netlify Cleanup**: Removed netlify.toml and all Netlify-specific configurations
+   - **Template Sanitization**: Cleaned baseof.html of all PWA meta tags and service worker code
+   - **Navigation Fix**: Corrected URLs from /#products to #products for proper smooth scrolling
+   - **Domain Correction**: Updated theme.toml from capulongfarms.com to capulongfarms.org
+   - **Cloudflare Ready**: Optimized for Cloudflare Pages deployment without conflicts
+   - **Testing Verified**: Confirmed working on both desktop and Android devices
+
+#### Previous Product Catalog Update:
+2. **0606c8d** - "updated products.yaml"
    - Comprehensive product catalog update with 190+ products
    - 10 distinct product categories fully populated
    - Complete pricing structure in Philippine Peso
@@ -75,56 +85,74 @@
    - Full farm-to-table business catalog integration
 
 #### Previous Header Redesign & Cache Optimization:
-2. **6d60d1d** - "Fix Capulong Farms nav link to prevent page reload"
+3. **6d60d1d** - "Fix Capulong Farms nav link to prevent page reload"
    - Changed navigation link from `url="/"` to `url="/#"` 
    - Prevents full page reload and cache issues
    - Maintains smooth scrolling behavior like other nav links
 
-3. **d54939d** - "Add CSS cache busting to fix desktop browser cache issues"
+4. **d54939d** - "Add CSS cache busting to fix desktop browser cache issues"
    - Added `?v=20251105` parameter to CSS file link
    - Forces browsers to load latest CSS version
    - Eliminates persistent cache issues on desktop browsers
 
-4. **c39163e** - "Remove navigation underlines for cleaner header design"
+5. **c39163e** - "Remove navigation underlines for cleaner header design"
    - Removed `text-decoration: underline` from active navigation links
    - Improves appearance of "Capulong Farms" as both logo and navigation
    - Cleaner, more professional look
 
-5. **260e8ab** - "Update stable state documentation with final header styling fix"
+6. **260e8ab** - "Update stable state documentation with final header styling fix"
    - Complete 2-column header layout implementation
    - Left-aligned navigation with proper spacing
    - Mobile-responsive design improvements
 
 #### Previous Performance & Header Commits:
-6. **9379160** - "Enforce header logo styling with !important declarations"
-7. **156aca9** - "Update stable state documentation with latest enhancements"
-8. **295ca8e** - "Fix header logo styling to match cart icon design"
-9. **2256017** - "Configure site for production deployment on Netlify"
+7. **9379160** - "Enforce header logo styling with !important declarations"
+8. **156aca9** - "Update stable state documentation with latest enhancements"
+9. **295ca8e** - "Fix header logo styling to match cart icon design"
+10. **2256017** - "Configure site for production deployment on Netlify"
 
 #### Contact System & Performance Enhancement Commits:
-10. **ae22b07** - "Optimize website performance and reduce loading redundancy"
+11. **ae22b07** - "Optimize website performance and reduce loading redundancy"
    - Removed duplicate image storage (~50% payload reduction)
    - Extracted 467 lines of JavaScript to modular files (cart.js, app.js)
    - Added deferred loading for non-blocking execution
    - Fixed image path references and cleaned build artifacts
    - Improved Core Web Vitals performance
 
-11. **8add58f** - "Update ordering instructions in Buy & Pay section"
-12. **4aca2ff** - "Update Facebook contact link text and URL"
-13. **8c32026** - "Add Messenger and Facebook contact options to Buy & Pay section"
+12. **8add58f** - "Update ordering instructions in Buy & Pay section"
+13. **4aca2ff** - "Update Facebook contact link text and URL"
+14. **8c32026** - "Add Messenger and Facebook contact options to Buy & Pay section"
 
 ### Files Modified in Current Version
 
-#### Latest Product Catalog Update (Current Version):
+#### Latest PWA & Netlify Cleanup (Current Version):
 
-1. **data/products.yaml** (Comprehensive product catalog overhaul)
-   - **Complete Business Catalog**: 190+ products across 10 categories
-   - **Professional Structure**: Organized by business lines with consistent pricing
-   - **Image Organization**: Systematic naming convention (FA-, FP-, LP-, PF-, TC-, TL-, BW-)
-   - **Seasonal Management**: Available/discontinue flags for inventory control
-   - **Price Transparency**: Clear Philippine Peso pricing with appropriate units
+**Files Completely Removed:**
+- ❌ **static/manifest.json** - PWA manifest configuration  
+- ❌ **static/sw.js** - Service worker for offline functionality
+- ❌ **static/images/icons/** - Complete PWA icon directory (10 icon files)
+- ❌ **netlify.toml** - Netlify deployment configuration
+- ❌ **public/manifest.json** - Generated PWA manifest (auto-regenerated)
+- ❌ **public/sw.js** - Generated service worker (auto-regenerated)
+- ❌ **public/images/icons/** - Generated PWA icons directory (auto-regenerated)
 
-#### Product Categories & Structure:
+**Files Modified for Cleanup:**
+1. **themes/capulong/layouts/_default/baseof.html** (Template sanitization)
+   - **Removed PWA Meta Tags**: manifest link, theme-color, apple-mobile-web-app settings
+   - **Removed Apple Touch Icons**: apple-touch-icon references to deleted icons
+   - **Removed Service Worker Registration**: Complete SW initialization and update logic
+   - **Maintained Core Functionality**: WhatsApp meta tag, CSS cache busting, navigation scripts
+
+2. **hugo.toml** (Navigation URL correction)
+   - **Navigation Fix**: Changed from `url = "/#products"` to `url = "#products"`
+   - **Smooth Scrolling**: Ensures proper hash-based navigation without page reloads
+   - **Maintained**: baseURL pointing to capulongfarms.org (Cloudflare)
+
+3. **themes/capulong/theme.toml** (Domain correction)
+   - **Domain Fix**: Updated homepage from `capulongfarms.com` to `capulongfarms.org`
+   - **Consistency**: Ensures all references point to correct Cloudflare domain
+
+#### Previous Product Catalog Structure (Maintained):
 - **Farm Products (35+ items)**: Vegetables, grains, compost, charcoal
 - **Fish & Aquatics (15+ items)**: Tilapia, Bangus, Catfish variations (live/fresh/frozen/processed)
 - **Processed Foods (17+ items)**: Canned goods, dried products, homemade specialties
@@ -266,34 +294,38 @@
 
 ### Revert Instructions
 
-#### Complete Revert to Previous Version (Before Product Update):
+#### Complete Revert to Previous Version (Before PWA/Netlify Cleanup):
 ```bash
 # Navigate to repository
 cd C:\Afiq\Homepage\CapulongFarms\Chocolatey\capulongfarms.org
 
-# Revert to state before product catalog update
-git reset --hard 6d60d1d
+# Revert to state before PWA/Netlify cleanup (with product catalog)
+git reset --hard 0606c8d
 
 # Force push if needed (WARNING: This will overwrite remote history)
 git push origin main --force
 ```
 
-#### Revert Only Product Catalog (Keep Header & Cache Design):
+#### Revert Only PWA/Netlify Cleanup (Keep Product Catalog):
 ```bash
-# Revert product catalog changes
-git checkout 6d60d1d -- data/products.yaml
+# Revert cleanup changes while maintaining product updates
+git checkout 0606c8d -- static/manifest.json static/sw.js netlify.toml
+git checkout 0606c8d -- static/images/icons/
+git checkout 0606c8d -- themes/capulong/layouts/_default/baseof.html
+git checkout 0606c8d -- themes/capulong/theme.toml
+git checkout 0606c8d -- hugo.toml
 
 # Commit the selective revert
-git commit -m "revert product catalog update, keep header and cache optimizations"
+git commit -m "restore PWA and Netlify features, keep clean product catalog"
 ```
 
-#### Restore Current State (If Reverted by Mistake):
+#### Restore Current Clean State (If Reverted by Mistake):
 ```bash
-# Return to current stable state with updated product catalog
-git reset --hard 0606c8d
+# Return to current stable state without PWA/Netlify
+git reset --hard ef4d846
 
 # Or restore specific commit
-git checkout 0606c8d
+git checkout ef4d846
 ```
 
 ### Rollback Testing Checklist
@@ -418,5 +450,5 @@ After any revert operation, verify:
 
 **Documentation Generated**: November 5, 2025  
 **For Repository**: Capulong Farms Website (capulongfarms.org)  
-**Stable Commit**: 0606c8d (Comprehensive Product Catalog Update)  
-**Documentation Purpose**: Backup/Revert Reference for Complete E-commerce Platform with Full Product Catalog (190+ Products), 2-Column Header, Browser Cache Optimization, Enhanced Contact System, and Performance Optimizations
+**Stable Commit**: ef4d846 (Clean Cloudflare-Ready Version)  
+**Documentation Purpose**: Backup/Revert Reference for Clean E-commerce Platform without PWA/Netlify Dependencies - Complete Product Catalog (190+ Products), 2-Column Header, Cache Optimization, Contact System, Optimized for Cloudflare Pages Deployment and Subdomain Creation
