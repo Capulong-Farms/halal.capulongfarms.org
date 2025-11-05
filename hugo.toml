@@ -16,7 +16,7 @@ disableKinds = ["taxonomy", "term"]
 [menu]
   [[menu.main]]
     name = "Capulong Farms"
-    url = "/"
+    url = "/#"
     weight = 1
     [menu.main.params]
       class = "cta-button"
