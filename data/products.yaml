@@ -1,6 +1,6 @@
 categories:
-  - name: "Halal Groceries"
-    id: "produce"
+  - name: "Halal Products"
+    id: "products"
     products:
       - name: "Sambal Belacan"
         price: "₱___/pc"
@@ -8,7 +8,6 @@ categories:
         available: false
         discontinue: false
 
- 
       - name: "Sambal Tumis"
         price: "₱___/pc"
         image: "/images/GR-Sambal-Tumis.jpg"
@@ -27,9 +26,6 @@ categories:
         available: false
         discontinue: false
 
-  - name: "Halal Processed Foods"
-    id: "processed"
-    products:
       - name: "Embotido"
         price: "₱200/pack"
         image: "/images/PF-Homemade-Embotido.jpg"
@@ -54,8 +50,8 @@ categories:
         available: false
         discontinue: false
 
-  - name: "Halal Meat-Poultry"
-    id: "livestocks"
+  - name: "Halal Meat"
+    id: "meat"
     products:
       - name: "Ducks, Salted Eggs "
         price: "₱15/pc"
@@ -93,9 +89,6 @@ categories:
         available: true
         discontinue: false
 
-  - name: "Halal Meat-Livestocks"
-    id: "coursesonline"
-    products:
       - name: "Goat, Fresh Meat, Halal"
         price: "₱100/kg"
         image: "/images/LP-Goat-MeatFresh.jpg"
