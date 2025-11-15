@@ -43,9 +43,22 @@ function getContactMessage() {
   let message = 'I would like to order the following items:\n\n';
   let total = 0;
   cart.forEach(item => {
-    const price = parseFloat(String(item.price).replace(/[^0-9.-]+/g, '')) || 0;
-    message += `• ${item.name} (${item.price}) x ${item.quantity}\n`;
-    total += price * item.quantity;
+    const originalPrice = parseFloat(String(item.price).replace(/[^0-9.-]+/g, '')) || 0;
+    const discount = item.discount || 0;
+    const discountedPrice = discount === 100 ? 0 : originalPrice * (100 - discount) / 100;
+    const itemTotal = discountedPrice * item.quantity;
+    
+    let priceDisplay = item.price;
+    if (discount > 0) {
+      if (discount === 100) {
+        priceDisplay = `${item.price} (FREE!)`;
+      } else {
+        priceDisplay = `${item.price} (${discount}% off = ₱${discountedPrice.toFixed(2)})`;
+      }
+    }
+    
+    message += `• ${item.name} (${priceDisplay}) x ${item.quantity}\n`;
+    total += itemTotal;
   });
   message += `\nTotal: ₱${total.toFixed(2)}\n\nPlease confirm availability and delivery.`;
   return message;
@@ -63,10 +76,13 @@ function attachFloatingContactHandlers() {
     'a[href*="facebook.com/messages"]',
     'a.floating-whatsapp',
     'a.floating-messenger',
+    'a.whatsapp-float',
+    'a.messenger-float',
     'a.whatsapp',
     'a.messenger',
     'a.whatsapp-contact-link',
-    'a.messenger-contact-link'
+    'a.messenger-contact-link',
+    'a.contact-float'
   ].join(',');
 
   const anchors = document.querySelectorAll(selectors);
@@ -93,7 +109,7 @@ function attachFloatingContactHandlers() {
         return;
       }
 
-      if (href.includes('m.me') || href.includes('facebook.com/messages') || a.classList.contains('floating-messenger') || a.classList.contains('messenger') || a.classList.contains('messenger-contact-link')) {
+      if (href.includes('m.me') || href.includes('facebook.com/messages') || a.classList.contains('floating-messenger') || a.classList.contains('messenger-float') || a.classList.contains('messenger') || a.classList.contains('messenger-contact-link')) {
         const m = 'https://m.me/' + messengerId + '?text=' + encoded;
         window.open(m, '_blank');
         return;

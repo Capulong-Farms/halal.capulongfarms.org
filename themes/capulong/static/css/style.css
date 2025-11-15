@@ -909,6 +909,45 @@ main {
   text-align: center;
 }
 
+/* Discount watermark styling */
+.product-card .product-image .discount-watermark {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  transform: rotate(-15deg);
+  background: rgba(25, 118, 210, 0.9);
+  color: white;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  border: 2px solid rgba(25, 118, 210, 0.7);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 10px rgba(25, 118, 210, 0.4);
+  pointer-events: none;
+  z-index: 15;
+  font-weight: bold;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 50px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.discount-watermark .discount-percentage {
+  font-size: 1.2rem;
+  line-height: 1;
+  font-weight: 900;
+  margin-bottom: 0.1rem;
+}
+
+.discount-watermark .discount-text {
+  font-size: 0.6rem;
+  line-height: 1;
+  font-weight: 600;
+  text-transform: lowercase;
+}
+
 .product-card h4 {
   margin-top: 1rem;
   font-size: 1.3rem;
@@ -1707,6 +1746,114 @@ main {
   .messenger-contact-link i,
   .facebook-contact-link i {
     font-size: 1.1rem;
+  }
+}
+
+/* Floating Contact Buttons (for side panel and dialog) */
+.floating-contacts {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  z-index: 99;
+}
+
+.floating-contacts .contact-float {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  color: #fff;
+  font-size: 28px;
+  border: none;
+  cursor: pointer;
+}
+
+.contact-float:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.whatsapp-float {
+  background: #25D366;
+}
+
+.messenger-float {
+  background: #0084FF;
+}
+
+/* Floating Messenger Button - specific styles for dialog context */
+.floating-messenger:not(.contact-float) {
+  width: 60px !important;
+  height: 60px !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #0084FF !important;
+  color: white !important;
+  text-decoration: none !important;
+  font-weight: bold !important;
+  margin-right: 10px !important;
+  margin-bottom: 10px !important;
+  box-shadow: var(--shadow-md) !important;
+  transition: all 0.3s ease !important;
+  font-size: 24px !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+.floating-messenger:not(.contact-float):hover {
+  background: #0066CC !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* Ensure floating contact buttons (sidebar) inherit proper styling */
+.floating-contacts .contact-float.floating-messenger {
+  background: #0084FF;
+}
+
+.floating-contacts .contact-float.floating-messenger:hover {
+  background: #0066CC;
+}
+
+/* Mobile responsive for floating contacts */
+@media (max-width: 768px) {
+  .floating-contacts {
+    bottom: 16px;
+    right: 16px;
+    gap: 8px;
+  }
+
+  .floating-contacts .contact-float {
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .floating-contacts {
+    bottom: 12px;
+    right: 12px;
+    gap: 6px;
+  }
+
+  .floating-contacts .contact-float {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
   }
 }
 

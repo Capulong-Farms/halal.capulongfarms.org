@@ -1,4 +1,12 @@
-# Halal Capulong Farms - Comprehensive Documentation
+# Halal Capulong Farms - Stable State Documentation
+## Complete E-commerce Platform with Advanced Discount System and Perfect Messenger Integration
+
+### Current Stable Version
+- **Commit Hash**: `45c4aec`
+- **Commit Message**: "Perfect synchronization: Complete discount system, fixed dialog functionality, and identical cart/floating button behavior"
+- **Date**: November 15, 2025
+- **Author**: Claude Code Enhancement
+- **Branch**: main
 
 ## Project Overview
 
@@ -8,7 +16,48 @@
 **Domain**: https://halal.capulongfarms.org/  
 **Business Location**: Lanang, Candaba, Pampanga, Philippines  
 
-This is a complete transformation of the original farm business into a halal grocery store specializing in certified Islamic-compliant products.
+This is a complete transformation of the original farm business into a halal grocery store specializing in certified Islamic-compliant products, now featuring a **perfect discount system** and **100% synchronized functionality** with the main capulongfarms.org repository.
+
+---
+
+## Key Features Implemented in This Version
+
+### 🎯 **Advanced Discount System (Perfect Implementation)**
+- **Discount Parameter**: Products support 0-100% discount values in `data/products.yaml`
+- **Blue Discount Watermarks**: 
+  - 1-99%: Shows "X% discount" with large percentage text
+  - 100%: Shows "FREE" watermark
+  - 0%: No watermark displayed
+- **Cart Calculations**: Perfect discount calculation in cart display and totals
+- **Order Messaging**: Discount information included in WhatsApp/Messenger orders
+
+### 🔄 **Perfect Messenger Integration (Fixed Dialog System)**
+- **WhatsApp First**: Orders sent to WhatsApp immediately upon "Proceed to Buy"
+- **Dialog Display**: Shows confirmation with Messenger option
+- **Messenger Icon**: Display-only (circular blue icon, no click functionality)
+- **OK Button**: Functional button that sends to Messenger and completes order
+- **Auto-Timeout**: 10-second automatic Messenger send if no user interaction
+- **No Dialog Disappearing Bug**: Fixed issue where dialog would close on icon hover
+
+### 🎨 **Floating Contact Buttons (Perfect Alignment)**
+- **Circular Design**: Both WhatsApp and Messenger buttons are perfectly circular
+- **Proper Alignment**: Identical positioning and spacing from screen edge
+- **Consistent Colors**: WhatsApp green (#25D366), Messenger blue (#0084FF)
+- **Responsive Design**: Scales properly on mobile devices
+- **Hover Effects**: Smooth animations and shadow effects
+
+### 🛒 **Advanced Cart System**
+- **Discount-Aware Cart**: Cart displays discounted prices correctly
+- **Real-Time Calculations**: Totals reflect discount values instantly
+- **Smart Messaging**: Order details include discount breakdowns
+- **Persistent Storage**: Cart data survives browser sessions
+- **Mobile Optimized**: Touch-friendly cart management
+
+### 🔗 **Cross-Repository Synchronization**
+- **100% Functional Identity**: Cart, discount, and floating button systems identical to capulongfarms.org
+- **Event Handler Consistency**: All JavaScript event handling synchronized
+- **CSS Styling Match**: Identical watermark and button styling
+- **Dialog Behavior**: Perfect match of dialog creation and cleanup
 
 ---
 

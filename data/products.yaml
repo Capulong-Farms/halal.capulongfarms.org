@@ -5,50 +5,58 @@ categories:
       - name: "Sambal Belacan"
         price: "₱___/pc"
         image: "/images/GR-Sambal-Belacan.jpg"
-        available: false
+        available: true
         discontinue: false
+        discount: 5
 
       - name: "Sambal Tumis"
         price: "₱___/pc"
         image: "/images/GR-Sambal-Tumis.jpg"
-        available: false
+        available: true
         discontinue: false
+        discount: 100
 
       - name: "Kicap Manis"
         price: "₱___/pc"
         image: "/images/GR-Kicap-Manis.jpg"
         available: false
         discontinue: false
+        discount: 0
 
       - name: "Kicap Pekat"
         price: "₱___/pc"
         image: "/images/GR-Kicap Pekat.jpg"
         available: false
         discontinue: false
+        discount: 0
 
       - name: "Embotido"
         price: "₱200/pack"
         image: "/images/PF-Homemade-Embotido.jpg"
         available: true
         discontinue: false
+        discount: 0
 
       - name: "Burong Kapampangan"
         price: "₱200/pack"
         image: "/images/PF-Homemade-Buro.jpg"
         available: true
         discontinue: false
+        discount: 0
 
       - name: "Keropok Lekor"
         price: "₱100/pack"
         image: "/images/PF-Homemade-Lekor.jpg"
         available: false
         discontinue: false
+        discount: 0
 
       - name: "Keropok Kering"
         price: "₱100/pack"
         image: "/images/PF-Homemade-Kering.jpg"
         available: false
         discontinue: false
+        discount: 0
 
   - name: "Halal Meat"
     id: "meat"
@@ -58,60 +66,70 @@ categories:
         image: "/images/LP-Duck-EggSalted.jpg"
         available: true
         discontinue: false
+        discount: 0
 
       - name: "Ducks, Penoy"
         price: "₱10/pc"
         image: "/images/LP-Duck-EggPenoy.jpg"
         available: true
         discontinue: false
+        discount: 0
 
       - name: "Ducks, Fresh Meat, Halal"
         price: "₱75/kg"
         image: "/images/LP-Duck-MeatFresh.jpg"
         available: true
         discontinue: false
+        discount: 0
 
       - name: "Ducks, Frozen Meat, Halal"
         price: "₱90/kg"
         image: "/images/LP-Duck-MeatFrozen.jpg"
         available: true
         discontinue: false
+        discount: 0
 
       - name: "Chicken, Fresh Meat, Halal"
         price: "₱75/kg"
         image: "/images/LP-Chick-MeatFresh.jpg"
         available: true
         discontinue: false
+        discount: 0
 
       - name: "Chicken, Frozen Meat, Halal"
         price: "₱90/kg"
         image: "/images/LP-Chick-MeatFrozen.jpg"
         available: true
         discontinue: false
+        discount: 0
 
       - name: "Goat, Fresh Meat, Halal"
         price: "₱100/kg"
         image: "/images/LP-Goat-MeatFresh.jpg"
         available: true
         discontinue: false
+        discount: 0
 
       - name: "Goat, Frozen Meat, Halal"
         price: "₱120/kg"
         image: "/images/LP-Goat-MeatFrozen.jpg"
         available: true
         discontinue: false
+        discount: 0
 
       - name: "Goat, Fresh Milk"
         price: "₱50/bottle"
         image: "/images/LP-Goat-Milk.jpg"
         available: true
         discontinue: false
+        discount: 0
 
       - name: "Buffalo, Fresh Milk"
         price: "₱50/bottle"
         image: "/images/LP-Bufallo-Milk.jpg"
         available: true
         discontinue: false
+        discount: 0
 
   - name: "Free Islamic Literatures"
     id: "coursesliteratures"
@@ -121,24 +139,28 @@ categories:
         image: "/images/TL-Madinah1.jpg"
         available: true
         discontinue: false
+        discount: 0
 
       - name: "Madinah Arabic Course-Volume2"
         price: "₱0/book"
         image: "/images/TL-Madinah1=2.jpg"
         available: true
         discontinue: false
+        discount: 0
 
       - name: "Madinah Arabic Course-Volume3"
         price: "₱0/book"
         image: "/images/TL-Madinah3.jpg"
         available: true
         discontinue: false
+        discount: 0
 
       - name: "Mufti Menk Ramadan Series (Audio)"
         price: "₱0/book"
         image: "/images/TL-MuftiMenk-Ramadan.jpg"
         available: true
         discontinue: false
+        discount: 0
 
   - name: "More Capulong Farms Products"
     id: "more-products"

@@ -99,12 +99,22 @@
       <div class="products-grid">
         {{ range $category.products }}
         {{ if not .discontinue }}
-        <div class="product-card {{ if not .available }}not-available{{ end }}" data-product-name="{{ .name }}" data-product-price="{{ .price }}">
+        <div class="product-card {{ if not .available }}not-available{{ end }}" data-product-name="{{ .name }}" data-product-price="{{ .price }}" data-product-discount="{{ .discount }}">
           <div class="product-image">
             {{ if .available }}
-              <a href="javascript:void(0);" onclick="orderProduct('{{ .name }}', '{{ .price }}')" style="display:block; position: relative;">
+              <a href="javascript:void(0);" onclick="orderProduct('{{ .name }}', '{{ .price }}', {{ .discount }})" style="display:block; position: relative;">
                 <img src="{{ .image | relURL }}" alt="{{ .name }}" loading="lazy" onerror="this.src='/images/placeholder.png'">
                 <div class="available-icon">✔</div>
+                {{ if and .discount (gt .discount 0) }}
+                  {{ if eq .discount 100 }}
+                    <div class="discount-watermark">FREE</div>
+                  {{ else }}
+                    <div class="discount-watermark">
+                      <span class="discount-percentage">{{ .discount }}%</span>
+                      <span class="discount-text">discount</span>
+                    </div>
+                  {{ end }}
+                {{ end }}
               </a>
             {{ else }}
               <img src="{{ .image | relURL }}" alt="{{ .name }}" loading="lazy" onerror="this.src='/images/placeholder.png'">
@@ -124,7 +134,7 @@
             </div>
           </div>
           <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-            <button class="add-to-cart-btn" onclick="addToCartWithQuantity('{{ .name }}', '{{ .price }}', '{{ .name | urlize }}')">
+            <button class="add-to-cart-btn" onclick="addToCartWithQuantity('{{ .name }}', '{{ .price }}', '{{ .name | urlize }}', {{ .discount }})">
               <i class="fas fa-shopping-cart"></i> Add to Cart
             </button>
           </div>

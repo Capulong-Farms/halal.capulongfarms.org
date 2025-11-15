@@ -11,21 +11,21 @@ function saveCart(cart) {
   updateCartCount();
 }
 
-function addToCart(productName, productPrice) {
+function addToCart(productName, productPrice, discount = 0) {
   const cart = getCart();
   const existingItem = cart.find(item => item.name === productName);
   
   if (existingItem) {
     existingItem.quantity += 1;
   } else {
-    cart.push({ name: productName, price: productPrice, quantity: 1 });
+    cart.push({ name: productName, price: productPrice, quantity: 1, discount: discount });
   }
   
   saveCart(cart);
   alert(productName + ' added to cart!');
 }
 
-function addToCartWithQuantity(productName, productPrice, productId) {
+function addToCartWithQuantity(productName, productPrice, productId, discount = 0) {
   const quantityInput = document.getElementById('qty-' + productId);
   const quantity = parseInt(quantityInput.value) || 1;
   
@@ -35,7 +35,7 @@ function addToCartWithQuantity(productName, productPrice, productId) {
   if (existingItem) {
     existingItem.quantity += quantity;
   } else {
-    cart.push({ name: productName, price: productPrice, quantity: quantity });
+    cart.push({ name: productName, price: productPrice, quantity: quantity, discount: discount });
   }
   
   saveCart(cart);
@@ -127,8 +127,8 @@ function updateCartCount() {
   }
 }
 
-function orderProduct(productName, productPrice) {
-  addToCart(productName, productPrice);
+function orderProduct(productName, productPrice, discount = 0) {
+  addToCart(productName, productPrice, discount);
 }
 
 function proceedToBuy() {
@@ -147,9 +147,22 @@ function proceedToBuy() {
   let total = 0;
   
   cart.forEach(item => {
-    const price = parseFloat(item.price.replace(/[^0-9.-]+/g, ''));
-    message += `• ${item.name} (${item.price}) x ${item.quantity}\n`;
-    total += price * item.quantity;
+    const originalPrice = parseFloat(item.price.replace(/[^0-9.-]+/g, ''));
+    const discount = item.discount || 0;
+    const discountedPrice = discount === 100 ? 0 : originalPrice * (100 - discount) / 100;
+    const itemTotal = discountedPrice * item.quantity;
+    
+    let priceDisplay = item.price;
+    if (discount > 0) {
+      if (discount === 100) {
+        priceDisplay = `${item.price} (FREE!)`;
+      } else {
+        priceDisplay = `${item.price} (${discount}% off = ₱${discountedPrice.toFixed(2)})`;
+      }
+    }
+    
+    message += `• ${item.name} (${priceDisplay}) x ${item.quantity}\n`;
+    total += itemTotal;
   });
   
   message += `\nTotal: ₱${total.toFixed(2)}\n\nPlease confirm availability and delivery.`;
@@ -189,9 +202,21 @@ function proceedToBuy() {
         border-radius: 5px;
         text-decoration: none;
         font-weight: bold;
+        margin-right: 10px;
       ">
-        <i class="fab fa-facebook-messenger"></i> Send to Messenger
+        <i class="fab fa-facebook-messenger"></i>
       </a>
+      <button id="complete-order-btn" style="
+        padding: 10px 20px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+      ">
+        OK
+      </button>
     </div>
   `;
 
@@ -207,52 +232,57 @@ function proceedToBuy() {
     z-index: 999;
   `;
 
-  // Add click handler to messenger button in dialog
-  dialog.querySelector('.floating-messenger').addEventListener('click', (e) => {
-    e.preventDefault();
 
-    // Get the message for messenger
-    const messengerId = '61582708015159';
-    const m = 'https://m.me/' + messengerId + '?text=' + encoded;
-    
-    // Open Messenger directly
-    window.open(m, '_blank');
-
-    // Remove dialog and overlay after short delay
-    setTimeout(() => {
-      document.body.removeChild(dialog);
-      document.body.removeChild(overlay);
-      
-      // Clear cart and show confirmation after messenger opens
-      localStorage.removeItem(CART_KEY);
-      updateCartCount();
-      alert('Cart has been cleared!');
-    }, 500);
-  });
-
-  // Add click handler to overlay for closing
+  // Add click handler to overlay for closing (cancel order)
   overlay.addEventListener('click', () => {
     document.body.removeChild(dialog);
     document.body.removeChild(overlay);
     
-    // Clear cart when dialog is closed
+    // Only show cart cleared message if user cancels
     localStorage.removeItem(CART_KEY);
     updateCartCount();
-    alert('Cart has been cleared!');
+    alert('Order cancelled. Cart has been cleared!');
+  });
+
+  // Add click handler to OK button
+  dialog.querySelector('#complete-order-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    
+    // Send to Messenger
+    const messengerId = '61582708015159';
+    const messengerUrl = 'https://m.me/' + messengerId + '?text=' + encoded;
+    window.open(messengerUrl, '_blank');
+    
+    // Remove dialog and overlay
+    if (document.body.contains(dialog)) {
+      document.body.removeChild(dialog);
+    }
+    if (document.body.contains(overlay)) {
+      document.body.removeChild(overlay);
+    }
+    
+    // Clear cart silently (no alert message)
+    localStorage.removeItem(CART_KEY);
+    updateCartCount();
   });
 
   // Add to page
   document.body.appendChild(overlay);
   document.body.appendChild(dialog);
   
-  // Auto-clear cart after 10 seconds if user doesn't interact
+  // Auto-send to Messenger and clear cart after 10 seconds if user doesn't interact
   setTimeout(() => {
     if (document.body.contains(dialog)) {
+      // Auto-send to Messenger
+      const messengerId = '61582708015159';
+      const autoMessengerUrl = 'https://m.me/' + messengerId + '?text=' + encoded;
+      window.open(autoMessengerUrl, '_blank');
+      
+      // Remove dialog and clear cart silently
       document.body.removeChild(dialog);
       document.body.removeChild(overlay);
       localStorage.removeItem(CART_KEY);
       updateCartCount();
-      alert('Cart has been cleared!');
     }
   }, 10000);
 }
@@ -290,15 +320,26 @@ function renderCartItems() {
   let cartHTML = '';
   
   cart.forEach((item, index) => {
-    const price = parseFloat(item.price.replace(/[^0-9.-]+/g, ''));
-    const itemTotal = price * item.quantity;
+    const originalPrice = parseFloat(item.price.replace(/[^0-9.-]+/g, ''));
+    const discount = item.discount || 0;
+    const discountedPrice = discount === 100 ? 0 : originalPrice * (100 - discount) / 100;
+    const itemTotal = discountedPrice * item.quantity;
     total += itemTotal;
+    
+    let priceDisplay = item.price;
+    if (discount > 0) {
+      if (discount === 100) {
+        priceDisplay = `${item.price} (FREE!)`;
+      } else {
+        priceDisplay = `${item.price} (${discount}% off = ₱${discountedPrice.toFixed(2)})`;
+      }
+    }
     
     cartHTML += `
       <div class="cart-item">
         <div class="cart-item-info">
           <h4>${item.name}</h4>
-          <p class="cart-item-price">${item.price} each</p>
+          <p class="cart-item-price">${priceDisplay} each</p>
         </div>
         <div class="cart-item-controls">
           <div class="cart-quantity-controls">
@@ -377,3 +418,4 @@ function addMobileEventListeners() {
     });
   }
 }
+
