@@ -2,6 +2,13 @@
 ## Complete E-commerce Platform with Advanced Discount System and Perfect Messenger Integration
 
 ### Current Stable Version
+- **Commit Hash**: `[PENDING]`
+- **Commit Message**: "Add Deal of the Day feature with header button integration and floating dialog"
+- **Date**: November 17, 2025
+- **Author**: Claude Code Enhancement
+- **Branch**: main
+
+### Previous Stable Version
 - **Commit Hash**: `ce71656`
 - **Commit Message**: "Perfect synchronization: Complete discount system, fixed dialog functionality, and identical cart/floating button behavior"
 - **Date**: November 15, 2025
@@ -21,6 +28,18 @@ This is a complete transformation of the original farm business into a halal gro
 ---
 
 ## Key Features Implemented in This Version
+
+### 🌟 **Deal of the Day Feature (Latest Enhancement)**
+- **Product Selection**: Added `deal_of_the_day: true/false` field to all products in `data/products.yaml`
+- **Header Integration**: Orange gradient "Deal" button positioned next to Cart icon in header
+- **Floating Dialog**: Professional dialog box opening from top-right with complete product details
+- **Smart Logic**: Automatically displays first available product with discount as Deal of the Day (Sambal Belacan)
+- **Complete Functionality**: Full product card replica with image, pricing, discount watermark, quantity controls, and Add to Cart
+- **Responsive Design**: Mobile-optimized with proper scaling and positioning
+- **Visual Design**: Orange gradient (#ff6b35 to #ffa500) for prominence while maintaining site aesthetics
+- **Dialog Positioning**: Opens from header location (top-right) for natural user experience
+- **Height Matching**: Perfect alignment with Cart button (40px height)
+- **Cross-Site Synchronization**: Identical implementation with main capulongfarms.org site
 
 ### 🎯 **Advanced Discount System (Perfect Implementation)**
 - **Discount Parameter**: Products support 0-100% discount values in `data/products.yaml`

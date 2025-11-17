@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
   addMobileEventListeners();
   initializeTabs();
   attachFloatingContactHandlers();
+  initializeDealOfTheDay();
 });
 
 // Tab functionality
@@ -118,4 +119,179 @@ function attachFloatingContactHandlers() {
       // otherwise let the link behave normally
     });
   });
+}
+
+// =============================
+// Deal of the Day Functionality
+// =============================
+
+// Initialize Deal of the Day
+function initializeDealOfTheDay() {
+  loadDealOfTheDay();
+}
+
+// Load and display the Deal of the Day product
+function loadDealOfTheDay() {
+  // Find deal of the day product from product cards
+  const productCards = document.querySelectorAll('.product-card[data-product-name]');
+  let dealProduct = null;
+  
+  productCards.forEach(card => {
+    const productName = card.dataset.productName;
+    const productPrice = card.dataset.productPrice;
+    const productDiscount = card.dataset.productDiscount || 0;
+    const productAvailable = !card.classList.contains('not-available');
+    
+    // Check if this is a deal of the day product by checking if it has deal_of_the_day: true
+    // Since we can't directly access YAML data, we'll find available products with discounts for now
+    // and select the first one as the deal (Sambal Belacan should be first)
+    if (productAvailable && productDiscount > 0 && !dealProduct) {
+      dealProduct = {
+        name: productName,
+        price: productPrice,
+        discount: parseInt(productDiscount),
+        image: card.querySelector('img')?.src,
+        available: productAvailable
+      };
+    }
+  });
+  
+  if (dealProduct) {
+    populateDealDialog(dealProduct);
+    showDealButton();
+  } else {
+    hideDealButton();
+  }
+}
+
+// Populate the deal dialog with product information
+function populateDealDialog(product) {
+  const dialogContent = document.querySelector('#deal-of-the-day-dialog .deal-dialog-content');
+  const productId = product.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  
+  let discountHtml = '';
+  if (product.discount > 0) {
+    if (product.discount === 100) {
+      discountHtml = '<div class="discount-watermark">FREE</div>';
+    } else {
+      discountHtml = `<div class="discount-watermark">
+        <span class="discount-percentage">${product.discount}%</span>
+        <span class="discount-text">discount</span>
+      </div>`;
+    }
+  }
+  
+  dialogContent.innerHTML = `
+    <div class="deal-product-card">
+      <div class="product-image">
+        <a href="javascript:void(0);" onclick="orderProduct('${product.name}', '${product.price}', ${product.discount})" style="display:block; position: relative;">
+          <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src='/images/placeholder.png'">
+          <div class="available-icon">✔</div>
+          ${discountHtml}
+        </a>
+      </div>
+      <div class="product-details">
+        <h4>${product.name}</h4>
+        <p class="price">${product.price}</p>
+        <div class="quantity-container">
+          <label class="quantity-label">Quantity:</label>
+          <div class="quantity-controls">
+            <button class="qty-btn minus-btn" onclick="changeDealQuantity('${productId}', -1)">-</button>
+            <input type="number" class="qty-input" id="deal-qty-${productId}" value="1" min="1" max="9999" onchange="validateDealQuantity('${productId}')" oninput="validateDealQuantityInput('${productId}')" onkeypress="return isNumberKey(event)">
+            <button class="qty-btn plus-btn" onclick="changeDealQuantity('${productId}', 1)">+</button>
+          </div>
+        </div>
+        <button class="add-to-cart-btn" onclick="addDealToCartWithQuantity('${product.name}', '${product.price}', '${productId}', ${product.discount})">
+          <i class="fas fa-shopping-cart"></i> Add to Cart
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+// Show Deal Button
+function showDealButton() {
+  const button = document.getElementById('deal-of-the-day-btn');
+  if (button) {
+    button.style.display = 'flex';
+  }
+}
+
+// Hide Deal Button
+function hideDealButton() {
+  const button = document.getElementById('deal-of-the-day-btn');
+  if (button) {
+    button.style.display = 'none';
+  }
+}
+
+// Open Deal Dialog
+function openDealDialog() {
+  const dialog = document.getElementById('deal-of-the-day-dialog');
+  if (dialog) {
+    dialog.style.display = 'block';
+  }
+}
+
+// Close Deal Dialog
+function closeDealDialog() {
+  const dialog = document.getElementById('deal-of-the-day-dialog');
+  if (dialog) {
+    dialog.style.display = 'none';
+  }
+}
+
+// Deal quantity management functions
+function changeDealQuantity(productId, delta) {
+  const input = document.getElementById('deal-qty-' + productId);
+  if (input) {
+    const currentValue = parseInt(input.value) || 1;
+    const newValue = Math.max(1, Math.min(9999, currentValue + delta));
+    input.value = newValue;
+  }
+}
+
+function validateDealQuantity(productId) {
+  const input = document.getElementById('deal-qty-' + productId);
+  if (input) {
+    let value = parseInt(input.value);
+    if (isNaN(value) || value < 1) {
+      input.value = 1;
+    } else if (value > 9999) {
+      input.value = 9999;
+    }
+  }
+}
+
+function validateDealQuantityInput(productId) {
+  const input = document.getElementById('deal-qty-' + productId);
+  if (input) {
+    const value = input.value.replace(/[^0-9]/g, '');
+    input.value = value;
+    if (value === '' || parseInt(value) < 1) {
+      input.value = 1;
+    } else if (parseInt(value) > 9999) {
+      input.value = 9999;
+    }
+  }
+}
+
+function addDealToCartWithQuantity(productName, productPrice, productId, discount = 0) {
+  const quantityInput = document.getElementById('deal-qty-' + productId);
+  const quantity = parseInt(quantityInput.value) || 1;
+  
+  const cart = getCart();
+  const existingItem = cart.find(item => item.name === productName);
+  
+  if (existingItem) {
+    existingItem.quantity += quantity;
+  } else {
+    cart.push({ name: productName, price: productPrice, quantity: quantity, discount: discount });
+  }
+  
+  saveCart(cart);
+  alert(productName + ' (x' + quantity + ') added to cart from Deal of the Day!');
+  
+  // Reset quantity to 1
+  quantityInput.value = 1;
 }

@@ -8,6 +8,7 @@ categories:
         available: true
         discontinue: false
         discount: 5
+        deal_of_the_day: true
 
       - name: "Sambal Tumis"
         price: "₱___/pc"
@@ -15,6 +16,7 @@ categories:
         available: true
         discontinue: false
         discount: 100
+        deal_of_the_day: false
 
       - name: "Kicap Manis"
         price: "₱___/pc"
@@ -22,6 +24,7 @@ categories:
         available: false
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Kicap Pekat"
         price: "₱___/pc"
@@ -29,6 +32,7 @@ categories:
         available: false
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Embotido"
         price: "₱200/pack"
@@ -36,6 +40,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Burong Kapampangan"
         price: "₱200/pack"
@@ -43,6 +48,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Keropok Lekor"
         price: "₱100/pack"
@@ -50,6 +56,7 @@ categories:
         available: false
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Keropok Kering"
         price: "₱100/pack"
@@ -57,6 +64,7 @@ categories:
         available: false
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
   - name: "Halal Meat"
     id: "meat"
@@ -67,6 +75,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Ducks, Penoy"
         price: "₱10/pc"
@@ -74,6 +83,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Ducks, Fresh Meat, Halal"
         price: "₱75/kg"
@@ -81,6 +91,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Ducks, Frozen Meat, Halal"
         price: "₱90/kg"
@@ -88,6 +99,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Chicken, Fresh Meat, Halal"
         price: "₱75/kg"
@@ -95,6 +107,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Chicken, Frozen Meat, Halal"
         price: "₱90/kg"
@@ -102,6 +115,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Goat, Fresh Meat, Halal"
         price: "₱100/kg"
@@ -109,6 +123,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Goat, Frozen Meat, Halal"
         price: "₱120/kg"
@@ -116,6 +131,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Goat, Fresh Milk"
         price: "₱50/bottle"
@@ -123,6 +139,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Buffalo, Fresh Milk"
         price: "₱50/bottle"
@@ -130,6 +147,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
   - name: "Free Islamic Literatures"
     id: "coursesliteratures"
@@ -140,6 +158,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Madinah Arabic Course-Volume2"
         price: "₱0/book"
@@ -147,6 +166,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Madinah Arabic Course-Volume3"
         price: "₱0/book"
@@ -154,6 +174,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
       - name: "Mufti Menk Ramadan Series (Audio)"
         price: "₱0/book"
@@ -161,6 +182,7 @@ categories:
         available: true
         discontinue: false
         discount: 0
+        deal_of_the_day: false
 
   - name: "More Capulong Farms Products"
     id: "more-products"
