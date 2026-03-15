@@ -99,7 +99,7 @@
       <div class="products-grid">
         {{ range $category.products }}
         {{ if not .discontinue }}
-        <div class="product-card {{ if not .available }}not-available{{ end }}" data-product-name="{{ .name }}" data-product-price="{{ .price }}" data-product-discount="{{ .discount }}">
+        <div class="product-card {{ if not .available }}not-available{{ end }}" data-product-name="{{ .name }}" data-product-price="{{ .price }}" data-product-discount="{{ .discount }}" data-deal-of-the-day="{{ .deal_of_the_day }}">
           <div class="product-image">
             {{ if .available }}
               <a href="javascript:void(0);" onclick="orderProduct('{{ .name }}', '{{ .price }}', {{ .discount }})" style="display:block; position: relative;">

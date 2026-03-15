@@ -132,36 +132,37 @@ function initializeDealOfTheDay() {
 
 // Load and display the Deal of the Day product
 function loadDealOfTheDay() {
-  // Find deal of the day product from product cards
-  const productCards = document.querySelectorAll('.product-card[data-product-name]');
-  let dealProduct = null;
-  
-  productCards.forEach(card => {
-    const productName = card.dataset.productName;
-    const productPrice = card.dataset.productPrice;
-    const productDiscount = card.dataset.productDiscount || 0;
-    const productAvailable = !card.classList.contains('not-available');
-    
-    // Check if this is a deal of the day product by checking if it has deal_of_the_day: true
-    // Since we can't directly access YAML data, we'll find available products with discounts for now
-    // and select the first one as the deal (Sambal Belacan should be first)
-    if (productAvailable && productDiscount > 0 && !dealProduct) {
-      dealProduct = {
-        name: productName,
-        price: productPrice,
-        discount: parseInt(productDiscount),
-        image: card.querySelector('img')?.src,
-        available: productAvailable
-      };
-    }
-  });
-  
-  if (dealProduct) {
-    populateDealDialog(dealProduct);
-    showDealButton();
-  } else {
-    hideDealButton();
+  const productCards = document.querySelectorAll('.product-card[data-deal-of-the-day="true"]');
+
+  if (productCards.length > 1) {
+    console.warn(
+      'Deal of the Day: ' + productCards.length + ' products are flagged as deal_of_the_day: true in products.yaml. ' +
+      'Only one is allowed — showing the first one. Please set deal_of_the_day: true on only one product.'
+    );
   }
+
+  if (productCards.length === 0) {
+    hideDealButton();
+    return;
+  }
+
+  const card = productCards[0];
+  const productAvailable = !card.classList.contains('not-available');
+
+  if (!productAvailable) {
+    hideDealButton();
+    return;
+  }
+
+  const dealProduct = {
+    name: card.dataset.productName,
+    price: card.dataset.productPrice,
+    discount: parseInt(card.dataset.productDiscount) || 0,
+    image: card.querySelector('img')?.src
+  };
+
+  populateDealDialog(dealProduct);
+  showDealButton();
 }
 
 // Populate the deal dialog with product information
