@@ -189,6 +189,7 @@ function populateDealDialog(product) {
           <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src='/images/placeholder.png'">
           <div class="available-icon">✔</div>
           ${discountHtml}
+          <div class="deal-of-the-day-badge"><i class="fas fa-star"></i> Deal!</div>
         </a>
       </div>
       <div class="product-details">

@@ -115,6 +115,12 @@
                     </div>
                   {{ end }}
                 {{ end }}
+                {{ if .deal_of_the_day }}
+                  <div class="deal-of-the-day-badge">
+                    <span class="deal-badge-icon"><i class="fas fa-star"></i></span>
+                    <span class="deal-badge-text">Deal!</span>
+                  </div>
+                {{ end }}
               </a>
             {{ else }}
               <img src="{{ .image | relURL }}" alt="{{ .name }}" loading="lazy" onerror="this.src='/images/placeholder.png'">
