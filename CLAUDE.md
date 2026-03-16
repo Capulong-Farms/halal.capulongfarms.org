@@ -2,76 +2,39 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Development Commands
+## Overview
 
-### Hugo Static Site Generator
-- **Start development server**: `hugo server -D`
-- **Build for production**: `hugo`
-- **Build with drafts**: `hugo -D`
+Hugo static site for `halal.capulongfarms.org` — the Halal Division variant of Capulong Farms. Structurally identical to `capulongfarms/` but with halal-specific branding and products. See `capulongfarms/CLAUDE.md` for full architecture details; this file documents only what differs.
 
-The development server runs on `localhost:1313` and includes live reload for instant preview of changes.
+## Commands
 
-## Project Architecture
+```bash
+hugo server -D     # Dev server at localhost:1313
+hugo               # Production build → public/
+hugo --gc          # Clean build cache
+```
 
-### Hugo Site Structure
-This is a Hugo static site for Capulong Farms, a farm-to-table business website. The architecture follows Hugo's standard conventions with a custom theme:
+## How This Site Differs from capulongfarms/
 
-- **Configuration**: `hugo.toml` - Contains site settings, menu structure, WhatsApp contact number, and caching configurations
-- **Data-driven content**: `data/products.yaml` - Centralized product catalog with categories, prices, images, and availability
-- **Custom theme**: `themes/capulong/` - Fully custom theme with farm-specific styling and functionality
+| Aspect | capulongfarms/ | capulongfarms-halal/ |
+|--------|---------------|----------------------|
+| baseURL | capulongfarms.org | halal.capulongfarms.org |
+| Branding | "Capulong Farms" | "Capulong Farms - Halal Division" |
+| Hero image | `/images/farm-photo.jpg` | `/images/halal-photo.jpg` |
+| Product catalog | All products | Halal-certified products only |
+| External link tab | Links to halal site | Links to main site |
 
-### Theme Architecture (`themes/capulong/`)
-- **Layouts**: 
-  - `index.html` - Single-page application structure with hero, about, products grid, and order sections
-  - `_default/baseof.html` - Base HTML template with head/body structure
-  - `partials/` - Reusable components (header with cart, footer, floating contact buttons)
-- **Static assets**: `static/css/style.css` - Comprehensive CSS with CSS custom properties and responsive design
+## JS and Template Files
 
-### Product Management System
-Products are managed through `data/products.yaml` with structured categories:
-- Each category has an `id` and `name`
-- Products include: `name`, `price`, `image` path, `available` status, and `discontinue` status
-- **`available`**: Controls seasonal availability (true/false) - shows "NOT AVAILABLE" watermark when false
-- **`discontinue`**: Controls product visibility (true/false) - products with `discontinue: true` are HIDDEN from website entirely
-- Image naming follows prefix convention: `FA-*` (Fish), `FP-*` (Farm Products), `LP-*` (Livestock), etc.
+`app.js`, `cart.js`, and all layout templates are **independently maintained copies** — not symlinked or shared with the main site. Changes to shared logic (cart behavior, Deal of the Day, contact handlers) must be manually applied in both repos.
 
-### Key Configuration Parameters
-- `whatsapp_number`: Used for WhatsApp contact integration
-- `gcash_qr_image`: Payment QR code path
-- Taxonomies disabled to simplify site structure
-- Cache settings optimized for development (10s maxAge)
+All key gotchas from `capulongfarms/CLAUDE.md` apply here too:
+- Deal of the Day auto-selects first DOM product with `discount > 0` (YAML `deal_of_the_day` flag is not functional)
+- Product ID format mismatch between Hugo `urlize` and Deal of Day JS regex — not interchangeable
+- CSS cache busting is manual: increment `?v=YYYYMMDD` in `themes/capulong/layouts/_default/baseof.html`
 
-## File Editing Guidelines
+## Contact Configuration
 
-### Modifying Products
-Edit `data/products.yaml` to:
-- Add/remove products from categories
-- Update prices and availability
-- Change product images (ensure images exist in `static/images/`)
-
-### Styling Changes
-Edit `themes/capulong/static/css/style.css` for:
-- Color scheme modifications (CSS custom properties in `:root`)
-- Layout adjustments and responsive design
-- Component-specific styling
-
-### Content Updates
-- Homepage content: `themes/capulong/layouts/index.html`
-- Site configuration: `hugo.toml` (title, description, contact info)
-- Navigation menu: Defined in `hugo.toml` under `[menu]`
-
-### Contact Information
-WhatsApp and Messenger integration is handled through:
-- `hugo.toml` params for WhatsApp number
-- `themes/capulong/layouts/partials/contacts-button.html` for floating buttons
-- Header cart functionality with WhatsApp integration
-
-## Image Management
-Images are stored in `static/images/` and follow naming conventions:
-- `FA-*`: Fish & Aquatics
-- `FP-*`: Farm Products  
-- `LP-*`: Livestock & Poultry
-- `PF-*`: Processed Foods
-- Payment QR codes and farm photos
-
-The `public/` directory is auto-generated and should not be edited directly.
+- **WhatsApp**: `966542761620` (in `hugo.toml` → `params.whatsapp_number`)
+- **Messenger ID**: `61582708015159` hardcoded in **5 places across 4 files** — `cart.js` (×2), `app.js`, `index.html`, `partials/contacts-button.html`. Update all if changed.
+- **GCash QR**: `hugo.toml` → `params.gcash_qr_image`
