@@ -29,9 +29,9 @@ hugo --gc          # Clean build cache
 `app.js`, `cart.js`, and all layout templates are **independently maintained copies** — not symlinked or shared with the main site. Changes to shared logic (cart behavior, Deal of the Day, contact handlers) must be manually applied in both repos.
 
 All key gotchas from `capulongfarms/CLAUDE.md` apply here too:
-- Deal of the Day auto-selects first DOM product with `discount > 0` (YAML `deal_of_the_day` flag is not functional)
+- Deal of the Day is driven by the YAML `deal_of_the_day: true` flag (template sets `data-deal-of-the-day="true"`; JS reads that attribute — only one product should be flagged)
 - Product ID format mismatch between Hugo `urlize` and Deal of Day JS regex — not interchangeable
-- CSS cache busting is manual: increment `?v=YYYYMMDD` in `themes/capulong/layouts/_default/baseof.html`
+- CSS **and JS** cache busting is manual: increment `?v=YYYYMMDD` on the CSS link and both JS script tags in `themes/capulong/layouts/_default/baseof.html`
 
 ## Contact Configuration
 
