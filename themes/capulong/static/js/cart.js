@@ -144,9 +144,15 @@ function openOrderForm() {
     alert('Your cart is empty!');
     return;
   }
+  // Move modal to document.body so position:fixed anchors to the true viewport
+  // regardless of any scrollable parent containers in the Hugo template
+  const modal = document.getElementById('order-form-modal');
+  if (modal.parentNode !== document.body) {
+    document.body.appendChild(modal);
+  }
   closeCartModal();
   renderOrderSummary();
-  document.getElementById('order-form-modal').style.display = 'block';
+  modal.style.display = 'block';
   document.body.style.overflow = 'hidden';
 }
 
