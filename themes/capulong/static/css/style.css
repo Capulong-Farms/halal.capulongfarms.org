@@ -2412,10 +2412,4 @@ main {
     right: 0;
   }
 
-  .order-form-modal {
-    align-items: flex-end;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
 }
