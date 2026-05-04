@@ -2283,3 +2283,139 @@ main {
     height: 160px;
   }
 }
+   Online Order Form Modal
+============================= */
+.order-form-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.order-form-content {
+  background-color: white;
+  margin: 2% auto;
+  border-radius: 10px;
+  max-width: 560px;
+  width: 90%;
+  max-height: 92vh;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.order-form-body {
+  padding: 1.25rem 1.5rem 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Order summary (cart items recap) */
+.order-summary-list {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.order-summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0;
+  font-size: 0.92rem;
+  border-bottom: 1px solid #eee;
+}
+
+.order-summary-item:last-child {
+  border-bottom: none;
+}
+
+.order-summary-name {
+  color: #333;
+}
+
+.order-summary-price {
+  font-weight: bold;
+  color: var(--primary-color);
+  white-space: nowrap;
+  margin-left: 1rem;
+}
+
+.order-summary-total {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.order-summary-total h3 {
+  margin: 0;
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+
+/* Form fields */
+.form-group {
+  margin-bottom: 0.9rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #333;
+  font-size: 0.92rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.15);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .order-form-content {
+    margin: 0 auto;
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+    max-height: 96vh;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .order-form-modal {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+}

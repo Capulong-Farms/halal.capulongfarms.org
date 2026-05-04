@@ -87,32 +87,22 @@ function attachFloatingContactHandlers() {
   ].join(',');
 
   const anchors = document.querySelectorAll(selectors);
+  // Query message — shown when customer contacts via WhatsApp or Messenger
+  const queryMsg = 'Thanks for browsing through our products, please leave your message and we will revert back to you very shortly';
+  const encoded  = encodeURIComponent(queryMsg);
+
   anchors.forEach(a => {
     a.addEventListener('click', function(e) {
       e.preventDefault();
-      
-      const cart = getCart();
       const href = (a.getAttribute('href') || '').toLowerCase();
-      
-      // If cart has items, open cart modal instead of sending message
-      if (cart && cart.length > 0) {
-        openCartModal();
-        return;
-      }
-      
-      // If cart is empty, send the fallback message
-      const rawMsg = 'Hi, I browsed your products and I am interested to purchase. Kindly return my message for more details?';
-      const encoded = encodeURIComponent(rawMsg);
 
-      if (href.includes('wa.me') || href.includes('api.whatsapp') || a.classList.contains('floating-whatsapp') || a.classList.contains('whatsapp') || a.classList.contains('whatsapp-contact-link')) {
-        const wa = 'https://wa.me/' + whatsappNumber + '?text=' + encoded;
-        window.open(wa, '_blank');
+      if (href.includes('wa.me') || href.includes('api.whatsapp') || a.classList.contains('floating-whatsapp') || a.classList.contains('whatsapp') || a.classList.contains('whatsapp-contact-link') || a.classList.contains('whatsapp-float')) {
+        window.open('https://wa.me/' + whatsappNumber + '?text=' + encoded, '_blank');
         return;
       }
 
       if (href.includes('m.me') || href.includes('facebook.com/messages') || a.classList.contains('floating-messenger') || a.classList.contains('messenger-float') || a.classList.contains('messenger') || a.classList.contains('messenger-contact-link')) {
-        const m = 'https://m.me/' + messengerId + '?text=' + encoded;
-        window.open(m, '_blank');
+        window.open('https://m.me/' + messengerId + '?text=' + encoded, '_blank');
         return;
       }
 

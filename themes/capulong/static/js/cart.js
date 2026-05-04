@@ -1,6 +1,11 @@
 // Cart Management System for Capulong Farms
 const CART_KEY = 'capulong_cart';
 
+// BMS integration — values injected via meta tags in baseof.html
+const BMS_API_URL    = document.querySelector('meta[name="bms-api-url"]')?.content    || 'https://api.capulongfarms.org';
+const PORTAL_API_KEY = document.querySelector('meta[name="portal-api-key"]')?.content || '';
+const PORTAL_SOURCE  = document.querySelector('meta[name="portal-source"]')?.content  || 'portal-main';
+
 function getCart() {
   const cart = localStorage.getItem(CART_KEY);
   return cart ? JSON.parse(cart) : [];
@@ -131,160 +136,128 @@ function orderProduct(productName, productPrice, discount = 0) {
   addToCart(productName, productPrice, discount);
 }
 
-function proceedToBuy() {
+// ── Online Order Flow ────────────────────────────────────────
+
+function openOrderForm() {
   const cart = getCart();
-  
   if (cart.length === 0) {
     alert('Your cart is empty!');
     return;
   }
-  
-  // Close cart modal immediately
   closeCartModal();
-  
-  // Build message
-  let message = 'I would like to order the following items:\n\n';
+  renderOrderSummary();
+  document.getElementById('order-form-modal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeOrderForm() {
+  document.getElementById('order-form-modal').style.display = 'none';
+  document.body.style.overflow = 'auto';
+  openCartModal();
+}
+
+function renderOrderSummary() {
+  const cart = getCart();
   let total = 0;
-  
+  let html = '';
   cart.forEach(item => {
-    const originalPrice = parseFloat(item.price.replace(/[^0-9.-]+/g, ''));
+    const originalPrice = parseFloat(String(item.price).replace(/[^0-9.-]+/g, '')) || 0;
     const discount = item.discount || 0;
     const discountedPrice = discount === 100 ? 0 : originalPrice * (100 - discount) / 100;
     const itemTotal = discountedPrice * item.quantity;
-    
-    let priceDisplay = item.price;
-    if (discount > 0) {
-      if (discount === 100) {
-        priceDisplay = `${item.price} (FREE!)`;
-      } else {
-        priceDisplay = `${item.price} (${discount}% off = ₱${discountedPrice.toFixed(2)})`;
-      }
-    }
-    
-    message += `• ${item.name} (${priceDisplay}) x ${item.quantity}\n`;
     total += itemTotal;
+    html += `<div class="order-summary-item">
+      <span class="order-summary-name">${item.name} &times; ${item.quantity}</span>
+      <span class="order-summary-price">&#8369;${itemTotal.toFixed(2)}</span>
+    </div>`;
   });
-  
-  message += `\nTotal: ₱${total.toFixed(2)}\n\nPlease confirm availability and delivery.`;
-  const encoded = encodeURIComponent(message);
+  document.getElementById('order-summary-items').innerHTML = html;
+  document.getElementById('order-form-total').textContent = `Total: ₱${total.toFixed(2)}`;
+}
 
-  // Get WhatsApp number from global variable set in HTML
-  const whatsappNumber = window.WHATSAPP_NUMBER || '966542761620';
-  
-  // First send to WhatsApp
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encoded}`;
-  window.open(whatsappUrl, '_blank');
+async function submitOnlineOrder(event) {
+  event.preventDefault();
 
-  // Create and show custom dialog
-  const dialog = document.createElement('div');
-  dialog.style.cssText = `
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    z-index: 1000;
-    text-align: center;
-  `;
-  
-  dialog.innerHTML = `
-    <p>Your order has been sent to WhatsApp!</p>
-    <p>Click the Messenger button below to also send via Messenger:</p>
-    <div style="margin-top: 15px;">
-      <a href="#" class="floating-messenger" style="
-        display: inline-block;
-        padding: 10px 20px;
-        background: #0084FF;
-        color: white;
-        border-radius: 5px;
-        text-decoration: none;
-        font-weight: bold;
-        margin-right: 10px;
-      ">
-        <i class="fab fa-facebook-messenger"></i>
-      </a>
-      <button id="complete-order-btn" style="
-        padding: 10px 20px;
-        background: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-weight: bold;
-        cursor: pointer;
-      ">
-        OK
-      </button>
-    </div>
-  `;
+  const name    = document.getElementById('order-name').value.trim();
+  const phone   = document.getElementById('order-phone').value.trim();
+  const address = document.getElementById('order-address').value.trim();
+  const remarks = document.getElementById('order-remarks').value.trim();
 
-  // Create overlay
+  if (!name || !phone || !address) {
+    alert('Please fill in your name, phone number, and delivery address.');
+    return;
+  }
+
+  const btn = document.getElementById('submit-order-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+  const cart = getCart();
+  const orderData = {
+    source:          PORTAL_SOURCE,
+    customerName:    name,
+    customerPhone:   phone,
+    customerAddress: address,
+    remarks:         remarks,
+    items: cart.map(item => ({
+      name:     item.name,
+      price:    parseFloat(String(item.price).replace(/[^0-9.-]+/g, '')) || 0,
+      quantity: item.quantity,
+      discount: item.discount || 0,
+    })),
+  };
+
+  try {
+    const response = await fetch(BMS_API_URL + '/api/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Portal-Key': PORTAL_API_KEY,
+      },
+      body: JSON.stringify(orderData),
+    });
+
+    if (!response.ok) throw new Error('Server error ' + response.status);
+
+    const result = await response.json();
+
+    // Success — clear cart, close form, show confirmation
+    localStorage.removeItem(CART_KEY);
+    updateCartCount();
+    document.getElementById('order-form-modal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+    // Reset form for next use
+    document.getElementById('online-order-form').reset();
+    showOrderConfirmation(result.orderRef, phone);
+
+  } catch (err) {
+    console.error('Order submission failed:', err);
+    alert('Sorry, there was a problem submitting your order. Please try again or contact us via WhatsApp.');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-check"></i> Place Order';
+  }
+}
+
+function showOrderConfirmation(orderRef, phone) {
   const overlay = document.createElement('div');
-  overlay.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 999;
+  overlay.className = 'order-confirm-overlay';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1099;';
+
+  const dialog = document.createElement('div');
+  dialog.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:2rem;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.3);z-index:1100;text-align:center;max-width:320px;width:90%;';
+  dialog.innerHTML = `
+    <div style="font-size:3rem;margin-bottom:0.5rem;">&#9989;</div>
+    <h3 style="color:#2e7d32;margin-bottom:0.5rem;">Order Received!</h3>
+    <p>Your order reference is <strong>${orderRef}</strong>.</p>
+    <p style="color:#666;font-size:0.9rem;margin:0.75rem 0 1.25rem;">We will contact you at <strong>${phone}</strong> to confirm delivery and payment.</p>
+    <button onclick="this.closest('div').remove();document.querySelector('.order-confirm-overlay').remove();"
+      style="padding:0.6rem 1.5rem;background:#2e7d32;color:white;border:none;border-radius:6px;font-size:1rem;cursor:pointer;font-weight:bold;">
+      OK
+    </button>
   `;
 
-
-  // Add click handler to overlay for closing (cancel order)
-  overlay.addEventListener('click', () => {
-    document.body.removeChild(dialog);
-    document.body.removeChild(overlay);
-    
-    // Only show cart cleared message if user cancels
-    localStorage.removeItem(CART_KEY);
-    updateCartCount();
-    alert('Order cancelled. Cart has been cleared!');
-  });
-
-  // Add click handler to OK button
-  dialog.querySelector('#complete-order-btn').addEventListener('click', (e) => {
-    e.preventDefault();
-    
-    // Send to Messenger
-    const messengerId = '61582708015159';
-    const messengerUrl = 'https://m.me/' + messengerId + '?text=' + encoded;
-    window.open(messengerUrl, '_blank');
-    
-    // Remove dialog and overlay
-    if (document.body.contains(dialog)) {
-      document.body.removeChild(dialog);
-    }
-    if (document.body.contains(overlay)) {
-      document.body.removeChild(overlay);
-    }
-    
-    // Clear cart silently (no alert message)
-    localStorage.removeItem(CART_KEY);
-    updateCartCount();
-  });
-
-  // Add to page
   document.body.appendChild(overlay);
   document.body.appendChild(dialog);
-  
-  // Auto-send to Messenger and clear cart after 10 seconds if user doesn't interact
-  setTimeout(() => {
-    if (document.body.contains(dialog)) {
-      // Auto-send to Messenger
-      const messengerId = '61582708015159';
-      const autoMessengerUrl = 'https://m.me/' + messengerId + '?text=' + encoded;
-      window.open(autoMessengerUrl, '_blank');
-      
-      // Remove dialog and clear cart silently
-      document.body.removeChild(dialog);
-      document.body.removeChild(overlay);
-      localStorage.removeItem(CART_KEY);
-      updateCartCount();
-    }
-  }, 10000);
 }
 
 function openCartModal() {

@@ -46,7 +46,8 @@
     <div class="contact-grid">
       <div class="contact-info">
         <h3>How to Order</h3>
-        <p>Click the Product photo to add in the Cart or adjust order quantity in the Add to Cart section on each product, and press the Cart trolley button to review your order and press Proceed to Buy button, we'll confirm availability and arrange for delivery.</p>
+        <p>Click the Product photo to add in the Cart or adjust order quantity in the Add to Cart section on each product, and press the Cart trolley button to review your order. Then press <strong>Order Online</strong> — fill in your name, phone, and delivery address, and we'll confirm availability and arrange delivery.</p>
+        <p>For questions before ordering, use the WhatsApp or Messenger buttons at the bottom-right of the page.</p>
         <div class="contact-details">
           <p>
             <a href="https://wa.me/{{ .Site.Params.whatsapp_number }}" class="whatsapp-contact-link">
@@ -182,10 +183,52 @@
         <button class="cart-btn cart-btn-secondary" onclick="clearCart()">
           <i class="fas fa-trash"></i> Clear Cart
         </button>
-        <button class="cart-btn cart-btn-primary" onclick="proceedToBuy()">
-          <i class="fas fa-credit-card"></i> Proceed to Buy
+        <button class="cart-btn cart-btn-primary" onclick="openOrderForm()">
+          <i class="fas fa-shopping-bag"></i> Order Online
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- 📦 Online Order Form Modal -->
+<div id="order-form-modal" class="order-form-modal">
+  <div class="order-form-content">
+    <div class="cart-modal-header">
+      <h2><i class="fas fa-shopping-bag"></i> Place Your Order</h2>
+      <button class="cart-modal-close" onclick="closeOrderForm()">&times;</button>
+    </div>
+    <div class="order-form-body">
+      <div id="order-summary-items" class="order-summary-list"></div>
+      <div class="order-summary-total">
+        <h3 id="order-form-total">Total: ₱0.00</h3>
+      </div>
+      <form id="online-order-form" onsubmit="submitOnlineOrder(event)" novalidate>
+        <div class="form-group">
+          <label for="order-name">Full Name *</label>
+          <input type="text" id="order-name" required placeholder="Juan dela Cruz">
+        </div>
+        <div class="form-group">
+          <label for="order-phone">Phone Number *</label>
+          <input type="tel" id="order-phone" required placeholder="+63 912 345 6789">
+        </div>
+        <div class="form-group">
+          <label for="order-address">Delivery Address *</label>
+          <textarea id="order-address" required rows="2" placeholder="House No., Street, Barangay, City/Municipality, Province"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="order-remarks">Remarks / Special Instructions</label>
+          <textarea id="order-remarks" rows="2" placeholder="e.g. Please pack separately, call before delivery..."></textarea>
+        </div>
+        <div class="cart-actions-modal" style="margin-top: 1rem;">
+          <button type="button" class="cart-btn cart-btn-secondary" onclick="closeOrderForm()">
+            <i class="fas fa-arrow-left"></i> Back to Cart
+          </button>
+          <button type="submit" class="cart-btn cart-btn-primary" id="submit-order-btn">
+            <i class="fas fa-check"></i> Place Order
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

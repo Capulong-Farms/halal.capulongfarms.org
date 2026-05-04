@@ -7,11 +7,14 @@
     <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
     
     
-    <link rel="stylesheet" href="{{ "css/style.css" | relURL }}?v=20260315">
+    <link rel="stylesheet" href="{{ "css/style.css" | relURL }}?v=20260504">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
-    <!-- Meta tag for WhatsApp number -->
+    <!-- Meta tags for JS configuration -->
     <meta name="whatsapp-number" content="{{ .Site.Params.whatsapp_number }}">
+    <meta name="bms-api-url" content="{{ .Site.Params.bms_api_url }}">
+    <meta name="portal-api-key" content="{{ .Site.Params.portal_api_key }}">
+    <meta name="portal-source" content="{{ .Site.Params.portal_source }}">
 </head>
 <body>
     {{ partial "header.html" . }}
@@ -24,8 +27,8 @@
     {{ partial "contacts-button.html" . }}
     
     <!-- JavaScript Files -->
-    <script src="{{ "js/cart.js" | relURL }}?v=20260315" defer></script>
-    <script src="{{ "js/app.js" | relURL }}?v=20260315" defer></script>
+    <script src="{{ "js/cart.js" | relURL }}?v=20260504" defer></script>
+    <script src="{{ "js/app.js" | relURL }}?v=20260504" defer></script>
     
     <!-- Active Navigation Link Detection Script -->
     <script>
