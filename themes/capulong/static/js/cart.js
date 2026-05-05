@@ -245,22 +245,31 @@ async function submitOnlineOrder(event) {
 }
 
 function showOrderConfirmation(orderRef, phone) {
+  // Ensure page is scrollable immediately
+  document.body.style.overflow = 'auto';
+
   const overlay = document.createElement('div');
-  overlay.className = 'order-confirm-overlay';
   overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1099;';
 
   const dialog = document.createElement('div');
   dialog.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:2rem;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.3);z-index:1100;text-align:center;max-width:320px;width:90%;';
+
+  const okBtn = document.createElement('button');
+  okBtn.textContent = 'OK';
+  okBtn.style.cssText = 'padding:0.6rem 1.5rem;background:#2e7d32;color:white;border:none;border-radius:6px;font-size:1rem;cursor:pointer;font-weight:bold;';
+  okBtn.addEventListener('click', function() {
+    overlay.remove();
+    dialog.remove();
+    document.body.style.overflow = 'auto';
+  });
+
   dialog.innerHTML = `
     <div style="font-size:3rem;margin-bottom:0.5rem;">&#9989;</div>
     <h3 style="color:#2e7d32;margin-bottom:0.5rem;">Order Received!</h3>
     <p>Your order reference is <strong>${orderRef}</strong>.</p>
     <p style="color:#666;font-size:0.9rem;margin:0.75rem 0 1.25rem;">We will contact you at <strong>${phone}</strong> to confirm delivery and payment.</p>
-    <button onclick="this.closest('div').remove();document.querySelector('.order-confirm-overlay').remove();document.body.style.overflow='auto';"
-      style="padding:0.6rem 1.5rem;background:#2e7d32;color:white;border:none;border-radius:6px;font-size:1rem;cursor:pointer;font-weight:bold;">
-      OK
-    </button>
   `;
+  dialog.appendChild(okBtn);
 
   document.body.appendChild(overlay);
   document.body.appendChild(dialog);
