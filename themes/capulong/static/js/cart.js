@@ -256,7 +256,7 @@ function showOrderConfirmation(orderRef, phone) {
     <h3 style="color:#2e7d32;margin-bottom:0.5rem;">Order Received!</h3>
     <p>Your order reference is <strong>${orderRef}</strong>.</p>
     <p style="color:#666;font-size:0.9rem;margin:0.75rem 0 1.25rem;">We will contact you at <strong>${phone}</strong> to confirm delivery and payment.</p>
-    <button onclick="this.closest('div').remove();document.querySelector('.order-confirm-overlay').remove();"
+    <button onclick="this.closest('div').remove();document.querySelector('.order-confirm-overlay').remove();document.body.style.overflow='auto';"
       style="padding:0.6rem 1.5rem;background:#2e7d32;color:white;border:none;border-radius:6px;font-size:1rem;cursor:pointer;font-weight:bold;">
       OK
     </button>
