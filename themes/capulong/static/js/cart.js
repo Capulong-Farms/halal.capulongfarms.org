@@ -144,15 +144,22 @@ function openOrderForm() {
     alert('Your cart is empty!');
     return;
   }
-  // Move modal to document.body so position:fixed anchors to the true viewport
-  // regardless of any scrollable parent containers in the Hugo template
   const modal = document.getElementById('order-form-modal');
   if (modal.parentNode !== document.body) {
     document.body.appendChild(modal);
   }
   closeCartModal();
   renderOrderSummary();
+  // Set positioning explicitly via JS — after appendChild, Chrome does not always
+  // recompute position:fixed from the CSS class when display:none is in the same rule.
   modal.style.display = 'block';
+  modal.style.position = 'fixed';
+  modal.style.top = '0';
+  modal.style.left = '0';
+  modal.style.width = '100%';
+  modal.style.height = '100%';
+  modal.style.zIndex = '1000';
+  modal.scrollTop = 0;
   document.body.style.overflow = 'hidden';
 }
 
