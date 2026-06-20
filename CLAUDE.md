@@ -37,7 +37,7 @@ All key gotchas from `capulongfarms/CLAUDE.md` apply here:
 - Product ID format mismatch between Hugo `urlize` and Deal of Day JS regex — not interchangeable.
 - CSS and JS cache busting is manual: increment `?v=YYYYMMDD` in `baseof.html` for all three assets after every change.
 - **Order form modal `style="display:none;"` inline** — do not remove it. On mobile (≤480px), `.order-form-content` has `position:fixed` and can escape a parent's CSS `display:none` on WebKit/Blink, causing the modal to appear on page load. The inline style on the element itself prevents this browser bug.
-- **Home nav link scroll fix** — `baseof.html` intercepts `.main-nav a[href="#"]` clicks and calls `window.scrollTo({top:0,behavior:'smooth'})` + `history.replaceState`. Browsers don't reliably scroll to top when transitioning from a hash URL to an empty hash.
+- **Home nav link scroll** — Home menu entry uses `url = "#home"` in `hugo.toml`, targeting `<section id="home">` at the top of the page. Browser handles scroll natively; CSS `html { scroll-behavior: smooth }` makes it smooth. No JS onclick needed. `updateActiveLink()` matches `href="#home"` in the no-hash case.
 
 ## Contact Configuration
 
