@@ -82,6 +82,12 @@
   <div class="container">
     <h2>Products & Prices</h2>
 
+    <!-- Product Search -->
+    <div class="product-search-wrap">
+      <input type="text" id="product-search" class="product-search-input" placeholder="Search products...">
+      <button class="product-search-clear" id="product-search-clear" onclick="clearProductSearch()" aria-label="Clear search" style="display:none;">&times;</button>
+    </div>
+
     <!-- Tabs Navigation -->
     <div class="tabs">
       {{ range $index, $category := .Site.Data.products.categories }}
@@ -130,8 +136,20 @@
             {{ end }}
           </div>
           <h4>{{ .name }}</h4>
+          {{ if .description }}<p class="product-desc">{{ .description }}</p>{{ end }}
+          {{ if .price_on_request }}
+          <p class="price price-on-request"><em>Price on Request</em></p>
+          {{ else }}
           <p class="price">{{ .price }}</p>
+          {{ end }}
           {{ if .available }}
+          {{ if .price_on_request }}
+          <div style="padding: 0.25rem 0.5rem 0.75rem;">
+            <button class="add-to-cart-btn whatsapp-inquiry-btn" onclick="inquireAbout('{{ .name }}')">
+              <i class="fab fa-whatsapp"></i> Inquire for Price
+            </button>
+          </div>
+          {{ else }}
           <div class="quantity-container">
             <label class="quantity-label">Quantity:</label>
             <div class="quantity-controls">
@@ -145,6 +163,7 @@
               <i class="fas fa-shopping-cart"></i> Add to Cart
             </button>
           </div>
+          {{ end }}
           {{ end }}
         </div>
         {{ end }}

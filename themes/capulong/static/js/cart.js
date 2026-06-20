@@ -6,47 +6,88 @@ const BMS_API_URL    = document.querySelector('meta[name="bms-api-url"]')?.conte
 const PORTAL_API_KEY = document.querySelector('meta[name="portal-api-key"]')?.content || '';
 const PORTAL_SOURCE  = document.querySelector('meta[name="portal-source"]')?.content  || 'portal-main';
 
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = 'cf-toast cf-toast-' + type;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('cf-toast-visible'));
+  setTimeout(() => {
+    toast.classList.remove('cf-toast-visible');
+    toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+  }, 2500);
+}
+
+function inquireAbout(productName) {
+  const whatsappNumber = window.WHATSAPP_NUMBER || '966542761620';
+  const msg = 'Hi! I\'d like to inquire about: ' + productName + '. What is the current price?';
+  window.open('https://wa.me/' + whatsappNumber + '?text=' + encodeURIComponent(msg), '_blank');
+}
+
 function getCart() {
-  const cart = localStorage.getItem(CART_KEY);
-  return cart ? JSON.parse(cart) : [];
+  const raw = localStorage.getItem(CART_KEY);
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      saveCart(parsed);
+      return parsed;
+    }
+    if (parsed.savedAt && (Date.now() - parsed.savedAt > 7 * 24 * 60 * 60 * 1000)) {
+      localStorage.removeItem(CART_KEY);
+      return [];
+    }
+    return parsed.items || [];
+  } catch (e) {
+    return [];
+  }
 }
 
 function saveCart(cart) {
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  localStorage.setItem(CART_KEY, JSON.stringify({ items: cart, savedAt: Date.now() }));
   updateCartCount();
 }
 
 function addToCart(productName, productPrice, discount = 0) {
+  const priceStr = String(productPrice);
+  if (priceStr.includes('---') || priceStr.includes('___')) {
+    showToast('Please contact us for pricing on this item.', 'info');
+    return;
+  }
   const cart = getCart();
   const existingItem = cart.find(item => item.name === productName);
-  
+
   if (existingItem) {
     existingItem.quantity += 1;
   } else {
     cart.push({ name: productName, price: productPrice, quantity: 1, discount: discount });
   }
-  
+
   saveCart(cart);
-  alert(productName + ' added to cart!');
+  showToast(productName + ' added to cart!');
 }
 
 function addToCartWithQuantity(productName, productPrice, productId, discount = 0) {
+  const priceStr = String(productPrice);
+  if (priceStr.includes('---') || priceStr.includes('___')) {
+    showToast('Please contact us for pricing on this item.', 'info');
+    return;
+  }
   const quantityInput = document.getElementById('qty-' + productId);
   const quantity = parseInt(quantityInput.value) || 1;
-  
+
   const cart = getCart();
   const existingItem = cart.find(item => item.name === productName);
-  
+
   if (existingItem) {
     existingItem.quantity += quantity;
   } else {
     cart.push({ name: productName, price: productPrice, quantity: quantity, discount: discount });
   }
-  
+
   saveCart(cart);
-  alert(quantity + 'x ' + productName + ' added to cart!');
-  
-  // Reset quantity to 1 after adding
+  showToast(quantity + 'x ' + productName + ' added to cart!');
+
   quantityInput.value = 1;
 }
 
@@ -141,7 +182,7 @@ function orderProduct(productName, productPrice, discount = 0) {
 function openOrderForm() {
   const cart = getCart();
   if (cart.length === 0) {
-    alert('Your cart is empty!');
+    showToast('Your cart is empty!', 'info');
     return;
   }
   const modal = document.getElementById('order-form-modal');
@@ -373,7 +414,7 @@ function clearCart() {
     localStorage.removeItem(CART_KEY);
     updateCartCount();
     renderCartItems();
-    alert('Cart cleared!');
+    showToast('Cart cleared!', 'info');
   }
 }
 

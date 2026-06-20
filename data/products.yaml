@@ -9,6 +9,8 @@ categories:
         discontinue: false
         discount: 5
         deal_of_the_day: true
+        price_on_request: true
+        description: "Malaysian shrimp paste chili sauce"
 
       - name: "Sambal Tumis"
         price: "₱___/pc"
@@ -17,6 +19,8 @@ categories:
         discontinue: false
         discount: 100
         deal_of_the_day: false
+        price_on_request: true
+        description: "Malaysian stir-fried chili paste"
 
       - name: "Kicap Manis"
         price: "₱___/pc"
@@ -25,6 +29,8 @@ categories:
         discontinue: false
         discount: 0
         deal_of_the_day: false
+        price_on_request: true
+        description: "Sweet Malaysian soy sauce"
 
       - name: "Kicap Pekat"
         price: "₱___/pc"
@@ -33,6 +39,8 @@ categories:
         discontinue: false
         discount: 0
         deal_of_the_day: false
+        price_on_request: true
+        description: "Thick Malaysian dark soy sauce"
 
       - name: "Embotido"
         price: "₱200/pack"
@@ -41,6 +49,7 @@ categories:
         discontinue: false
         discount: 0
         deal_of_the_day: false
+        description: "Traditional Filipino pork roll, homemade"
 
       - name: "Burong Kapampangan"
         price: "₱200/pack"
@@ -49,6 +58,7 @@ categories:
         discontinue: false
         discount: 0
         deal_of_the_day: false
+        description: "Fermented shrimp-rice, Kapampangan heritage"
 
       - name: "Keropok Lekor"
         price: "₱100/pack"
@@ -57,6 +67,7 @@ categories:
         discontinue: false
         discount: 0
         deal_of_the_day: false
+        description: "Malaysian fish sausage, fry from frozen"
 
       - name: "Keropok Kering"
         price: "₱100/pack"
@@ -65,6 +76,7 @@ categories:
         discontinue: false
         discount: 0
         deal_of_the_day: false
+        description: "Malaysian-style crispy fish crackers"
 
   - name: "Halal Meat"
     id: "meat"
@@ -84,6 +96,7 @@ categories:
         discontinue: false
         discount: 0
         deal_of_the_day: false
+        description: "Unfertilized hard-boiled duck egg"
 
       - name: "Ducks, Fresh Meat, Halal"
         price: "₱75/kg"

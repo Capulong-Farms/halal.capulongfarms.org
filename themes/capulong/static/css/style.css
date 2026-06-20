@@ -2413,3 +2413,141 @@ main {
   }
 
 }
+
+/* =============================
+   Toast Notifications
+============================= */
+.cf-toast {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: white;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  max-width: 280px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  pointer-events: none;
+}
+
+.cf-toast-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cf-toast-success { background: #2d8659; }
+.cf-toast-info { background: #e07b2e; }
+
+@media (max-width: 480px) {
+  .cf-toast {
+    left: 15px;
+    right: 15px;
+    max-width: none;
+    bottom: 70px;
+    font-size: 0.85rem;
+  }
+}
+
+/* =============================
+   Product Search Bar
+============================= */
+.product-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.product-search-input {
+  width: 100%;
+  padding: 0.6rem 2.5rem 0.6rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 24px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  background: white;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.product-search-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(45, 134, 89, 0.15);
+}
+
+.product-search-clear {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #aaa;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 50%;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.product-search-clear:hover {
+  color: #555;
+}
+
+/* =============================
+   Product Description
+============================= */
+.product-desc {
+  font-size: 0.77rem;
+  color: #888;
+  padding: 0 0.75rem 0.4rem;
+  margin: 0;
+  line-height: 1.3;
+  font-style: italic;
+}
+
+/* =============================
+   Price on Request
+============================= */
+.price-on-request {
+  color: var(--secondary-color) !important;
+  font-style: italic;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+}
+
+.whatsapp-inquiry-btn {
+  background: #25D366;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  text-decoration: none;
+  width: 100%;
+  transition: background-color 0.2s;
+}
+
+.whatsapp-inquiry-btn:hover {
+  background: #20b358;
+  color: white;
+  text-decoration: none;
+}

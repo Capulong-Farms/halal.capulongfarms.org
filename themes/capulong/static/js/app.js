@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
   initializeTabs();
   attachFloatingContactHandlers();
   initializeDealOfTheDay();
+  initializeSearch();
 });
 
 // Tab functionality
@@ -269,21 +270,72 @@ function validateDealQuantityInput(productId) {
 }
 
 function addDealToCartWithQuantity(productName, productPrice, productId, discount = 0) {
+  const priceStr = String(productPrice);
+  if (priceStr.includes('---') || priceStr.includes('___')) {
+    showToast('Please contact us for pricing on this item.', 'info');
+    return;
+  }
   const quantityInput = document.getElementById('deal-qty-' + productId);
   const quantity = parseInt(quantityInput.value) || 1;
-  
+
   const cart = getCart();
   const existingItem = cart.find(item => item.name === productName);
-  
+
   if (existingItem) {
     existingItem.quantity += quantity;
   } else {
     cart.push({ name: productName, price: productPrice, quantity: quantity, discount: discount });
   }
-  
+
   saveCart(cart);
-  alert(productName + ' (x' + quantity + ') added to cart from Deal of the Day!');
-  
+  showToast(productName + ' (x' + quantity + ') added to cart!', 'success');
+
   // Reset quantity to 1
   quantityInput.value = 1;
+}
+
+function initializeSearch() {
+  const input = document.getElementById('product-search');
+  if (!input) return;
+  input.addEventListener('input', function() {
+    handleProductSearch(this.value);
+  });
+}
+
+function handleProductSearch(term) {
+  const clearBtn = document.getElementById('product-search-clear');
+  const contents = document.querySelectorAll('.tab-content');
+  const cards = document.querySelectorAll('.product-card');
+  const trimmed = term.trim().toLowerCase();
+
+  if (clearBtn) clearBtn.style.display = trimmed ? 'flex' : 'none';
+
+  if (!trimmed) {
+    contents.forEach(c => c.style.display = '');
+    cards.forEach(card => card.style.display = '');
+    return;
+  }
+
+  // Show all tab contents in search mode
+  contents.forEach(c => c.style.display = 'block');
+
+  // Show/hide cards based on search term
+  cards.forEach(card => {
+    const name = (card.dataset.productName || '').toLowerCase();
+    card.style.display = name.includes(trimmed) ? '' : 'none';
+  });
+
+  // Hide tab contents that have no visible product cards
+  contents.forEach(c => {
+    const hasVisible = Array.from(c.querySelectorAll('.product-card')).some(card => card.style.display !== 'none');
+    if (!hasVisible) c.style.display = 'none';
+  });
+}
+
+function clearProductSearch() {
+  const input = document.getElementById('product-search');
+  if (input) {
+    input.value = '';
+    handleProductSearch('');
+  }
 }
