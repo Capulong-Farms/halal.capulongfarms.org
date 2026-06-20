@@ -148,7 +148,7 @@ main {
 .hero,
 .products-section,
 .contact-section {
-  scroll-margin-top: 72px;
+  scroll-margin-top: 65px;
 }
 
 /* =============================
@@ -493,7 +493,7 @@ main {
   .hero,
   .products-section,
   .contact-section {
-    scroll-margin-top: 67px;
+    scroll-margin-top: 60px;
   }
 
   .hero {
@@ -635,7 +635,7 @@ main {
   .hero,
   .products-section,
   .contact-section {
-    scroll-margin-top: 77px;
+    scroll-margin-top: 70px;
   }
 
   .hero h1 {
