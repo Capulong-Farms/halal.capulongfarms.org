@@ -38,6 +38,7 @@ All key gotchas from `capulongfarms/CLAUDE.md` apply here:
 - CSS and JS cache busting is manual: increment `?v=YYYYMMDD` in `baseof.html` for all three assets after every change.
 - **Order form modal `style="display:none;"` inline** — do not remove it. On mobile (≤480px), `.order-form-content` has `position:fixed` and can escape a parent's CSS `display:none` on WebKit/Blink, causing the modal to appear on page load. The inline style on the element itself prevents this browser bug.
 - **Home nav link scroll** — Home menu entry uses `url = "#home"` in `hugo.toml`, targeting `<section id="home">` at the top of the page. Browser handles scroll natively; CSS `html { scroll-behavior: smooth }` makes it smooth. No JS onclick needed. `updateActiveLink()` matches `href="#home"` in the no-hash case.
+- **Fixed header / anchor offset** — `scroll-margin-top` on `.hero`, `.products-section`, `.contact-section` in `style.css` (75px desktop / 70px tablet / 80px mobile) prevents section titles being hidden under the fixed nav bar on anchor navigation. `scroll-padding-top` on `html` was tried first but is ineffective when `body { height: 100% }` shifts the scroll container.
 
 ## Deployment
 
