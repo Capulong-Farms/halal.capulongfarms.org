@@ -39,6 +39,12 @@ All key gotchas from `capulongfarms/CLAUDE.md` apply here:
 - **Order form modal `style="display:none;"` inline** — do not remove it. On mobile (≤480px), `.order-form-content` has `position:fixed` and can escape a parent's CSS `display:none` on WebKit/Blink, causing the modal to appear on page load. The inline style on the element itself prevents this browser bug.
 - **Home nav link scroll** — Home menu entry uses `url = "#home"` in `hugo.toml`, targeting `<section id="home">` at the top of the page. Browser handles scroll natively; CSS `html { scroll-behavior: smooth }` makes it smooth. No JS onclick needed. `updateActiveLink()` matches `href="#home"` in the no-hash case.
 
+## Deployment
+
+Deployed on **Cloudflare Pages** (project: `halal-capulongfarms-org`) — identical setup to the main portal. Auto-deploys on every `git push` to `main`; Cloudflare runs `hugo` and serves `public/`. No `wrangler.jsonc`, no manual deploy step needed.
+
+Previously this repo had a `wrangler.jsonc` that caused it to deploy as a **Cloudflare Worker** instead of Pages, requiring manual `wrangler deploy` for CSS/asset changes. That file was removed on 2026-06-20 and the project was recreated as a Pages site.
+
 ## Contact Configuration
 
 - **WhatsApp**: `966542761620` (in `hugo.toml` → `params.whatsapp_number`)
