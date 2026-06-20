@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Hugo static site for `halal.capulongfarms.org` — the Halal Division variant of Capulong Farms. Structurally identical to `capulongfarms/` but with halal-specific branding and products. See `capulongfarms/CLAUDE.md` for full architecture details; this file documents only what differs.
+Hugo static site for `halal.capulongfarms.org` — the Halal Division variant of Capulong Farms. See `capulongfarms/CLAUDE.md` for full architecture details; this file documents only what differs.
 
 ## Commands
 
@@ -23,18 +23,22 @@ hugo --gc          # Clean build cache
 | Hero image | `/images/farm-photo.jpg` | `/images/halal-photo.jpg` |
 | Product catalog | All products | Halal-certified products only |
 | External link tab | Links to halal site | Links to main site |
+| portal_source | `portal-main` | `portal-halal` |
 
 ## JS and Template Files
 
-`app.js`, `cart.js`, and all layout templates are **independently maintained copies** — not symlinked or shared with the main site. Changes to shared logic (cart behavior, Deal of the Day, contact handlers) must be manually applied in both repos.
+`cart.js`, `app.js`, `style.css`, `baseof.html`, and all partials are **kept byte-for-byte identical** with the main site. When changing shared logic, apply the change to both repos and verify with `diff`.
 
-All key gotchas from `capulongfarms/CLAUDE.md` apply here too:
-- Deal of the Day is driven by the YAML `deal_of_the_day: true` flag (template sets `data-deal-of-the-day="true"`; JS reads that attribute — only one product should be flagged)
-- Product ID format mismatch between Hugo `urlize` and Deal of Day JS regex — not interchangeable
-- CSS **and JS** cache busting is manual: increment `?v=YYYYMMDD` on the CSS link and both JS script tags in `themes/capulong/layouts/_default/baseof.html`
+The only legitimately different template file is `themes/capulong/layouts/index.html` — branding text and hero image only; the product grid, cart, search, and order form logic are identical.
+
+All key gotchas from `capulongfarms/CLAUDE.md` apply here:
+- Deal of the Day: `deal_of_the_day: true` in YAML → `data-deal-of-the-day="true"` on card → JS reads attribute. Only one product should be flagged.
+- `price_on_request: true` in YAML → shows "Price on Request" + WhatsApp inquiry button instead of cart controls.
+- Product ID format mismatch between Hugo `urlize` and Deal of Day JS regex — not interchangeable.
+- CSS and JS cache busting is manual: increment `?v=YYYYMMDD` in `baseof.html` for all three assets after every change.
 
 ## Contact Configuration
 
 - **WhatsApp**: `966542761620` (in `hugo.toml` → `params.whatsapp_number`)
-- **Messenger ID**: `61582708015159` hardcoded in **5 places across 4 files** — `cart.js` (×2), `app.js`, `index.html`, `partials/contacts-button.html`. Update all if changed.
+- **Messenger ID**: `61582708015159` hardcoded in **3 places across 3 files** — `app.js`, `index.html`, `partials/contacts-button.html`. Update all if changed.
 - **GCash QR**: `hugo.toml` → `params.gcash_qr_image`
