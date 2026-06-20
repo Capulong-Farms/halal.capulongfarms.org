@@ -54,10 +54,10 @@
             }
           });
         } else {
-          // If no hash, highlight Home only (href="#" or href="/")
+          // If no hash, highlight Home only (href="#home" or href="/")
           links.forEach(link => {
             const href = link.getAttribute("href");
-            if (href === "/" || href === "#") {
+            if (href === "/" || href === "#home") {
               link.classList.add("active");
             }
           });

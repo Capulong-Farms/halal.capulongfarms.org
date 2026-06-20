@@ -19,7 +19,7 @@ disableKinds = ["taxonomy", "term"]
 [menu]
   [[menu.main]]
     name = "Halal Capulong Farms"
-    url = "#"
+    url = "#home"
     weight = 1
     [menu.main.params]
       class = "cta-button"
