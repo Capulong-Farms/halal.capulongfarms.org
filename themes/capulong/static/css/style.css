@@ -144,6 +144,13 @@ main {
   margin-top: 70px;
 }
 
+/* Offset anchor sections so the fixed header doesn't cover the title */
+.hero,
+.products-section,
+.contact-section {
+  scroll-margin-top: 75px;
+}
+
 /* =============================
    Hero Section
 ============================= */
@@ -483,6 +490,12 @@ main {
     margin-top: 65px;
   }
 
+  .hero,
+  .products-section,
+  .contact-section {
+    scroll-margin-top: 70px;
+  }
+
   .hero {
     padding: 2rem 0;
   }
@@ -617,6 +630,12 @@ main {
 
   main {
     margin-top: 75px;
+  }
+
+  .hero,
+  .products-section,
+  .contact-section {
+    scroll-margin-top: 80px;
   }
 
   .hero h1 {
