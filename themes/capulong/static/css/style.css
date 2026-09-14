@@ -2303,6 +2303,8 @@ main {
     height: 160px;
   }
 }
+
+/* =============================
    Online Order Form Modal
 ============================= */
 .order-form-modal {
@@ -2570,4 +2572,43 @@ main {
   background: #20b358;
   color: white;
   text-decoration: none;
+}
+
+/* =============================
+   Trial Notice Watermark
+============================= */
+.trial-watermark {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.trial-watermark span {
+  display: block;
+  transform: rotate(-25deg);
+  font-size: clamp(1.1rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: 2px;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(220, 20, 60, 0.16);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 480px) {
+  .trial-watermark span {
+    letter-spacing: 1px;
+  }
 }

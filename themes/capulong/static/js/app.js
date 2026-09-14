@@ -280,16 +280,16 @@ function addDealToCartWithQuantity(productName, productPrice, productId, discoun
 
   const cart = getCart();
   const existingItem = cart.find(item => item.name === productName);
-
+  
   if (existingItem) {
     existingItem.quantity += quantity;
   } else {
     cart.push({ name: productName, price: productPrice, quantity: quantity, discount: discount });
   }
-
+  
   saveCart(cart);
   showToast(productName + ' (x' + quantity + ') added to cart!', 'success');
-
+  
   // Reset quantity to 1
   quantityInput.value = 1;
 }

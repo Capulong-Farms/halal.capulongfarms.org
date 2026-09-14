@@ -7,7 +7,7 @@
     <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
     
     
-    <link rel="stylesheet" href="{{ "css/style.css" | relURL }}?v=20260625">
+    <link rel="stylesheet" href="{{ "css/style.css" | relURL }}?v=20260914">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
     <!-- Meta tags for JS configuration -->
@@ -17,6 +17,11 @@
     <meta name="portal-source" content="{{ .Site.Params.portal_source }}">
 </head>
 <body>
+    <!-- Trial notice watermark - shown on every page view -->
+    <div class="trial-watermark" aria-hidden="true">
+      <span>Website On Trial Survey<br>Won't Be Active Until April 2027</span>
+    </div>
+
     {{ partial "header.html" . }}
     
     <main>
@@ -27,8 +32,8 @@
     {{ partial "contacts-button.html" . }}
     
     <!-- JavaScript Files -->
-    <script src="{{ "js/cart.js" | relURL }}?v=20260625" defer></script>
-    <script src="{{ "js/app.js" | relURL }}?v=20260625" defer></script>
+    <script src="{{ "js/cart.js" | relURL }}?v=20260914" defer></script>
+    <script src="{{ "js/app.js" | relURL }}?v=20260914" defer></script>
     
     <!-- Active Navigation Link Detection Script -->
     <script>
