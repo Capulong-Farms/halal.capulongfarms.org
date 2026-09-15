@@ -239,6 +239,21 @@
           <label for="order-remarks">Remarks / Special Instructions</label>
           <textarea id="order-remarks" rows="2" placeholder="e.g. Please pack separately, call before delivery..."></textarea>
         </div>
+        <div class="form-group order-payment">
+          <label for="order-payment-method">Payment</label>
+          <select id="order-payment-method" onchange="togglePaymentFields()">
+            <option value="later">Pay later &mdash; we'll contact you to arrange payment</option>
+            <option value="qr">Pay now via GCash / QR (scan below)</option>
+          </select>
+          <!-- Inline display:none on purpose, same reason as #order-form-modal: toggled by togglePaymentFields() -->
+          <div id="order-payment-qr" class="order-payment-qr" style="display:none;">
+            <p class="order-payment-step">1. Scan and pay <strong id="order-pay-amount">&#8369;0.00</strong></p>
+            <img src="{{ .Site.Params.gcash_qr_image }}" alt="GCash / QR Ph payment code" loading="lazy">
+            <label class="order-payment-step" for="order-payment-ref">2. Enter the reference no. from your receipt</label>
+            <input type="text" id="order-payment-ref" maxlength="40" autocomplete="off" placeholder="e.g. 1234 567 891011">
+            <small class="order-payment-note">We'll check your payment and confirm your order. No reference yet? Place the order and send it to us later via WhatsApp.</small>
+          </div>
+        </div>
         <div class="cart-actions-modal" style="margin-top: 1rem;">
           <button type="button" class="cart-btn cart-btn-secondary" onclick="closeOrderForm()">
             <i class="fas fa-arrow-left"></i> Back to Cart

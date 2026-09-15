@@ -191,6 +191,7 @@ function openOrderForm() {
   }
   closeCartModal();
   renderOrderSummary();
+  togglePaymentFields();
   // Set positioning explicitly via JS — after appendChild, Chrome does not always
   // recompute position:fixed from the CSS class when display:none is in the same rule.
   modal.style.display = 'block';
@@ -227,6 +228,16 @@ function renderOrderSummary() {
   });
   document.getElementById('order-summary-items').innerHTML = html;
   document.getElementById('order-form-total').textContent = `Total: ₱${total.toFixed(2)}`;
+  const payAmount = document.getElementById('order-pay-amount');
+  if (payAmount) payAmount.textContent = `₱${total.toFixed(2)}`;
+}
+
+// Shows the QR code and reference-number box only when "Pay now" is selected.
+function togglePaymentFields() {
+  const method = document.getElementById('order-payment-method');
+  const box = document.getElementById('order-payment-qr');
+  if (!method || !box) return;
+  box.style.display = method.value === 'qr' ? 'block' : 'none';
 }
 
 async function submitOnlineOrder(event) {
@@ -236,6 +247,10 @@ async function submitOnlineOrder(event) {
   const phone   = document.getElementById('order-phone').value.trim();
   const address = document.getElementById('order-address').value.trim();
   const remarks = document.getElementById('order-remarks').value.trim();
+  const methodEl = document.getElementById('order-payment-method');
+  const refEl    = document.getElementById('order-payment-ref');
+  const paymentMethod = methodEl && methodEl.value === 'qr' ? 'qr' : 'later';
+  const paymentRef    = paymentMethod === 'qr' && refEl ? refEl.value.trim() : '';
 
   if (!name || !phone || !address) {
     alert('Please fill in your name, phone number, and delivery address.');
@@ -253,6 +268,8 @@ async function submitOnlineOrder(event) {
     customerPhone:   phone,
     customerAddress: address,
     remarks:         remarks,
+    paymentMethod:    paymentMethod,
+    paymentReference: paymentRef,
     items: cart.map(item => ({
       name:     item.name,
       price:    parseFloat(String(item.price).replace(/[^0-9.-]+/g, '')) || 0,
@@ -282,7 +299,8 @@ async function submitOnlineOrder(event) {
     document.body.style.overflow = 'auto';
     // Reset form for next use
     document.getElementById('online-order-form').reset();
-    showOrderConfirmation(result.orderRef, phone);
+    togglePaymentFields();
+    showOrderConfirmation(result.orderRef, phone, paymentMethod, paymentRef);
 
   } catch (err) {
     console.error('Order submission failed:', err);
@@ -292,10 +310,21 @@ async function submitOnlineOrder(event) {
   }
 }
 
-function showOrderConfirmation(orderRef, phone) {
+function showOrderConfirmation(orderRef, phone, paymentMethod, paymentRef) {
   const overlay = document.createElement('div');
   overlay.className = 'order-confirm-overlay';
   overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1099;';
+
+  const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g,
+    c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  let payMsg;
+  if (paymentMethod === 'qr' && paymentRef) {
+    payMsg = `We received your payment reference <strong>${esc(paymentRef)}</strong>. We will verify it and contact you at <strong>${esc(phone)}</strong> to confirm delivery.`;
+  } else if (paymentMethod === 'qr') {
+    payMsg = `Please send your payment reference via WhatsApp, quoting <strong>${esc(orderRef)}</strong>. We will contact you at <strong>${esc(phone)}</strong> to confirm delivery.`;
+  } else {
+    payMsg = `We will contact you at <strong>${esc(phone)}</strong> to confirm delivery and payment.`;
+  }
 
   const dialog = document.createElement('div');
   dialog.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:2rem;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.3);z-index:1100;text-align:center;max-width:320px;width:90%;';
@@ -303,7 +332,7 @@ function showOrderConfirmation(orderRef, phone) {
     <div style="font-size:3rem;margin-bottom:0.5rem;">&#9989;</div>
     <h3 style="color:#2e7d32;margin-bottom:0.5rem;">Order Received!</h3>
     <p>Your order reference is <strong>${orderRef}</strong>.</p>
-    <p style="color:#666;font-size:0.9rem;margin:0.75rem 0 1.25rem;">We will contact you at <strong>${phone}</strong> to confirm delivery and payment.</p>
+    <p style="color:#666;font-size:0.9rem;margin:0.75rem 0 1.25rem;">${payMsg}</p>
     <button onclick="this.closest('div').remove();document.querySelector('.order-confirm-overlay').remove();"
       style="padding:0.6rem 1.5rem;background:#2e7d32;color:white;border:none;border-radius:6px;font-size:1rem;cursor:pointer;font-weight:bold;">
       OK

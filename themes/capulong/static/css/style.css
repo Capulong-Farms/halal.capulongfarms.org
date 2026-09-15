@@ -2612,3 +2612,55 @@ main {
     letter-spacing: 1px;
   }
 }
+
+/* =============================
+   Order Form - Payment (GCash / QR Ph, manual confirmation)
+============================= */
+.form-group select {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.order-payment select,
+.order-payment input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.order-payment-qr {
+  margin-top: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.order-payment-qr img {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  margin: 0.5rem auto 0.75rem;
+  border-radius: 6px;
+}
+
+.order-payment-step {
+  display: block;
+  text-align: left;
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+}
+
+.order-payment-note {
+  display: block;
+  text-align: left;
+  color: #666;
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+}
