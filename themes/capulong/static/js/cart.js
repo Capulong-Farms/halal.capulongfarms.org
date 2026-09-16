@@ -249,7 +249,7 @@ async function submitOnlineOrder(event) {
   const remarks = document.getElementById('order-remarks').value.trim();
   const methodEl = document.getElementById('order-payment-method');
   const refEl    = document.getElementById('order-payment-ref');
-  const paymentMethod = methodEl && methodEl.value === 'qr' ? 'qr' : 'later';
+  const paymentMethod = methodEl ? methodEl.value : 'later';
   const paymentRef    = paymentMethod === 'qr' && refEl ? refEl.value.trim() : '';
 
   if (!name || !phone || !address) {
@@ -322,6 +322,10 @@ function showOrderConfirmation(orderRef, phone, paymentMethod, paymentRef) {
     payMsg = `We received your payment reference <strong>${esc(paymentRef)}</strong>. We will verify it and contact you at <strong>${esc(phone)}</strong> to confirm delivery.`;
   } else if (paymentMethod === 'qr') {
     payMsg = `Please send your payment reference via WhatsApp, quoting <strong>${esc(orderRef)}</strong>. We will contact you at <strong>${esc(phone)}</strong> to confirm delivery.`;
+  } else if (paymentMethod === 'cod') {
+    payMsg = `You chose <strong>Cash on Delivery</strong>. We will contact you at <strong>${esc(phone)}</strong> to confirm the delivery schedule. Please have the exact amount ready.`;
+  } else if (paymentMethod === 'cod_outside') {
+    payMsg = `You chose <strong>Cash on Delivery (outside Pampanga)</strong>. We will contact you at <strong>${esc(phone)}</strong> to confirm the schedule and the extra delivery charge before we ship.`;
   } else {
     payMsg = `We will contact you at <strong>${esc(phone)}</strong> to confirm delivery and payment.`;
   }

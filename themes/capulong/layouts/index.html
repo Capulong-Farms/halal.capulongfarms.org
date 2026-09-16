@@ -243,7 +243,8 @@
           <label for="order-payment-method">Payment</label>
           <select id="order-payment-method" onchange="togglePaymentFields()">
             <option value="qr" selected>Pay now via GCash / QR (scan below)</option>
-            <option value="later">Pay later &mdash; we'll contact you to arrange payment</option>
+            <option value="cod">Cash on Delivery (within Pampanga)</option>
+            <option value="cod_outside">Cash on Delivery (outside Pampanga, extra charges apply)</option>
           </select>
           <!-- Inline display:none on purpose, same reason as #order-form-modal: toggled by togglePaymentFields() -->
           <div id="order-payment-qr" class="order-payment-qr" style="display:none;">
