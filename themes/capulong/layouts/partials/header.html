@@ -1,6 +1,12 @@
 <header class="site-header">
     <div class="container">
         <div class="header-content">
+            <a href="#home" class="site-logo" aria-label="Capulong Farms home">
+                <img class="logo-full" src="{{ "images/logo-header.png" | relURL }}"
+                     alt="Capulong Farms - Lanang, Candaba, Pampanga" width="425" height="96">
+                <img class="logo-mark" src="{{ "images/logo-mark.png" | relURL }}"
+                     alt="Capulong Farms" width="56" height="96">
+            </a>
             <nav class="main-nav">
                 <ul>
                     {{ range .Site.Menus.main }}

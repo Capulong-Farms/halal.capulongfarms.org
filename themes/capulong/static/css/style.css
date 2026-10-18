@@ -2664,3 +2664,39 @@ main {
   font-size: 0.8rem;
   margin-top: 0.4rem;
 }
+
+
+/* =============================
+   Site Logo (header)
+============================= */
+.header-content {
+  grid-template-columns: auto 1fr auto;
+}
+
+.site-logo {
+  display: flex;
+  align-items: center;
+  justify-self: start;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.site-logo img {
+  display: block;
+  width: auto;
+  height: 46px;
+}
+
+.site-logo .logo-mark {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .site-logo img { height: 38px; }
+}
+
+/* Below 480px the full plaque crowds the nav, so show the leaf mark alone. */
+@media (max-width: 480px) {
+  .site-logo .logo-full { display: none; }
+  .site-logo .logo-mark { display: block; height: 34px; }
+}
