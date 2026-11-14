@@ -34,7 +34,7 @@ categories:
 
       - name: "Kicap Pekat"
         price: "₱___/pc"
-        image: "/images/GR-Kicap Pekat.jpg"
+        image: "/images/GR-Kicap-Pekat.jpg"
         available: false
         discontinue: false
         discount: 0
@@ -175,7 +175,7 @@ categories:
 
       - name: "Madinah Arabic Course-Volume2"
         price: "₱0/book"
-        image: "/images/TL-Madinah1=2.jpg"
+        image: "/images/TL-Madinah2.jpg"
         available: true
         discontinue: false
         discount: 0
