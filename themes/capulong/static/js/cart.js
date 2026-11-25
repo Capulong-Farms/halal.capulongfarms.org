@@ -187,6 +187,41 @@ function orderProduct(productName, productPrice, discount = 0) {
 // inventing a figure.
 let DELIVERY_RATES = null;
 
+// What the farm can still sell, by product name. Fetched when the order form
+// opens rather than cached for the visit: stock is the one figure that must
+// not be stale, and two shoppers can be in the cart at the same moment.
+// null for a product means it is not stock-tracked - a course or a service.
+let STOCK = null;
+
+async function loadStock() {
+  try {
+    const r = await fetch(BMS_API_URL + '/api/stock', { cache: 'no-store' });
+    if (!r.ok) throw new Error('stock ' + r.status);
+    STOCK = (await r.json()).stock || {};
+  } catch (e) {
+    STOCK = null;        // unreachable: let the order through, the server checks again
+  }
+  return STOCK;
+}
+
+// Returns the lines that cannot be filled, with what is left of each.
+function cartStockProblems() {
+  if (!STOCK) return [];
+  return getCart().reduce((bad, item) => {
+    const left = STOCK[item.name];
+    if (left == null) return bad;                  // not tracked, or unknown to the farm
+    if (item.quantity > left) bad.push({ name: item.name, wanted: item.quantity, left: Math.max(0, left) });
+    return bad;
+  }, []);
+}
+
+function stockProblemMessage(problems) {
+  return 'Sorry, these are no longer available in that quantity:\n\n' +
+    problems.map(p => `\u2022 ${p.name} \u2014 you asked for ${p.wanted}, ` +
+      (p.left ? `only ${p.left} left` : 'none left')).join('\n') +
+    '\n\nPlease adjust your cart and try again.';
+}
+
 async function loadDeliveryRates() {
   if (DELIVERY_RATES) return DELIVERY_RATES;
   try {
@@ -401,6 +436,10 @@ function openOrderForm() {
   togglePaymentFields();
   // The charge appears as soon as the rates arrive; the form is usable meanwhile.
   loadDeliveryRates().then(() => { renderRateCard(); renderOrderSummary(); });
+  loadStock().then(() => {
+    const problems = cartStockProblems();
+    if (problems.length) alert(stockProblemMessage(problems));
+  });
   // Set positioning explicitly via JS — after appendChild, Chrome does not always
   // recompute position:fixed from the CSS class when display:none is in the same rule.
   modal.style.display = 'block';
@@ -489,6 +528,11 @@ async function submitOnlineOrder(event) {
     return;
   }
 
+  // Stock may have gone while the form was being filled in, so ask once more.
+  await loadStock();
+  const problems = cartStockProblems();
+  if (problems.length) { alert(stockProblemMessage(problems)); return; }
+
   const btn = document.getElementById('submit-order-btn');
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
@@ -525,6 +569,18 @@ async function submitOnlineOrder(event) {
       body: JSON.stringify(orderData),
     });
 
+    // 409: the farm sold the last of something between our check and this one.
+    if (response.status === 409) {
+      const d = await response.json().catch(() => ({}));
+      const items = (d.items || []).map(i =>
+        `\u2022 ${i.name} \u2014 you asked for ${i.wanted}, ` +
+        (i.available ? `only ${i.available} left` : 'none left')).join('\n');
+      alert('Sorry, these are no longer available in that quantity:\n\n' + items +
+            '\n\nYour cart has been kept \u2014 please adjust it and try again.');
+      resetSubmitButton();
+      await loadStock();
+      return;
+    }
     if (!response.ok) throw new Error('Server error ' + response.status);
 
     const result = await response.json();
