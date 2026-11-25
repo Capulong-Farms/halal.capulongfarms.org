@@ -2752,11 +2752,34 @@ main {
   color: var(--primary-color, #2c6b2f);
 }
 
-.order-pickup-tick {
+/* The tick sits on the line, before its words. Without this the shared
+   `.form-group input { width:100% }` rule styles a checkbox like a text box
+   and pushes the label onto its own line. */
+.form-group label.order-pickup-tick {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
   font-weight: 600;
+  margin-bottom: 0;
 }
-.order-pickup-tick input { width: auto; margin: 0; }
+.form-group label.order-pickup-tick input[type="checkbox"] {
+  width: auto;
+  min-width: 0;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  transform: scale(1.2);
+  accent-color: var(--primary-color, #2c6b2f);
+}
+
+/* Address fields while collecting in person: visible, so it is clear what is
+   being skipped, but plainly not in play. */
+.is-muted {
+  opacity: 0.45;
+  pointer-events: none;
+  filter: grayscale(1);
+  transition: opacity 0.15s ease;
+}

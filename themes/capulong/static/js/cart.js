@@ -246,13 +246,17 @@ function onDeliveryMethod() {
   const pickup = deliveryMethod() === 'pickup';
   const block = document.getElementById('order-address-block');
   const note = document.getElementById('order-pickup-note');
-  if (block) block.style.display = pickup ? 'none' : '';
+  // Greyed rather than hidden: the customer can see what is being skipped,
+  // and nothing jumps around when the box is ticked.
+  if (block) block.classList.toggle('is-muted', pickup);
   if (note) note.style.display = pickup ? 'block' : 'none';
-  // The address fields are required only when something is being delivered,
-  // or the browser blocks a pick-up order on fields it cannot see.
+  // Disabled as well as unrequired - a required field the browser cannot
+  // focus blocks the submit with a message pointing at nothing.
   ['order-province', 'order-town', 'order-address'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.required = !pickup;
+    if (!el) return;
+    el.required = !pickup;
+    el.disabled = pickup || (id === 'order-town' && !document.getElementById('order-province').value);
   });
   renderOrderSummary();
 }
