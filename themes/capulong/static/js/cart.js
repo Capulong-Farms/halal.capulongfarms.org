@@ -359,6 +359,18 @@ function renderRateCard() {
     <small>Measured in a straight line from the farm in Candaba, Pampanga.</small></details>`;
 }
 
+// form.reset() restores field values, but a button's disabled state and its
+// label are not form values: after a successful order they survived, and every
+// later order form opened showing a dead "Submitting..." button. Putting the
+// button right whenever the form opens covers that, a submit interrupted by a
+// closed tab, and anything else that leaves it mid-flight.
+function resetSubmitButton() {
+  const btn = document.getElementById('submit-order-btn');
+  if (!btn) return;
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-check"></i> Place Order';
+}
+
 function openOrderForm() {
   const cart = getCart();
   if (cart.length === 0) {
@@ -370,6 +382,7 @@ function openOrderForm() {
     document.body.appendChild(modal);
   }
   closeCartModal();
+  resetSubmitButton();
   fillOrderProvinces();
   onDeliveryMethod();
   togglePaymentFields();
@@ -510,14 +523,19 @@ async function submitOnlineOrder(event) {
     document.body.style.overflow = 'auto';
     // Reset form for next use
     document.getElementById('online-order-form').reset();
+    // reset() clears the fields; the town list and the hidden address block
+    // follow from them, so rebuild both rather than leave the last order's
+    // towns in a select whose province is now blank.
+    resetSubmitButton();
+    onOrderProvince();
+    onDeliveryMethod();
     togglePaymentFields();
     showOrderConfirmation(result.orderRef, phone, paymentMethod, paymentRef);
 
   } catch (err) {
     console.error('Order submission failed:', err);
     alert('Sorry, there was a problem submitting your order. Please try again or contact us via WhatsApp.');
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-check"></i> Place Order';
+    resetSubmitButton();
   }
 }
 
