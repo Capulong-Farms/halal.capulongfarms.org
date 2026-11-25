@@ -209,6 +209,14 @@ function deliveryKmFor(province, town) {
   return hit ? hit[1] : null;
 }
 
+// A town the farm priced by hand ignores the bands, so the figure shown here
+// is the one that will be charged.
+function deliveryOverrideFor(province, town) {
+  const list = (DELIVERY_RATES && DELIVERY_RATES.overrides) || [];
+  const hit = list.find(o => o.town === town && (!o.province || o.province === province));
+  return hit ? hit.fee : null;
+}
+
 // null = beyond every band, which means courier and a charge quoted later.
 function deliveryFeeForKm(km) {
   if (km == null || !DELIVERY_RATES || !DELIVERY_RATES.bands) return null;
@@ -237,9 +245,10 @@ function currentDelivery() {
     return { method: 'deliver', province: '', town: '', km: null, fee: null, chosen: false, courier: false };
   }
   const km = deliveryKmFor(p.value, t.value);
-  const beyond = DELIVERY_RATES && km != null && km > DELIVERY_RATES.courierBeyondKm;
+  const fixed = deliveryOverrideFor(p.value, t.value);
+  const beyond = fixed == null && DELIVERY_RATES && km != null && km > DELIVERY_RATES.courierBeyondKm;
   return { method: 'deliver', province: p.value, town: t.value, km,
-           fee: deliveryFeeForKm(km), chosen: true, courier: !!beyond };
+           fee: fixed != null ? fixed : deliveryFeeForKm(km), chosen: true, courier: !!beyond };
 }
 
 function onDeliveryMethod() {
