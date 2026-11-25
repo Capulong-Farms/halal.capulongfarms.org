@@ -179,6 +179,101 @@ function orderProduct(productName, productPrice, discount = 0) {
 
 // ── Online Order Flow ────────────────────────────────────────
 
+// ── Delivery charges ───────────────────────────────────────
+// Where the buyer lives decides the charge. ph-towns.js holds every province
+// and town with its distance from the farm; the bands that turn a distance
+// into a price live in the BMS, so the farm can change them without either
+// site being rebuilt. If the BMS cannot be reached we say so rather than
+// inventing a figure.
+let DELIVERY_RATES = null;
+
+async function loadDeliveryRates() {
+  if (DELIVERY_RATES) return DELIVERY_RATES;
+  try {
+    const r = await fetch(BMS_API_URL + '/api/delivery-rates', { cache: 'no-store' });
+    if (!r.ok) throw new Error('rates ' + r.status);
+    DELIVERY_RATES = await r.json();
+  } catch (e) {
+    DELIVERY_RATES = null;
+  }
+  return DELIVERY_RATES;
+}
+
+function phProvinces() {
+  return (window.PH_TOWNS && window.PH_TOWNS.provinces) || {};
+}
+
+function deliveryKmFor(province, town) {
+  const list = phProvinces()[province] || [];
+  const hit = list.find(t => t[0] === town);
+  return hit ? hit[1] : null;
+}
+
+// null = beyond every band, which means courier and a charge quoted later.
+function deliveryFeeForKm(km) {
+  if (km == null || !DELIVERY_RATES || !DELIVERY_RATES.bands) return null;
+  for (const b of DELIVERY_RATES.bands) if (km <= b.km) return b.fee;
+  return null;
+}
+
+function currentDelivery() {
+  const p = document.getElementById('order-province');
+  const t = document.getElementById('order-town');
+  if (!p || !t || !p.value || !t.value) return { province: '', town: '', km: null, fee: null, chosen: false };
+  const km = deliveryKmFor(p.value, t.value);
+  return { province: p.value, town: t.value, km, fee: deliveryFeeForKm(km), chosen: true };
+}
+
+function fillOrderProvinces() {
+  const sel = document.getElementById('order-province');
+  if (!sel || sel.dataset.filled === '1') return;
+  const names = Object.keys(phProvinces());
+  if (!names.length) return;
+  sel.innerHTML = '<option value="">Select province…</option>' +
+    names.map(p => `<option value="${p}">${p}</option>`).join('');
+  sel.dataset.filled = '1';
+}
+
+function onOrderProvince() {
+  const sel = document.getElementById('order-town');
+  const province = document.getElementById('order-province').value;
+  const list = phProvinces()[province] || [];
+  sel.innerHTML = '<option value="">Select city / municipality…</option>' +
+    list.map(t => `<option value="${t[0]}">${t[0]}</option>`).join('');
+  sel.disabled = !province;
+  onOrderTown();
+}
+
+function onOrderTown() {
+  renderOrderSummary();
+}
+
+function deliveryNoteHtml() {
+  const d = currentDelivery();
+  if (!d.chosen) return 'Choose your province and town to see the delivery charge.';
+  if (!DELIVERY_RATES) return 'We could not reach the farm to check delivery charges — we will confirm the charge with you.';
+  if (d.fee === null) {
+    return `<strong>${d.town}</strong> is about ${d.km} km away, beyond our delivery area. ` +
+           'We will send it by courier and tell you the cost before despatch.';
+  }
+  if (d.fee === 0) return `<strong>${d.town}</strong> is about ${d.km} km away — delivery is free.`;
+  return `<strong>${d.town}</strong> is about ${d.km} km away — delivery &#8369;${d.fee.toFixed(2)}.`;
+}
+
+function renderRateCard() {
+  const box = document.getElementById('order-rate-card');
+  if (!box) return;
+  if (!DELIVERY_RATES || !DELIVERY_RATES.bands) { box.innerHTML = ''; return; }
+  const rows = DELIVERY_RATES.bands.map((b, i) => {
+    const from = i === 0 ? 0 : DELIVERY_RATES.bands[i - 1].km;
+    const span = i === 0 ? `Up to ${b.km} km` : `${from}–${b.km} km`;
+    return `<li><span>${span}</span><span>${b.fee === 0 ? 'Free' : '&#8369;' + b.fee.toFixed(2)}</span></li>`;
+  }).join('');
+  box.innerHTML = `<details><summary>Delivery charges</summary><ul class="order-rate-list">${rows}
+    <li><span>Over ${DELIVERY_RATES.courierBeyondKm} km</span><span>By courier</span></li></ul>
+    <small>Measured in a straight line from the farm in Candaba, Pampanga.</small></details>`;
+}
+
 function openOrderForm() {
   const cart = getCart();
   if (cart.length === 0) {
@@ -190,8 +285,11 @@ function openOrderForm() {
     document.body.appendChild(modal);
   }
   closeCartModal();
+  fillOrderProvinces();
   renderOrderSummary();
   togglePaymentFields();
+  // The charge appears as soon as the rates arrive; the form is usable meanwhile.
+  loadDeliveryRates().then(() => { renderRateCard(); renderOrderSummary(); });
   // Set positioning explicitly via JS — after appendChild, Chrome does not always
   // recompute position:fixed from the CSS class when display:none is in the same rule.
   modal.style.display = 'block';
@@ -227,9 +325,23 @@ function renderOrderSummary() {
     </div>`;
   });
   document.getElementById('order-summary-items').innerHTML = html;
-  document.getElementById('order-form-total').textContent = `Total: ₱${total.toFixed(2)}`;
+
+  const d = currentDelivery();
+  const fee = d.fee || 0;
+  const feeLine = document.getElementById('order-delivery-line');
+  if (feeLine) {
+    feeLine.innerHTML = !d.chosen ? ''
+      : `<span>Delivery${d.km != null ? ' (' + d.km + ' km)' : ''}</span>` +
+        `<span>${d.fee === null ? 'by courier' : d.fee === 0 ? 'Free' : '&#8369;' + d.fee.toFixed(2)}</span>`;
+  }
+  const note = document.getElementById('order-delivery-note');
+  if (note) note.innerHTML = deliveryNoteHtml();
+
+  // The courier charge is not known yet, so it is not in the total.
+  const grand = total + fee;
+  document.getElementById('order-form-total').textContent = `Total: ₱${grand.toFixed(2)}`;
   const payAmount = document.getElementById('order-pay-amount');
-  if (payAmount) payAmount.textContent = `₱${total.toFixed(2)}`;
+  if (payAmount) payAmount.textContent = `₱${grand.toFixed(2)}`;
 }
 
 // Shows the QR code and reference-number box only when "Pay now" is selected.
@@ -246,6 +358,7 @@ async function submitOnlineOrder(event) {
   const name    = document.getElementById('order-name').value.trim();
   const phone   = document.getElementById('order-phone').value.trim();
   const address = document.getElementById('order-address').value.trim();
+  const delivery = currentDelivery();
   const remarks = document.getElementById('order-remarks').value.trim();
   const methodEl = document.getElementById('order-payment-method');
   const refEl    = document.getElementById('order-payment-ref');
@@ -254,6 +367,10 @@ async function submitOnlineOrder(event) {
 
   if (!name || !phone || !address) {
     alert('Please fill in your name, phone number, and delivery address.');
+    return;
+  }
+  if (!delivery.chosen) {
+    alert('Please choose your province and city / municipality so we can work out the delivery charge.');
     return;
   }
 
@@ -266,7 +383,9 @@ async function submitOnlineOrder(event) {
     source:          PORTAL_SOURCE,
     customerName:    name,
     customerPhone:   phone,
-    customerAddress: address,
+    customerAddress: [address, delivery.town, delivery.province].filter(Boolean).join(', '),
+    province:        delivery.province,
+    town:            delivery.town,
     remarks:         remarks,
     paymentMethod:    paymentMethod,
     paymentReference: paymentRef,

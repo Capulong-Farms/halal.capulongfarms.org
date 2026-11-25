@@ -2700,3 +2700,28 @@ main {
   .site-logo .logo-full { display: none; }
   .site-logo .logo-mark { display: block; height: 34px; }
 }
+
+/* ── Delivery charge in the order form ────────────────────── */
+.order-delivery-note {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-muted, #6b6b6b);
+}
+.order-delivery-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text-muted, #6b6b6b);
+  margin-bottom: 0.25rem;
+}
+.order-rate-card { margin-top: 0.5rem; font-size: 0.82rem; }
+.order-rate-card summary { cursor: pointer; font-weight: 600; }
+.order-rate-list { list-style: none; margin: 0.4rem 0 0.2rem; padding: 0; }
+.order-rate-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+}

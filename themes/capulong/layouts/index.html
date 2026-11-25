@@ -220,6 +220,7 @@
     <div class="order-form-body">
       <div id="order-summary-items" class="order-summary-list"></div>
       <div class="order-summary-total">
+        <div class="order-delivery-line" id="order-delivery-line"></div>
         <h3 id="order-form-total">Total: ₱0.00</h3>
       </div>
       <form id="online-order-form" onsubmit="submitOnlineOrder(event)" novalidate>
@@ -232,8 +233,22 @@
           <input type="tel" id="order-phone" required placeholder="+63 912 345 6789">
         </div>
         <div class="form-group">
-          <label for="order-address">Delivery Address *</label>
-          <textarea id="order-address" required rows="2" placeholder="House No., Street, Barangay, City/Municipality, Province"></textarea>
+          <label for="order-province">Province *</label>
+          <select id="order-province" required onchange="onOrderProvince()">
+            <option value="">Select province…</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="order-town">City / Municipality *</label>
+          <select id="order-town" required disabled onchange="onOrderTown()">
+            <option value="">Select city / municipality…</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="order-address">House No., Street, Barangay *</label>
+          <textarea id="order-address" required rows="2" placeholder="e.g. 123 Purok 2, Barangay Lanang"></textarea>
+          <small class="order-delivery-note" id="order-delivery-note">Choose your province and town to see the delivery charge.</small>
+          <div id="order-rate-card" class="order-rate-card"></div>
         </div>
         <div class="form-group">
           <label for="order-remarks">Remarks / Special Instructions</label>
