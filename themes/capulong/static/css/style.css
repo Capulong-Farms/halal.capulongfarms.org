@@ -2734,3 +2734,20 @@ main {
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.04);
 }
+
+/* The three delivery cases: grey information, with the live one picked out.
+   Only pick-up is selectable - the other two follow from the distance. */
+.order-cases {
+  list-style: none;
+  margin: -0.4rem 0 1rem;
+  padding: 0;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--text-muted, #8a8a8a);
+}
+.order-cases li { opacity: 0.65; }
+.order-cases li.is-active {
+  opacity: 1;
+  font-weight: 600;
+  color: var(--primary-color, #2c6b2f);
+}

@@ -307,6 +307,27 @@ function onOrderTown() {
   renderOrderSummary();
 }
 
+// The customer only ever chooses one thing: whether they are collecting.
+// Which of the other two applies is decided by how far their town is, so both
+// are shown greyed, with the live one picked out once a town is chosen.
+function renderDeliveryCases() {
+  const box = document.getElementById('order-cases');
+  if (!box) return;
+  const d = currentDelivery();
+  const limit = (DELIVERY_RATES && DELIVERY_RATES.courierBeyondKm) || 100;
+  const rows = [
+    { on: d.method === 'pickup',
+      text: 'Pick up at the farm \u2014 no delivery charge' },
+    { on: d.method === 'deliver' && d.chosen && !d.courier,
+      text: `Delivery within ${limit} km \u2014 charged by distance, see the rates below` },
+    { on: d.method === 'deliver' && d.chosen && d.courier,
+      text: `Delivery over ${limit} km \u2014 by courier; the charge depends on weight and ` +
+            'distance and is collected before despatch' },
+  ];
+  box.innerHTML = rows.map(r =>
+    `<li class="${r.on ? 'is-active' : ''}">${r.on ? '\u25cf' : '\u25cb'} ${r.text}</li>`).join('');
+}
+
 function deliveryNoteHtml() {
   const d = currentDelivery();
   if (d.method === 'pickup') return 'No delivery charge — you are collecting at the farm.';
@@ -399,6 +420,7 @@ function renderOrderSummary() {
         `<span>${d.fee === null ? 'courier — advised later' : d.fee === 0 ? 'Free' : '&#8369;' + d.fee.toFixed(2)}</span>`;
   }
   updatePaymentOptions();
+  renderDeliveryCases();
   const note = document.getElementById('order-delivery-note');
   if (note) note.innerHTML = deliveryNoteHtml();
 
