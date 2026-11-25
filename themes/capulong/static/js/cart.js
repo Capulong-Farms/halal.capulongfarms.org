@@ -216,9 +216,11 @@ function deliveryFeeForKm(km) {
   return null;
 }
 
+// Unticked is the ordinary case: it is being delivered, and the distance to
+// the chosen town decides what that costs.
 function deliveryMethod() {
-  const el = document.getElementById('order-method');
-  return el ? el.value : 'deliver';
+  const el = document.getElementById('order-pickup');
+  return el && el.checked ? 'pickup' : 'deliver';
 }
 
 // Three outcomes, and only the first is a choice: collecting it yourself is

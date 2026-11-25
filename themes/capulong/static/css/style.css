@@ -2751,3 +2751,12 @@ main {
   font-weight: 600;
   color: var(--primary-color, #2c6b2f);
 }
+
+.order-pickup-tick {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+.order-pickup-tick input { width: auto; margin: 0; }

@@ -233,11 +233,10 @@
           <input type="tel" id="order-phone" required placeholder="+63 912 345 6789">
         </div>
         <div class="form-group">
-          <label for="order-method">How would you like to receive it? *</label>
-          <select id="order-method" required onchange="onDeliveryMethod()">
-            <option value="deliver" selected>Deliver to my address</option>
-            <option value="pickup">Pick up at the farm — no delivery charge</option>
-          </select>
+          <label class="order-pickup-tick" for="order-pickup">
+            <input type="checkbox" id="order-pickup" onchange="onDeliveryMethod()">
+            <span>I will pick it up at the farm — no delivery charge</span>
+          </label>
         </div>
         <ul class="order-cases" id="order-cases"></ul>
         <div id="order-pickup-note" class="order-pickup-note" style="display:none;">
