@@ -216,12 +216,71 @@ function deliveryFeeForKm(km) {
   return null;
 }
 
+function deliveryMethod() {
+  const el = document.getElementById('order-method');
+  return el ? el.value : 'deliver';
+}
+
+// Three outcomes, and only the first is a choice: collecting it yourself is
+// free, a town inside the last band is charged from the rate card, and
+// anything further has to go by courier at a price nobody knows until the
+// courier is booked and the parcel is weighed.
 function currentDelivery() {
+  if (deliveryMethod() === 'pickup') {
+    return { method: 'pickup', province: '', town: '', km: 0, fee: 0, chosen: true, courier: false };
+  }
   const p = document.getElementById('order-province');
   const t = document.getElementById('order-town');
-  if (!p || !t || !p.value || !t.value) return { province: '', town: '', km: null, fee: null, chosen: false };
+  if (!p || !t || !p.value || !t.value) {
+    return { method: 'deliver', province: '', town: '', km: null, fee: null, chosen: false, courier: false };
+  }
   const km = deliveryKmFor(p.value, t.value);
-  return { province: p.value, town: t.value, km, fee: deliveryFeeForKm(km), chosen: true };
+  const beyond = DELIVERY_RATES && km != null && km > DELIVERY_RATES.courierBeyondKm;
+  return { method: 'deliver', province: p.value, town: t.value, km,
+           fee: deliveryFeeForKm(km), chosen: true, courier: !!beyond };
+}
+
+function onDeliveryMethod() {
+  const pickup = deliveryMethod() === 'pickup';
+  const block = document.getElementById('order-address-block');
+  const note = document.getElementById('order-pickup-note');
+  if (block) block.style.display = pickup ? 'none' : '';
+  if (note) note.style.display = pickup ? 'block' : 'none';
+  // The address fields are required only when something is being delivered,
+  // or the browser blocks a pick-up order on fields it cannot see.
+  ['order-province', 'order-town', 'order-address'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.required = !pickup;
+  });
+  renderOrderSummary();
+}
+
+// Cash on delivery only makes sense for the distance actually involved, and
+// not at all when the customer is collecting.
+function updatePaymentOptions() {
+  const sel = document.getElementById('order-payment-method');
+  if (!sel) return;
+  const d = currentDelivery();
+  const pickup = d.method === 'pickup';
+  const show = { cod: !pickup && d.chosen && !d.courier, cod_outside: !pickup && d.chosen && d.courier };
+  [...sel.options].forEach(opt => {
+    if (opt.value === 'qr') return;        // paying now works either way
+    if (opt.value === 'cod') {
+      opt.textContent = pickup
+        ? 'Pay in cash when you collect'
+        : 'Cash on Delivery (within ' + ((DELIVERY_RATES && DELIVERY_RATES.courierBeyondKm) || 100) + ' km) \u2014 delivery charge applies';
+      opt.hidden = !(pickup || show.cod);
+      opt.disabled = opt.hidden;
+      return;
+    }
+    if (opt.value === 'cod_outside') {
+      opt.hidden = !show.cod_outside;
+      opt.disabled = opt.hidden;
+    }
+  });
+  // If the choice on screen no longer applies, fall back to paying now.
+  const cur = sel.options[sel.selectedIndex];
+  if (cur && cur.disabled) { sel.value = 'qr'; togglePaymentFields(); }
 }
 
 function fillOrderProvinces() {
@@ -250,11 +309,14 @@ function onOrderTown() {
 
 function deliveryNoteHtml() {
   const d = currentDelivery();
+  if (d.method === 'pickup') return 'No delivery charge — you are collecting at the farm.';
   if (!d.chosen) return 'Choose your province and town to see the delivery charge.';
   if (!DELIVERY_RATES) return 'We could not reach the farm to check delivery charges — we will confirm the charge with you.';
   if (d.fee === null) {
-    return `<strong>${d.town}</strong> is about ${d.km} km away, beyond our delivery area. ` +
-           'We will send it by courier and tell you the cost before despatch.';
+    return `<strong>${d.town}</strong> is about ${d.km} km away, past our ` +
+           `${DELIVERY_RATES.courierBeyondKm} km delivery limit. It will go by courier, ` +
+           'and the courier charge depends on the weight and the distance — we will tell you the ' +
+           'amount and collect it before despatch.';
   }
   if (d.fee === 0) return `<strong>${d.town}</strong> is about ${d.km} km away — delivery is free.`;
   return `<strong>${d.town}</strong> is about ${d.km} km away — delivery &#8369;${d.fee.toFixed(2)}.`;
@@ -286,7 +348,7 @@ function openOrderForm() {
   }
   closeCartModal();
   fillOrderProvinces();
-  renderOrderSummary();
+  onDeliveryMethod();
   togglePaymentFields();
   // The charge appears as soon as the rates arrive; the form is usable meanwhile.
   loadDeliveryRates().then(() => { renderRateCard(); renderOrderSummary(); });
@@ -330,10 +392,13 @@ function renderOrderSummary() {
   const fee = d.fee || 0;
   const feeLine = document.getElementById('order-delivery-line');
   if (feeLine) {
-    feeLine.innerHTML = !d.chosen ? ''
+    feeLine.innerHTML =
+      d.method === 'pickup' ? '<span>Pick-up at the farm</span><span>Free</span>'
+      : !d.chosen ? ''
       : `<span>Delivery${d.km != null ? ' (' + d.km + ' km)' : ''}</span>` +
-        `<span>${d.fee === null ? 'by courier' : d.fee === 0 ? 'Free' : '&#8369;' + d.fee.toFixed(2)}</span>`;
+        `<span>${d.fee === null ? 'courier — advised later' : d.fee === 0 ? 'Free' : '&#8369;' + d.fee.toFixed(2)}</span>`;
   }
+  updatePaymentOptions();
   const note = document.getElementById('order-delivery-note');
   if (note) note.innerHTML = deliveryNoteHtml();
 
@@ -365,11 +430,11 @@ async function submitOnlineOrder(event) {
   const paymentMethod = methodEl ? methodEl.value : 'later';
   const paymentRef    = paymentMethod === 'qr' && refEl ? refEl.value.trim() : '';
 
-  if (!name || !phone || !address) {
+  if (!name || !phone || (delivery.method !== 'pickup' && !address)) {
     alert('Please fill in your name, phone number, and delivery address.');
     return;
   }
-  if (!delivery.chosen) {
+  if (delivery.method !== 'pickup' && !delivery.chosen) {
     alert('Please choose your province and city / municipality so we can work out the delivery charge.');
     return;
   }
@@ -383,7 +448,10 @@ async function submitOnlineOrder(event) {
     source:          PORTAL_SOURCE,
     customerName:    name,
     customerPhone:   phone,
-    customerAddress: [address, delivery.town, delivery.province].filter(Boolean).join(', '),
+    customerAddress: delivery.method === 'pickup'
+      ? 'Pick-up at the farm'
+      : [address, delivery.town, delivery.province].filter(Boolean).join(', '),
+    deliveryMethod:  delivery.method,
     province:        delivery.province,
     town:            delivery.town,
     remarks:         remarks,

@@ -233,6 +233,18 @@
           <input type="tel" id="order-phone" required placeholder="+63 912 345 6789">
         </div>
         <div class="form-group">
+          <label for="order-method">How would you like to receive it? *</label>
+          <select id="order-method" required onchange="onDeliveryMethod()">
+            <option value="deliver" selected>Deliver to my address</option>
+            <option value="pickup">Pick up at the farm — no delivery charge</option>
+          </select>
+        </div>
+        <div id="order-pickup-note" class="order-pickup-note" style="display:none;">
+          Collect at <strong>Capulong Farms, Brgy Lanang, Candaba, Pampanga</strong>.
+          We will message you to agree a day and time.
+        </div>
+        <div id="order-address-block">
+        <div class="form-group">
           <label for="order-province">Province *</label>
           <select id="order-province" required onchange="onOrderProvince()">
             <option value="">Select province…</option>
@@ -250,6 +262,7 @@
           <small class="order-delivery-note" id="order-delivery-note">Choose your province and town to see the delivery charge.</small>
           <div id="order-rate-card" class="order-rate-card"></div>
         </div>
+        </div>
         <div class="form-group">
           <label for="order-remarks">Remarks / Special Instructions</label>
           <textarea id="order-remarks" rows="2" placeholder="e.g. Please pack separately, call before delivery..."></textarea>
@@ -258,8 +271,8 @@
           <label for="order-payment-method">Payment</label>
           <select id="order-payment-method" onchange="togglePaymentFields()">
             <option value="qr" selected>Pay now via GCash / QR (scan below)</option>
-            <option value="cod">Cash on Delivery (within Pampanga)</option>
-            <option value="cod_outside">Cash on Delivery (outside Pampanga, extra charges apply)</option>
+            <option value="cod">Cash on Delivery (within 100 km) — delivery charge applies</option>
+            <option value="cod_outside">Cash on Delivery (over 100 km) — courier charge also applies</option>
           </select>
           <!-- Inline display:none on purpose, same reason as #order-form-modal: toggled by togglePaymentFields() -->
           <div id="order-payment-qr" class="order-payment-qr" style="display:none;">
