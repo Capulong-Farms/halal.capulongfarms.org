@@ -193,15 +193,108 @@ let DELIVERY_RATES = null;
 // null for a product means it is not stock-tracked - a course or a service.
 let STOCK = null;
 
+// The same reply carries the harvest days and the farm's cut-off, because the
+// earliest date depends on both and neither is worth a second request.
+let FRESH = null;        // { cutoffTime, leadDays, dispatchDays, today, now }
+let HARVEST = null;      // product name -> weekdays it is picked
+
 async function loadStock() {
   try {
     const r = await fetch(BMS_API_URL + '/api/stock', { cache: 'no-store' });
     if (!r.ok) throw new Error('stock ' + r.status);
-    STOCK = (await r.json()).stock || {};
+    const d = await r.json();
+    STOCK = d.stock || {};
+    FRESH = d.fulfilment || null;
+    HARVEST = d.harvest || {};
   } catch (e) {
     STOCK = null;        // unreachable: let the order through, the server checks again
+    FRESH = null;
+    HARVEST = null;
   }
   return STOCK;
+}
+
+// ── When can it actually arrive? ──────────────────
+// This mirrors earliestDate() in the BMS server, deliberately: the date shown
+// here has to be the date the server accepts, or the shop promises a day the
+// farm then changes. If you change one, change the other.
+const DOW_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+function dayAdd(ymd, n) {
+  const d = new Date(ymd + 'T00:00:00Z');
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+function dayOfWeek(ymd) { return new Date(ymd + 'T00:00:00Z').getUTCDay(); }
+
+function nextDayIn(from, days) {
+  if (!days || !days.length) return from;
+  for (let i = 0; i < 14; i++) {
+    const d = dayAdd(from, i);
+    if (days.includes(dayOfWeek(d))) return d;
+  }
+  return from;
+}
+
+// null when the farm could not be reached - the form then says the date will
+// be confirmed, the same way it does for a delivery charge it cannot price.
+function earliestFulfilment() {
+  if (!FRESH || !FRESH.today) return null;
+  const parts = String(FRESH.cutoffTime || '15:00').split(':');
+  const nowParts = String(FRESH.now || '00:00').split(':');
+  const past = Number(nowParts[0]) * 60 + Number(nowParts[1])
+               >= Number(parts[0]) * 60 + Number(parts[1]);
+  let base = dayAdd(FRESH.today, (Number(FRESH.leadDays) || 0) + (past ? 1 : 0));
+  getCart().forEach(item => {
+    const h = (HARVEST || {})[item.name];
+    if (!Array.isArray(h) || !h.length) return;
+    const d = nextDayIn(base, h.map(Number));
+    if (d > base) base = d;
+  });
+  return nextDayIn(base, (FRESH.dispatchDays || []).map(Number));
+}
+
+function prettyDate(ymd) {
+  if (!ymd) return '';
+  const d = new Date(ymd + 'T00:00:00Z');
+  return DOW_SHORT[d.getUTCDay()] + ' ' + d.getUTCDate() + ' ' +
+    ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getUTCMonth()];
+}
+
+// The cart items that are only picked on certain days, so the wait has a
+// reason attached to it rather than looking like a delay.
+function harvestNotes() {
+  return getCart().reduce((out, item) => {
+    const h = (HARVEST || {})[item.name];
+    if (Array.isArray(h) && h.length) {
+      const names = h.map(Number).sort((a, b) => a - b).map(i => DOW_SHORT[i]);
+      out.push(item.name + ' is picked ' +
+        (names.length > 1 ? names.slice(0, -1).join(', ') + ' & ' + names[names.length - 1] : names[0]));
+    }
+    return out;
+  }, []);
+}
+
+// Fills the date box once the farm's rules have arrived. Called after every
+// load, because a changed cart can change the earliest day.
+function renderFulfilment() {
+  const input = document.getElementById('order-date');
+  const note = document.getElementById('order-date-note');
+  if (!input || !note) return;
+  const first = earliestFulfilment();
+  if (!first) {
+    input.value = '';
+    input.removeAttribute('min');
+    note.textContent = 'We will confirm the date with you when we get in touch.';
+    return;
+  }
+  input.min = first;
+  if (!input.value || input.value < first) input.value = first;
+  const notes = harvestNotes();
+  note.innerHTML = 'Earliest we can have this ready: <strong>' + prettyDate(first) + '</strong>.' +
+    (FRESH.cutoffTime ? ' Orders after ' + FRESH.cutoffTime + ' are prepared the next day.' : '') +
+    (notes.length ? '<br>' + notes.join('. ') + '.' : '') +
+    '<br>Choose a later day if it suits you better.';
 }
 
 // Returns the lines that cannot be filled, with what is left of each.
@@ -436,7 +529,9 @@ function openOrderForm() {
   togglePaymentFields();
   // The charge appears as soon as the rates arrive; the form is usable meanwhile.
   loadDeliveryRates().then(() => { renderRateCard(); renderOrderSummary(); });
+  renderFulfilment();            // clears any date left from a previous order
   loadStock().then(() => {
+    renderFulfilment();
     const problems = cartStockProblems();
     if (problems.length) alert(stockProblemMessage(problems));
   });
@@ -548,6 +643,9 @@ async function submitOnlineOrder(event) {
     deliveryMethod:  delivery.method,
     province:        delivery.province,
     town:            delivery.town,
+    // A request, not a promise: the server moves it forward if the farm cannot
+    // pick that soon, and the confirmation says which day it settled on.
+    requestedDate:   (document.getElementById('order-date') || {}).value || '',
     remarks:         remarks,
     paymentMethod:    paymentMethod,
     paymentReference: paymentRef,
