@@ -1113,6 +1113,41 @@ main {
   margin: 0;
 }
 
+/* A box the shopper cannot use must not look like one they can. */
+.qty-input:disabled {
+  background: var(--cream, #F0EDE3);
+  color: #9A9385;
+  cursor: not-allowed;
+}
+
+.add-to-cart-btn:disabled {
+  background: #C9C3B4;
+  border-color: #C9C3B4;
+  color: #6F6A5E;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.add-to-cart-btn:disabled:hover {
+  background: #C9C3B4;
+  transform: none;
+}
+
+/* "Only 2 left" / "Sold out", written under the quantity box by
+   applyStockCaps(). Sized so appearing or vanishing does not shift the grid. */
+.stock-note {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.72rem;
+  line-height: 1.1;
+  font-weight: 600;
+  color: #B36A1D;
+}
+
+.stock-note.sold-out {
+  color: #C0392B;
+}
+
 .qty-input:focus {
   background: #f8f9fa;
 }

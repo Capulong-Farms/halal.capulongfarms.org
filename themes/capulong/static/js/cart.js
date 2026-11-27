@@ -46,6 +46,8 @@ function getCart() {
 function saveCart(cart) {
   localStorage.setItem(CART_KEY, JSON.stringify({ items: cart, savedAt: Date.now() }));
   updateCartCount();
+  // What may still be added has changed, so the boxes change with it.
+  if (typeof applyStockCaps === 'function') applyStockCaps();
 }
 
 function addToCart(productName, productPrice, discount = 0) {
@@ -54,6 +56,7 @@ function addToCart(productName, productPrice, discount = 0) {
     showToast('Please contact us for pricing on this item.', 'info');
     return;
   }
+  if (refuseOverStock(productName, 1)) return;
   const cart = getCart();
   const existingItem = cart.find(item => item.name === productName);
 
@@ -75,6 +78,7 @@ function addToCartWithQuantity(productName, productPrice, productId, discount = 
   }
   const quantityInput = document.getElementById('qty-' + productId);
   const quantity = parseInt(quantityInput.value) || 1;
+  if (refuseOverStock(productName, quantity)) return;
 
   const cart = getCart();
   const existingItem = cart.find(item => item.name === productName);
@@ -91,15 +95,25 @@ function addToCartWithQuantity(productName, productPrice, productId, discount = 
   quantityInput.value = 1;
 }
 
+// The ceiling is whatever applyStockCaps() put on the box, so the + button,
+// typing and pasting all stop at the same number.
+function qtyCeiling(input) {
+  const m = parseInt(input && input.max, 10);
+  return m > 0 ? m : 9999;
+}
+
 function changeQuantity(productId, change) {
   const quantityInput = document.getElementById('qty-' + productId);
   let currentValue = parseInt(quantityInput.value) || 1;
   let newValue = currentValue + change;
-  
-  // Ensure value stays within bounds
+  const ceiling = qtyCeiling(quantityInput);
+
   if (newValue < 1) newValue = 1;
-  if (newValue > 9999) newValue = 9999;
-  
+  if (newValue > ceiling) {
+    newValue = ceiling;
+    if (change > 0) showToast('Only ' + ceiling + ' available.', 'info');
+  }
+
   quantityInput.value = newValue;
 }
 
@@ -114,11 +128,14 @@ function validateQuantity(productId) {
   }
   
   let numValue = parseInt(value);
-  
-  // Ensure value stays within bounds
+  const ceiling = qtyCeiling(quantityInput);
+
   if (numValue < 1) numValue = 1;
-  if (numValue > 9999) numValue = 9999;
-  
+  if (numValue > ceiling) {
+    numValue = ceiling;
+    showToast('Only ' + ceiling + ' available.', 'info');
+  }
+
   quantityInput.value = numValue;
 }
 
@@ -300,6 +317,114 @@ function renderFulfilment() {
     (notes.length ? '<br>' + notes.join('. ') + '.' : '') +
     '<br>Choose a later day if it suits you better.';
 }
+
+// ── Stock caps on the quantity boxes ─────────────
+// Show "only N left" at or below this; above it the box is capped silently,
+// so the shop is not announcing its whole inventory on every card.
+const LOW_STOCK_HINT = 5;
+
+// How many MORE of this product may be added: what the farm has, less what is
+// already in the cart. null means it is not stock-tracked - a course, a
+// service - or the farm could not be reached, and then nothing is capped.
+function addableQty(productName) {
+  if (!STOCK) return null;
+  const left = STOCK[productName];
+  if (left == null) return null;
+  const inCart = getCart().reduce((n, i) => n + (i.name === productName ? i.quantity : 0), 0);
+  return Math.max(0, left - inCart);
+}
+
+// The Deal of the Day dialog squashes the name into its input id, so the id is
+// matched back to a product name the same way rather than parsed out of an
+// onclick attribute, which an apostrophe in a name would break.
+function squashName(n) { return String(n).toLowerCase().replace(/[^a-z0-9]/g, ''); }
+
+// Locks, caps or frees one quantity box, and says why underneath it.
+function capQtyBox(input, addBtn, name) {
+  if (!input) return;
+  const addable = addableQty(name);
+  // One host for both finding and placing the note. Looking in one place and
+  // inserting in another means every pass adds another note, and the page
+  // ends up stacking "Sold out" five deep.
+  const host = input.closest('.quantity-container') || input.parentElement;
+
+  const setNote = (text, soldOut) => {
+    let note = host.parentElement.querySelector('.stock-note');
+    if (!text) { if (note) note.remove(); return; }
+    if (!note) {
+      note = document.createElement('small');
+      note.className = 'stock-note';
+      host.parentElement.insertBefore(note, host.nextSibling);
+    }
+    note.textContent = text;
+    note.classList.toggle('sold-out', !!soldOut);
+  };
+
+  if (addable === null) {                      // not tracked, or farm unreachable
+    input.disabled = false;
+    input.max = 9999;
+    if (addBtn) addBtn.disabled = false;
+    setNote('');
+    return;
+  }
+
+  if (addable === 0) {
+    const left = STOCK[name];
+    input.disabled = true;
+    input.max = 1;
+    if (addBtn) addBtn.disabled = true;
+    // Two different noughts: none on the farm, or all of it already in the cart.
+    setNote(left > 0 ? 'All ' + left + ' we have is in your cart' : 'Sold out', true);
+    return;
+  }
+
+  input.disabled = false;
+  input.max = addable;
+  if (addBtn) addBtn.disabled = false;
+  if ((parseInt(input.value, 10) || 1) > addable) input.value = addable;
+  setNote(addable <= LOW_STOCK_HINT ? 'Only ' + addable + ' left' : '');
+}
+
+// Re-applied after every cart change as well as after every stock fetch,
+// because what is addable depends on both.
+function applyStockCaps() {
+  document.querySelectorAll('.product-card').forEach(card => {
+    const name = card.dataset.productName;
+    const input = card.querySelector('.qty-input');
+    if (!name || !input) return;             // a price-on-request card has no box
+    capQtyBox(input, card.querySelector('.add-to-cart-btn'), name);
+  });
+
+  // The deal dialog exists only while it is open.
+  const dealInput = document.querySelector('[id^="deal-qty-"]');
+  if (dealInput && STOCK) {
+    const want = dealInput.id.replace('deal-qty-', '');
+    const name = Object.keys(STOCK).find(n => squashName(n) === want);
+    if (name) {
+      const btn = [...document.querySelectorAll('.add-to-cart-btn')]
+        .find(b => /addDealToCartWithQuantity/.test(b.getAttribute('onclick') || ''));
+      capQtyBox(dealInput, btn, name);
+    }
+  }
+}
+
+// Last line of defence for the add buttons: the box can be capped and still be
+// submitted by a stale page, and the image click adds one without any box.
+function refuseOverStock(productName, wanted) {
+  const addable = addableQty(productName);
+  if (addable === null || wanted <= addable) return false;
+  showToast(addable === 0
+    ? productName + ' is sold out.'
+    : 'Only ' + addable + ' of ' + productName + ' left \u2014 adjust the quantity.', 'info');
+  applyStockCaps();
+  return true;
+}
+
+// The caps are no use if the figures only arrive when the order form opens,
+// so the shop asks once on load and again whenever the cart is opened.
+document.addEventListener('DOMContentLoaded', () => {
+  loadStock().then(applyStockCaps);
+});
 
 // Returns the lines that cannot be filled, with what is left of each.
 function cartStockProblems() {

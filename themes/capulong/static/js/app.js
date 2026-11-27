@@ -277,6 +277,9 @@ function addDealToCartWithQuantity(productName, productPrice, productId, discoun
   }
   const quantityInput = document.getElementById('deal-qty-' + productId);
   const quantity = parseInt(quantityInput.value) || 1;
+  // Defined in cart.js, which loads first; guarded so the deal still works if
+  // the stock figures never arrived.
+  if (typeof refuseOverStock === 'function' && refuseOverStock(productName, quantity)) return;
 
   const cart = getCart();
   const existingItem = cart.find(item => item.name === productName);
