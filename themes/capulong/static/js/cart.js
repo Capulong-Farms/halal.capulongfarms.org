@@ -730,8 +730,30 @@ function togglePaymentFields() {
   box.style.display = method.value === 'qr' ? 'block' : 'none';
 }
 
+// One tap, one order. The button is not disabled until after the stock check,
+// which is a network round trip, so without this guard a double-tap places the
+// order twice - measured, not guessed: two taps 120 ms apart posted twice.
+let _submitting = false;
+
 async function submitOnlineOrder(event) {
-  event.preventDefault();
+  if (event) event.preventDefault();
+  if (_submitting) return;
+  _submitting = true;
+  // Locked here rather than deep inside, so the second tap finds it dead.
+  const b = document.getElementById('submit-order-btn');
+  if (b) { b.disabled = true; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...'; }
+  try { await placeOnlineOrder(); } finally { _submitting = false; }
+}
+
+// A phone number the farm can actually ring. Deliberately loose - 7 to 15
+// digits covers 09171234567 and +966 56 254 1620 alike - but it does reject
+// prose, which used to sail through as a contact number.
+function looksLikePhone(v) {
+  const digits = String(v || '').replace(/\D/g, '');
+  return digits.length >= 7 && digits.length <= 15;
+}
+
+async function placeOnlineOrder() {
 
   const name    = document.getElementById('order-name').value.trim();
   const phone   = document.getElementById('order-phone').value.trim();
@@ -745,21 +767,33 @@ async function submitOnlineOrder(event) {
 
   if (!name || !phone || (delivery.method !== 'pickup' && !address)) {
     alert('Please fill in your name, phone number, and delivery address.');
+    resetSubmitButton();
+    return;
+  }
+  if (!looksLikePhone(phone)) {
+    alert('Please enter a phone number we can reach you on \u2014 for example 0917 123 4567.');
+    resetSubmitButton();
     return;
   }
   if (delivery.method !== 'pickup' && !delivery.chosen) {
     alert('Please choose your province and city / municipality so we can work out the delivery charge.');
+    resetSubmitButton();
     return;
   }
 
   // Stock may have gone while the form was being filled in, so ask once more.
   await loadStock();
   const problems = cartStockProblems();
-  if (problems.length) { alert(stockProblemMessage(problems)); return; }
+  if (problems.length) { alert(stockProblemMessage(problems)); resetSubmitButton(); return; }
 
-  const btn = document.getElementById('submit-order-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+  // 4. A date earlier than the farm can manage is moved up here, where the
+  // buyer can see it happen. The server clamps it anyway, so leaving it alone
+  // would mean showing one date and quietly honouring another.
+  const dateEl = document.getElementById('order-date');
+  if (dateEl && dateEl.min && dateEl.value && dateEl.value < dateEl.min) {
+    dateEl.value = dateEl.min;
+    showToast('The earliest we can have this ready is ' + prettyDate(dateEl.min) + '.', 'info');
+  }
 
   const cart = getCart();
   const orderData = {
@@ -877,6 +911,9 @@ function openCartModal() {
   renderCartItems();
   modal.style.display = 'block';
   document.body.style.overflow = 'hidden'; // Prevent background scrolling
+  // Opening the cart is the moment the buyer starts adjusting quantities, so
+  // the figures they are adjusting against should be current.
+  loadStock().then(() => { applyStockCaps(); renderCartItems(); });
 }
 
 function closeCartModal() {
@@ -947,15 +984,25 @@ function renderCartItems() {
 
 function updateCartQuantity(index, newQuantity) {
   const cart = getCart();
-  
+
   if (newQuantity <= 0) {
     cart.splice(index, 1);
-  } else if (newQuantity > 9999) {
-    cart[index].quantity = 9999;
   } else {
-    cart[index].quantity = newQuantity;
+    const name = cart[index].name;
+    // The ceiling here is the whole stock figure, not addableQty(): this line
+    // IS the cart's claim on the stock, so it must not be subtracted from
+    // itself. Capping the product cards alone left this box free to put 50 in
+    // a cart with 2 available, which the buyer discovered at the last step.
+    const left = STOCK ? STOCK[name] : null;
+    let q = Math.min(newQuantity, 9999);
+    if (left != null && q > left) {
+      q = Math.max(0, left);
+      showToast(q ? 'Only ' + q + ' of ' + name + ' left.' : name + ' is sold out.', 'info');
+    }
+    if (q <= 0) cart.splice(index, 1);
+    else cart[index].quantity = q;
   }
-  
+
   saveCart(cart);
   renderCartItems();
 }
