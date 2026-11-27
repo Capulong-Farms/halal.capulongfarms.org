@@ -17,7 +17,7 @@ categories:
         image: "/images/GR-Sambal-Tumis.jpg"
         available: true
         discontinue: false
-        discount: 100
+        discount: 0
         deal_of_the_day: false
         price_on_request: true
         description: "Malaysian stir-fried chili paste"
