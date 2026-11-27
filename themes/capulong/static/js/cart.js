@@ -781,6 +781,26 @@ async function placeOnlineOrder() {
     return;
   }
 
+  // Chose to pay by QR and left the reference blank. Asked rather than
+  // blocked: the order still arrives as pending_payment and the farm checks
+  // the money before confirming, so refusing it would only lose the buyer who
+  // is about to pay. This catches the one who forgot.
+  if (paymentMethod === 'qr' && !paymentRef) {
+    const goOn = confirm(
+      'You chose to pay by GCash / QR but have not entered a reference number.\n\n' +
+      'Press OK to place the order anyway \u2014 send us the reference afterwards and ' +
+      'we will confirm it once we can see your payment.\n\n' +
+      'Press Cancel to go back and enter it now.');
+    if (!goOn) {
+      resetSubmitButton();
+      if (refEl) {
+        refEl.focus();
+        refEl.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+      return;
+    }
+  }
+
   // Stock may have gone while the form was being filled in, so ask once more.
   await loadStock();
   const problems = cartStockProblems();
