@@ -675,6 +675,20 @@ function renderRateCard() {
 // later order form opened showing a dead "Submitting..." button. Putting the
 // button right whenever the form opens covers that, a submit interrupted by a
 // closed tab, and anything else that leaves it mid-flight.
+// One key per checkout attempt. Every retry of that attempt carries the same
+// one, so the farm can tell "the reply never reached me" from "I want another
+// of these". Cleared only once an order has actually been taken.
+let ORDER_KEY = null;
+
+function newOrderKey() {
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  // Older browsers: random enough for this, which only has to be unique
+  // among one farm's orders.
+  return 'k-' + Date.now().toString(36) + '-' +
+         Math.random().toString(36).slice(2, 10) +
+         Math.random().toString(36).slice(2, 10);
+}
+
 function resetSubmitButton() {
   const btn = document.getElementById('submit-order-btn');
   if (!btn) return;
@@ -694,6 +708,8 @@ function openOrderForm() {
   }
   closeCartModal();
   resetSubmitButton();
+  // A fresh attempt starts here; a retry of it keeps this key.
+  ORDER_KEY = newOrderKey();
   fillOrderProvinces();
   onDeliveryMethod();
   togglePaymentFields();
@@ -871,6 +887,7 @@ async function placeOnlineOrder() {
   const cart = getCart();
   const orderData = {
     source:          PORTAL_SOURCE,
+    orderKey:        ORDER_KEY,
     customerName:    name,
     customerPhone:   phone,
     customerAddress: delivery.method === 'pickup'
@@ -925,6 +942,7 @@ async function placeOnlineOrder() {
     const result = await response.json();
 
     // Success — clear cart, close form, show confirmation
+    ORDER_KEY = null;                  // the next order is a different order
     localStorage.removeItem(CART_KEY);
     updateCartCount();
     document.getElementById('order-form-modal').style.display = 'none';
