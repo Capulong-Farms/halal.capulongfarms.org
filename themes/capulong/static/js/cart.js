@@ -437,11 +437,52 @@ function cartStockProblems() {
   }, []);
 }
 
-function stockProblemMessage(problems) {
-  return 'Sorry, these are no longer available in that quantity:\n\n' +
-    problems.map(p => `\u2022 ${p.name} \u2014 you asked for ${p.wanted}, ` +
-      (p.left ? `only ${p.left} left` : 'none left')).join('\n') +
-    '\n\nPlease adjust your cart and try again.';
+// Put the cart right, rather than telling the buyer to do it. Takes the
+// problems found by cartStockProblems(), or the quantities the server sent
+// back with a 409, and returns what it changed.
+//
+// A line with nothing left is removed. A line with some left is REDUCED, not
+// removed: the farm can still sell what it has, and a buyer who wanted ten is
+// usually glad of three.
+function reconcileCart(problems) {
+  if (!problems || !problems.length) return null;
+  const cart = getCart();
+  const removed = [], trimmed = [];
+  problems.forEach(p => {
+    const i = cart.findIndex(it => it.name === p.name);
+    if (i < 0) return;
+    if (!p.left || p.left <= 0) {
+      removed.push(p.name);
+      cart.splice(i, 1);
+    } else {
+      trimmed.push({ name: p.name, from: cart[i].quantity, to: p.left });
+      cart[i].quantity = p.left;
+    }
+  });
+  if (!removed.length && !trimmed.length) return null;
+  saveCart(cart);                       // also re-applies the caps on the cards
+  return { removed, trimmed, emptied: cart.length === 0 };
+}
+
+// Said once, plainly, with the specifics. An apology with no detail leaves the
+// buyer wondering what they are now paying for.
+function stockChangeMessage(c) {
+  const lines = [];
+  c.removed.forEach(n => lines.push('\u2022 ' + n + ' \u2014 sold out, removed from your cart'));
+  c.trimmed.forEach(t => lines.push('\u2022 ' + t.name + ' \u2014 only ' + t.to +
+    ' left, so your ' + t.from + ' has been reduced to ' + t.to));
+
+  const only = c.removed.length === 1 && !c.trimmed.length;
+  let msg = 'Our sincere apologies \u2014 while you were completing this order, ' +
+    (only ? 'this item was' : 'some of these were') +
+    ' bought by someone else.\n\n' + lines.join('\n') + '\n\n';
+
+  msg += c.emptied
+    ? 'That leaves your cart empty, so we have closed the order form. ' +
+      'Please have another look at the shop and add what you would like.'
+    : 'Your cart and total have been updated. Please check them over, then place ' +
+      'the order again \u2014 we did not want to charge you for something that had changed.';
+  return msg;
 }
 
 async function loadDeliveryRates() {
@@ -661,8 +702,11 @@ function openOrderForm() {
   renderFulfilment();            // clears any date left from a previous order
   loadStock().then(() => {
     renderFulfilment();
-    const problems = cartStockProblems();
-    if (problems.length) alert(stockProblemMessage(problems));
+    const changed = reconcileCart(cartStockProblems());
+    if (!changed) return;
+    alert(stockChangeMessage(changed));
+    if (changed.emptied) closeOrderForm();
+    else { renderOrderSummary(); renderFulfilment(); }
   });
   // Set positioning explicitly via JS — after appendChild, Chrome does not always
   // recompute position:fixed from the CSS class when display:none is in the same rule.
@@ -803,8 +847,17 @@ async function placeOnlineOrder() {
 
   // Stock may have gone while the form was being filled in, so ask once more.
   await loadStock();
-  const problems = cartStockProblems();
-  if (problems.length) { alert(stockProblemMessage(problems)); resetSubmitButton(); return; }
+  // Somebody may have taken the last of it while this form was being filled
+  // in. The cart is corrected and the buyer sees the new total before paying -
+  // the order is never quietly re-submitted at a figure they have not seen.
+  const changed = reconcileCart(cartStockProblems());
+  if (changed) {
+    alert(stockChangeMessage(changed));
+    resetSubmitButton();
+    if (changed.emptied) closeOrderForm();
+    else { renderOrderSummary(); renderFulfilment(); }
+    return;
+  }
 
   // 4. A date earlier than the farm can manage is moved up here, where the
   // buyer can see it happen. The server clamps it anyway, so leaving it alone
@@ -851,15 +904,20 @@ async function placeOnlineOrder() {
     });
 
     // 409: the farm sold the last of something between our check and this one.
+    // 409: the farm sold the last of something between our check and this one.
+    // Its reply carries the real quantities, so the cart is put right from
+    // those rather than from anything this page believed.
     if (response.status === 409) {
       const d = await response.json().catch(() => ({}));
-      const items = (d.items || []).map(i =>
-        `\u2022 ${i.name} \u2014 you asked for ${i.wanted}, ` +
-        (i.available ? `only ${i.available} left` : 'none left')).join('\n');
-      alert('Sorry, these are no longer available in that quantity:\n\n' + items +
-            '\n\nYour cart has been kept \u2014 please adjust it and try again.');
+      const changed = reconcileCart((d.items || []).map(i =>
+        ({ name: i.name, wanted: i.wanted, left: i.available })));
+      alert(changed ? stockChangeMessage(changed)
+        : 'Sorry, something in your cart is no longer available. Please check it and try again.');
       resetSubmitButton();
       await loadStock();
+      applyStockCaps();
+      if (changed && changed.emptied) closeOrderForm();
+      else { renderOrderSummary(); renderFulfilment(); }
       return;
     }
     if (!response.ok) throw new Error('Server error ' + response.status);
