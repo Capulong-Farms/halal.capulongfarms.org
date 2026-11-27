@@ -244,14 +244,18 @@ function earliestFulfilment() {
   const nowParts = String(FRESH.now || '00:00').split(':');
   const past = Number(nowParts[0]) * 60 + Number(nowParts[1])
                >= Number(parts[0]) * 60 + Number(parts[1]);
-  let base = dayAdd(FRESH.today, (Number(FRESH.leadDays) || 0) + (past ? 1 : 0));
+  const base = dayAdd(FRESH.today, (Number(FRESH.leadDays) || 0) + (past ? 1 : 0));
+  // Every window is measured from the same starting point and the latest one
+  // wins - the order waits until all of it has been picked. Advancing a
+  // running date made the waits compound instead.
+  let want = base;
   getCart().forEach(item => {
     const h = (HARVEST || {})[item.name];
     if (!Array.isArray(h) || !h.length) return;
     const d = nextDayIn(base, h.map(Number));
-    if (d > base) base = d;
+    if (d > want) want = d;
   });
-  return nextDayIn(base, (FRESH.dispatchDays || []).map(Number));
+  return nextDayIn(want, (FRESH.dispatchDays || []).map(Number));
 }
 
 function prettyDate(ymd) {
